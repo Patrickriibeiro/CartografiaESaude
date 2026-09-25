@@ -243,7 +243,7 @@ Testes verificam o contrato, não a implementação.
 01_etl_sivep.R  ──► dados/intermediarios/sivep_rj.parquet          (CS-006, entregue)
                     contrato: 1 linha por ficha de SRAG de residente do RJ; 37 colunas
                     tipadas; datas em UTC; ano_epi == ano_banco; semana_epi recalculada
-                ──► dados/processados/sivep_processado.parquet      (CS-008)
+                ──► dados/processados/sivep_processado.parquet      (CS-008, entregue: 37.562 casos)
                     contrato: só casos confirmados pelo ADR-0002; coluna
                     agente ∈ {sarscov2, influenza, vsr}; coluna codeteccao
 02_indicadores.R ─► dados/processados/populacao_rj.parquet           (CS-011, entregue)

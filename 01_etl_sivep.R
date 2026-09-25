@@ -1,10 +1,11 @@
 # 01_etl_sivep.R — baixa, confere e prepara o SIVEP-Gripe do RJ
 #
-# Entrega atual (CS-005, CS-006):
+# Entrega atual (CS-005, CS-006, CS-007, CS-008):
 #   dados/brutos/INFLUD*.parquet              bancos anuais, registrados no manifesto
 #   dados/intermediarios/sivep_rj.parquet     fichas de SRAG de residentes do RJ, tipadas
 #   resultados/tabelas/diagnostico_sivep.csv  anomalias contadas por ano (não corrigidas)
-# A classificação por agente (→ dados/processados/sivep_processado.parquet) é o CS-008.
+#   dados/processados/sivep_processado.parquet  casos confirmados pela regra do ADR-0002 (CS-008)
+#   resultados/tabelas/casos_por_agente.csv, subtipo_influenza.csv, codeteccao_casos.csv
 
 source("00_setup.R")
 
@@ -29,6 +30,35 @@ for (nome in names(tabelas_adr)) {
   utils::write.csv(tabelas_adr[[nome]], file.path("resultados", "tabelas", paste0(nome, ".csv")),
                    row.names = FALSE, fileEncoding = "UTF-8")
 }
-print(stats::xtabs(casos ~ regra + agente + ano, tabelas_adr$comparacao_regras_caso))
 
-message("Classificação por agente ainda não implementada (CS-008): aguarda a regra aceita no ADR-0002 (D-04).")
+# Classificação por agente (CS-008), com a regra aceita no ADR-0002 (D-04).
+casos <- aplicar_criterios_inclusao(classificar_agente(sivep_rj, REGRA_CASO))
+por_agente <- contar_casos_agente(casos)
+
+# Aceite do CS-008: a contagem tem de ser idêntica à linha da regra na tabela da decisão.
+linha_adr <- tabelas_adr$comparacao_regras_caso
+linha_adr <- linha_adr[linha_adr$regra == REGRA_CASO & linha_adr$agente %in% AGENTES, ]
+conferencia <- merge(por_agente, linha_adr, by = c("agente", "ano"), suffixes = c("", "_adr"))
+if (nrow(conferencia) != length(AGENTES) * length(ANOS_ESTUDO) ||
+    any(conferencia$casos != conferencia$casos_adr)) {
+  stop("Casos classificados diferem da tabela do ADR-0002 para a regra ", REGRA_CASO, call. = FALSE)
+}
+
+arrow::write_parquet(casos, file.path("dados", "processados", "sivep_processado.parquet"))
+utils::write.csv(por_agente, file.path("resultados", "tabelas", "casos_por_agente.csv"),
+                 row.names = FALSE, fileEncoding = "UTF-8")
+subtipo <- as.data.frame(table(ano = casos$ano_banco[casos$agente == "influenza"],
+                               subtipo = casos$subtipo_influenza[casos$agente == "influenza"],
+                               useNA = "ifany"), stringsAsFactors = FALSE)
+utils::write.csv(subtipo, file.path("resultados", "tabelas", "subtipo_influenza.csv"),
+                 row.names = FALSE, fileEncoding = "UTF-8")
+codet <- as.data.frame(table(agente = casos$agente, ano = casos$ano_banco, codeteccao = casos$codeteccao),
+                       stringsAsFactors = FALSE)
+utils::write.csv(codet[codet$codeteccao == "TRUE", c("agente", "ano", "Freq")],
+                 file.path("resultados", "tabelas", "codeteccao_casos.csv"), row.names = FALSE,
+                 fileEncoding = "UTF-8")
+
+message(sprintf("CS-008: %d casos (%s), idênticos à tabela do ADR-0002",
+                nrow(casos), paste(names(table(casos$agente)), table(casos$agente), sep = " ", collapse = ", ")))
+print(stats::xtabs(casos ~ agente + ano, por_agente))
+print(stats::xtabs(Freq ~ ano + subtipo, subtipo, addNA = TRUE))

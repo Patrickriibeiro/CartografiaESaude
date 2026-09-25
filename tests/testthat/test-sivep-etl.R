@@ -2,30 +2,8 @@
 # Os dados abaixo são FABRICADOS: poucas linhas com o formato real do PARQUET
 # (datas como timestamp à meia-noite UTC, códigos como texto ou decimal).
 
-# Monta um banco sintético com as 34 colunas, registra no manifesto e devolve
-# uma configuração de fontes apontando para ele.
-banco_sintetico <- function(linhas, ano = 2022L) {
-  base <- as.data.frame(
-    setNames(replicate(length(COLUNAS_SIVEP), rep(NA_character_, nrow(linhas)),
-                       simplify = FALSE), COLUNAS_SIVEP),
-    stringsAsFactors = FALSE
-  )
-  for (col in COLUNAS_DATA_SIVEP) base[[col]] <- as.POSIXct(NA, tz = "UTC")
-  for (col in names(linhas)) base[[col]] <- linhas[[col]]
-  arquivo <- sprintf("dados/brutos/INFLUD%02d-teste.parquet", ano %% 100)
-  # O banco real guarda timestamp[ns] SEM fuso; o R gravaria timestamp[us, tz=UTC].
-  # Sem este cast o teste do fuso exercita um tipo que não existe nos dados reais.
-  tabela <- arrow::arrow_table(base)
-  for (col in COLUNAS_DATA_SIVEP) tabela[[col]] <- tabela[[col]]$cast(arrow::timestamp("ns"))
-  arrow::write_parquet(tabela, arquivo)
-  registrar_fonte(arquivo, url = paste0("https://exemplo/", basename(arquivo)),
-                  descricao = "FABRICADO para teste")
-  list(sivep = list(bancos = list(list(
-    ano = ano, url = paste0("https://exemplo/", basename(arquivo)), versao = "teste"
-  ))))
-}
+# banco_sintetico(), escrever_banco_sivep() e utc() estão em helper-projeto.R.
 
-utc <- function(x) as.POSIXct(x, tz = "UTC")
 
 test_that("semana_epidemiologica segue o calendário do Ministério, inclusive semana 53", {
   datas <- as.Date(c("2022-01-02", "2022-01-01", "2023-12-31", "2024-12-29",

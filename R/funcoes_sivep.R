@@ -338,6 +338,58 @@ resumir_codeteccao <- function(d, regra) {
   }))))
 }
 
-# A implementar:
-# classificar_agente()         — CS-008: aplica a regra aceita no ADR-0002 (D-04)
-# aplicar_criterios_inclusao() — CS-008
+# ---------------------------------------------------------------------------
+# Classificação por agente (CS-008), com a regra aceita no ADR-0002
+# ---------------------------------------------------------------------------
+
+#' Acrescenta a coluna `agente` (fator sarscov2/influenza/vsr; NA = não é caso).
+#'
+#' Atribuição única (ADR-0002, decisão 2): se a regra marcar a mesma ficha em dois
+#' agentes, a função PARA. Com a R2 isso não acontece, porque cada ficha tem um só
+#' CLASSI_FIN; a trava existe para o dia em que alguém trocar a regra por outra
+#' que conte co-detecção duas vezes (a R5, por exemplo).
+classificar_agente <- function(d, regra = REGRA_CASO) {
+  m <- aplicar_regra_caso(d, regra)
+  multiplos <- rowSums(m) > 1
+  if (any(multiplos)) {
+    stop(sum(multiplos), " ficha(s) classificada(s) em mais de um agente pela regra ", regra,
+         "; a atribuição única do ADR-0002 exige um agente por ficha", call. = FALSE)
+  }
+  agente <- rep(NA_character_, nrow(d))
+  for (ag in AGENTES) agente[m[[ag]]] <- ag
+  d$agente <- factor(agente, levels = AGENTES)
+  d
+}
+
+#' Fica só com os casos e acrescenta as colunas derivadas:
+#' - codeteccao: o campo específico de OUTRO dos três agentes está marcado
+#'   (reportada, não contada duas vezes; ADR-0002 §3.3);
+#' - subtipo_influenza: "A" ou "B" para casos de influenza, pelo RT-PCR quando
+#'   positivo, senão pelo antígeno; NA se o caso entrou só pelo critério declarado.
+aplicar_criterios_inclusao <- function(d) {
+  if (!"agente" %in% names(d)) stop("Rode classificar_agente() antes", call. = FALSE)
+  s <- sinais_caso(d)
+  outros <- cbind(
+    sarscov2 = s$esp_influenza | s$esp_vsr,
+    influenza = s$esp_sarscov2 | s$esp_vsr,
+    vsr = s$esp_sarscov2 | s$esp_influenza
+  )
+  ag <- as.character(d$agente)
+  d$codeteccao <- FALSE
+  for (a in AGENTES) d$codeteccao[!is.na(ag) & ag == a] <- outros[!is.na(ag) & ag == a, a]
+
+  tipo <- ifelse(!is.na(d$POS_PCRFLU) & d$POS_PCRFLU == 1L, d$TP_FLU_PCR,
+                 ifelse(!is.na(d$POS_AN_FLU) & d$POS_AN_FLU == 1L, d$TP_FLU_AN, NA_integer_))
+  d$subtipo_influenza <- ifelse(!is.na(ag) & ag == "influenza",
+                                c("A", "B")[match(tipo, 1:2)], NA_character_)
+  d[!is.na(d$agente), , drop = FALSE]
+}
+
+#' Casos por agente e ano: a tabela que tem de bater com a linha da regra em
+#' comparacao_regras_caso.csv (aceite do CS-008).
+contar_casos_agente <- function(casos) {
+  t <- as.data.frame(table(agente = casos$agente, ano = casos$ano_banco), stringsAsFactors = FALSE)
+  names(t)[3] <- "casos"
+  t$ano <- as.integer(t$ano)
+  t[order(t$agente, t$ano), ]
+}
