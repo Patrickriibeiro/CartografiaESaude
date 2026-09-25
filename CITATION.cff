@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "Se usar este trabalho, cite-o como abaixo."
+title: "Análise espaço-temporal de vírus respiratórios no Estado do Rio de Janeiro (2022–2025): uma prova de conceito reprodutível em R com dados do SIVEP-Gripe e IBGE"
+type: software
+authors:
+  - family-names: "Coelho"
+    given-names: "Gabrielle Barbosa Teixeira"
+    affiliation: "Programa de Pós-Graduação em Biologia Computacional e Sistemas, Instituto Oswaldo Cruz, Fiocruz"
+  - family-names: "Oliveira"
+    given-names: "Patrick Ribeiro"
+license: MIT
+date-released: "2026-09-25"
+keywords:
+  - SRAG
+  - SIVEP-Gripe
+  - estatística espacial
+  - LISA
+  - Moran
+  - Bayes empírico
+  - Rio de Janeiro
+  - R
