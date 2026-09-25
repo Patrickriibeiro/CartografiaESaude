@@ -65,7 +65,7 @@ escala regional, leitos do CNES. Repositório **privado**
 | Vivo | `docs/BACKLOG.md`, `docs/trilha-desenvolvimento.md`, `docs/proposta-v2.md`, `README.md` | reflete o estado atual |
 
 Cicatriz: em 2026-09-25 duas frases do release-history do CS-034, já commitado, foram
-reescritas em vez de corrigidas por errata (errata registrada depois).
+reescritas em vez de corrigidas por errata (errata registrada depois; hook no CS-045).
 
 ## 4. Fechamento de cada item (padrão do projeto)
 
@@ -87,6 +87,11 @@ reescritas em vez de corrigidas por errata (errata registrada depois).
   código staged (`R/`, `tests/`, `config/`, scripts `0N_*.R`, `run.R`, `app.R`, `08_relatorio.qmd`,
   `renv.lock`, `.github/`) sem nenhum `docs/release-history/*.md` staged. Commit só de
   docs (como o do hash no BACKLOG) passa.
+- **PreToolUse (Edit|Write|MultiEdit)** → `guarda-append-only.ps1` (CS-045): **nega** edição
+  destrutiva de `docs/decisoes/ADR-*.md` e `docs/release-history/*.md` já commitados — Edit
+  cujo trecho antigo não reaparece no novo; Write que não começa com o conteúdo atual.
+  Acrescentar (inclusive no meio) passa; rascunho não commitado passa. Edição por Bash
+  (`sed`, Python) não passa pelo hook: aí vale a regra do §3.
 
 Só se bloqueia o que é fato binário; julgamento (profundidade da explicação, qualidade do
 texto) não vira bloqueio.
