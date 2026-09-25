@@ -55,7 +55,7 @@ test_that("cada caso cai numa só casinha de cada lado, com a conta feita à mã
 test_that("município de notificação do RJ fora da lista para, em vez de sumir", {
   e <- casos_exemplo()
   expect_error(comparar_residencia_notificacao(e$casos, e$de_fora, c("330010", "330020"), anos = 2024L),
-               "fora da lista: 330030")
+               "Município de notificação fora da lista de municípios: 330030")
 })
 
 test_that("sem nenhum caso de fora, a coluna existe com zeros", {

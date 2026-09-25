@@ -156,11 +156,7 @@ calcular_casos <- function(casos, por_quadrimestre = FALSE) {
 #' tiraria municípios do Moran e do mapa.
 completar_municipios <- function(contagem, cod6, anos = ANOS_ESTUDO, agentes = AGENTES,
                                  quadrimestres = NULL) {
-  fora <- setdiff(unique(contagem$cod6), cod6)
-  if (length(fora) > 0) {
-    stop("Município com caso fora da lista de municípios: ", paste(fora, collapse = ", "),
-         call. = FALSE)
-  }
+  validar_municipios_rj(contagem$cod6, cod6, "Município com caso")   # CS-009
   eixos <- list(cod6 = sort(unique(cod6)), agente = agentes, ano = as.integer(anos))
   if (!is.null(quadrimestres)) eixos$quadrimestre <- as.integer(quadrimestres)
   grade <- expand.grid(eixos, stringsAsFactors = FALSE, KEEP.OUT.ATTRS = FALSE)
@@ -289,10 +285,8 @@ comparar_residencia_notificacao <- function(casos, casos_de_fora, cod6,
                                       ano = as.integer(d$ano_banco), stringsAsFactors = FALSE)
   rj <- function(x) !is.na(x) & substr(x, 1, 2) == PREFIXO_UF_RJ
   not_rj <- rj(casos$CO_MUN_NOT)
-  fora <- setdiff(unique(c(casos$CO_MUN_NOT[not_rj], casos_de_fora$CO_MUN_NOT)), cod6)
-  if (length(fora) > 0) {
-    stop("Município de notificação fora da lista: ", paste(fora, collapse = ", "), call. = FALSE)
-  }
+  validar_municipios_rj(c(casos$CO_MUN_NOT[not_rj], casos_de_fora$CO_MUN_NOT), cod6,
+                        "Município de notificação")   # CS-009
   mesmo <- not_rj & casos$CO_MUN_NOT == casos$CO_MUN_RES
 
   conta <- function(d, nome) {

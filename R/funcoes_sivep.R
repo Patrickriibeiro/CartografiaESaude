@@ -117,6 +117,7 @@ ler_banco_sivep_rj <- function(caminho, ano_banco, prefixo_uf = PREFIXO_UF_RJ,
   verificar_manifesto(caminho)
 
   ds <- arrow::open_dataset(caminho)
+  validar_variaveis(names(ds), COLUNAS_SIVEP, basename(caminho))   # CS-009
   ds <- if (recorte == "residencia") {
     dplyr::filter(ds, substr(CO_MUN_RES, 1, 2) == prefixo_uf)
   } else {
@@ -160,22 +161,10 @@ preparar_sivep <- function(anos = ANOS_ESTUDO, fontes = ler_fontes()) {
   }
   d <- do.call(rbind, partes)
 
-  if (anyNA(d$DT_SIN_PRI)) {
-    stop(sum(is.na(d$DT_SIN_PRI)), " fichas sem DT_SIN_PRI", call. = FALSE)
-  }
-  padrao <- paste0("^", PREFIXO_UF_RJ, "[0-9]{4}$")
-  if (!all(grepl(padrao, d$CO_MUN_RES))) {
-    stop("CO_MUN_RES fora do padrão ", padrao, ": ",
-         paste(utils::head(unique(d$CO_MUN_RES[!grepl(padrao, d$CO_MUN_RES)]), 5),
-               collapse = ", "), call. = FALSE)
-  }
+  validar_datas(d$DT_SIN_PRI, d$ano_banco)             # CS-009: vazia ou fora do ano epidemiológico
+  validar_codigos_ibge(d$CO_MUN_RES, "CO_MUN_RES")       # CS-009
   if (any(d$SG_UF != "RJ", na.rm = TRUE)) {
     stop(sum(d$SG_UF != "RJ", na.rm = TRUE), " fichas com CO_MUN_RES 33 e SG_UF != RJ",
-         call. = FALSE)
-  }
-  fora <- d$ano_epi != d$ano_banco
-  if (any(fora)) {
-    stop(sum(fora), " fichas com ano epidemiológico diferente do ano do banco",
          call. = FALSE)
   }
   d
@@ -189,13 +178,8 @@ preparar_sivep_notificados_de_fora <- function(anos = ANOS_ESTUDO, fontes = ler_
   d <- do.call(rbind, lapply(seq_len(nrow(b)), function(i) {
     ler_banco_sivep_rj(b$destino[i], b$ano[i], recorte = "notificacao_de_fora")
   }))
-  if (anyNA(d$DT_SIN_PRI)) stop(sum(is.na(d$DT_SIN_PRI)), " fichas sem DT_SIN_PRI", call. = FALSE)
-  padrao <- paste0("^", PREFIXO_UF_RJ, "[0-9]{4}$")
-  if (!all(grepl(padrao, d$CO_MUN_NOT))) stop("CO_MUN_NOT fora do padrão ", padrao, call. = FALSE)
-  if (any(d$ano_epi != d$ano_banco)) {
-    stop(sum(d$ano_epi != d$ano_banco), " fichas com ano epidemiológico diferente do ano do banco",
-         call. = FALSE)
-  }
+  validar_datas(d$DT_SIN_PRI, d$ano_banco)             # CS-009
+  validar_codigos_ibge(d$CO_MUN_NOT, "CO_MUN_NOT")       # CS-009
   d
 }
 
