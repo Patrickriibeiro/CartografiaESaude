@@ -16,6 +16,7 @@
 | Área (CS-015) | 43.750,4 km², idêntica ao campo oficial `AREA_KM2` |
 | Junção por `cod6` | 92/92 com a população; os 92 códigos do SIVEP 2022–2025 estão na malha; com `cod7`, 0 casariam |
 | Fontes no manifesto | 4 JSON do SIDRA + zip da malha, cada um com SHA-256 |
+| Clone limpo preserva os bytes | 6/6 arquivos de `dados/externos/` conferem com o manifesto num `git clone` novo, depois de marcar a pasta como binária no `.gitattributes` (sem isso o git converteria CRLF → LF nos JSON) |
 
 ## Achados
 
