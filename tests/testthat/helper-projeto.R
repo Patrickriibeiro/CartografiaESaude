@@ -26,6 +26,13 @@ escrever_arquivo <- function(caminho, conteudo) {
 
 utc <- function(x) as.POSIXct(x, tz = "UTC")
 
+#' URL file:// de um arquivo local, certa no Windows (file:///C:/...) e no Linux
+#' (file:///tmp/...). Colar "file:///" no caminho do Linux daria quatro barras.
+url_arquivo <- function(caminho) {
+  p <- normalizePath(caminho, winslash = "/")
+  paste0("file://", if (startsWith(p, "/")) "" else "/", p)
+}
+
 #' Grava um banco PARQUET com as colunas do SIVEP, no MESMO tipo do banco real,
 #' e registra no manifesto. `linhas` traz só as colunas que o teste quer
 #' preencher; as demais ficam vazias.

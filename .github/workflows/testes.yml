@@ -1,0 +1,46 @@
+# Integração contínua (CS-025): roda a suíte de testes a cada push e pull request.
+#
+# Roda sobre a base sintética; não baixa os dados do SIVEP. Os testes de
+# integração com os dados reais são pulados aqui (skip_if_not), e isso aparece
+# na contagem de "pulados" do resumo.
+
+name: testes
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  testes:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      # Pacotes binários para Ubuntu 24.04 (noble): instala em minutos, sem compilar.
+      RENV_CONFIG_REPOS_OVERRIDE: https://packagemanager.posit.co/cran/__linux__/noble/latest
+      TZ: America/Sao_Paulo   # o teste do fuso horário precisa de um fuso diferente de UTC
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: "4.6.1"
+          use-public-rspm: true
+
+      - name: Bibliotecas de sistema do sf (GDAL, GEOS, PROJ) e do units
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgdal-dev libgeos-dev libproj-dev libudunits2-dev libsqlite3-dev
+
+      - uses: r-lib/actions/setup-renv@v2   # renv::restore() com cache entre execuções
+
+      - name: Testes
+        run: |
+          Rscript -e '
+            r <- as.data.frame(testthat::test_dir("tests/testthat", reporter = "summary",
+                                                  stop_on_failure = TRUE))
+            cat("\nexpectativas:", sum(r$nb), "| testes:", nrow(r),
+                "| pulados:", sum(r$skipped), "| arquivos:", length(unique(r$file)), "\n")
+          '

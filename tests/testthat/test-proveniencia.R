@@ -101,7 +101,7 @@ test_that("arquivo fora do projeto não entra no manifesto", {
 test_that("baixar_e_registrar baixa uma vez e depois usa o cache conferido", {
   origem <- withr::local_tempfile(fileext = ".txt")
   writeLines("conteúdo remoto", origem)
-  url <- paste0("file:///", normalizePath(origem, winslash = "/"))
+  url <- url_arquivo(origem)
   projeto_temporario()
 
   baixar_e_registrar(url, "dados/externos/x.txt", descricao = "d")
@@ -117,7 +117,7 @@ test_that("baixar_e_registrar baixa uma vez e depois usa o cache conferido", {
 test_that("baixar_e_registrar recusa cache adulterado em vez de sobrescrever", {
   origem <- withr::local_tempfile(fileext = ".txt")
   writeLines("original", origem)
-  url <- paste0("file:///", normalizePath(origem, winslash = "/"))
+  url <- url_arquivo(origem)
   projeto_temporario()
   baixar_e_registrar(url, "dados/externos/x.txt", "d")
   writeLines("adulterado", "dados/externos/x.txt")

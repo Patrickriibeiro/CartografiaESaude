@@ -125,7 +125,7 @@ test_that("diagnóstico conta semana divergente e sintoma após digitação", {
 test_that("download retoma de onde parou e o arquivo final é idêntico à origem", {
   origem <- withr::local_tempfile(fileext = ".bin")
   writeBin(as.raw(0:255), origem)
-  url <- paste0("file:///", normalizePath(origem, winslash = "/"))
+  url <- url_arquivo(origem)
   projeto_temporario()
   dir.create("dados/externos", recursive = TRUE)
   writeBin(as.raw(0:99), "dados/externos/x.bin.parcial")  # simula queda aos 100 bytes
