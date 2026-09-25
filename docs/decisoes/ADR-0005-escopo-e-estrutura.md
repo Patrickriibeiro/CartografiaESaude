@@ -1,6 +1,6 @@
 # ADR-0005 — Escopo e estrutura do pipeline
 
-- **Status:** aceito parcialmente (itens 1 e 2); item 3 aguarda D-06 e D-08
+- **Status:** aceito (itens 1 e 2 em 2026-09-25; item 3 pela autora em 2026-09-25, D-06 e D-08)
 - **Data:** 2026-09-25
 - **Nasce em:** CS-002
 
@@ -20,7 +20,7 @@ explícita antes do primeiro commit, porque moldam o esqueleto.
    fora do código, trilha §6) e `docs/`. Nada do PDF foi renomeado.
 3. **Escopo municipal, não por bairro; quadrimestre só descritivo.** O "por bairro" da
    seção 4.2 do PDF é tratado como erro de digitação. O LISA roda em escala anual.
-   Pendente de confirmação da autora (D-06, D-08).
+   Confirmado pela autora em 2026-09-25 (D-06, D-08).
 
 ## Consequências
 

@@ -1,7 +1,7 @@
 # ADR-0002 — Critério de caso por agente e tratamento da co-detecção
 
-- **Status:** **proposto**. Aguarda a decisão D-04 da autora. Enquanto isso, o CS-008 não
-  produz `sivep_processado.parquet`.
+- **Status:** **aceito em 2026-09-25** pela autora (D-04). Texto original preservado abaixo;
+  ver a seção "Aceite" no fim.
 - **Data:** 2026-09-25
 - **Nasce em:** CS-007 · decide D-04
 - **Evidência:** `resultados/tabelas/comparacao_regras_caso.csv`,
@@ -176,3 +176,13 @@ SARS-CoV-2 83 · 32 · 39 · 57; Influenza 37 · 15 · 38 · 62; VSR 2 · 1 · 0
 1. Aceita a R2? Se preferir R1 ou R4, o relatório passa a ter a R2 como sensibilidade.
 2. Aceita a atribuição única por `CLASSI_FIN`, com co-detecção só reportada?
 3. Aceita contar toda ficha do banco, sem filtrar internação?
+
+## Aceite (2026-09-25)
+
+A autora aceitou as três respostas da §8 como recomendadas:
+
+1. Regra **R2 "vigilância"** para os três agentes.
+2. **Atribuição única** pelo `CLASSI_FIN`; co-detecção só reportada.
+3. **Toda ficha do banco conta**, sem filtrar internação; o texto fala em "SRAG notificada".
+
+As regras R1, R4 e R5 permanecem no código e entram no relatório como sensibilidade (CS-040).

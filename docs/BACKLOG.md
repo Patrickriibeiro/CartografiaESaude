@@ -13,20 +13,23 @@ Prefixos: `CS` = tarefa · `D` = decisão que só o dono/mestranda fecha · `ADR
 
 ---
 
-## Decisões abertas (bloqueiam o que está indicado)
+## Decisões
+
+Em 2026-09-25 a autora aceitou todas as recomendações pendentes (D-01, D-04, D-05,
+D-06, D-08, D-09, D-10 e a opção do CS-039). **Só a D-02 (prazo) continua aberta.**
 
 | ID | Pergunta | Recomendação | Bloqueia |
 |---|---|---|---|
-| D-01 | Quem é o dono do repositório GitHub público (item 4.5 do PDF): Patrick, Gabrielle ou ambos? Qual licença (MIT para código, CC-BY para relatório)? | Ambos como autores; MIT + CC-BY 4.0 | CS-026 |
+| D-01 | Quem é o dono do repositório GitHub público (item 4.5 do PDF): Patrick, Gabrielle ou ambos? Qual licença (MIT para código, CC-BY para relatório)? | Ambos como autores; MIT + CC-BY 4.0 | **Decidida 2026-09-25 (autora):** Gabrielle e Patrick como autores; MIT para o código, CC-BY 4.0 para o relatório; o PDF da proposta sai do repositório antes de publicar (ver CS-026: ele está no histórico desde `b66ae13`) | CS-026 |
 | D-02 | O `23092026` no nome do arquivo é data da apresentação (já passou) ou prazo de entrega? Existe prazo real para o produto final? | — | ordem da F5/F6 |
 | D-03 | Baixar CSV ou PARQUET do portal? PARQUET é menor e lê por coluna; CSV é o formato "clássico" que a banca conhece | PARQUET, com CSV como fallback | **Decidida 2026-09-25: PARQUET** (ADR-0001) |
-| D-04 | Critério de caso: estrito (`CLASSI_FIN` + laboratório) como o PDF escreve, ou laboratorial puro? Co-detecção conta em cada vírus? | ~~Estrito, co-detecção conta em cada agente e é reportada~~ **Atualizada 2026-09-25 (ADR-0002, com números sobre 99.880 fichas):** regra **R2 vigilância** (`CLASSI_FIN` do agente + critério laboratorial declarado ou checkbox), porque a estrita perde 27 % → 5 % dos casos de COVID entre 2022 e 2025 só por checkbox em branco; **atribuição única** por `CLASSI_FIN`, co-detecção só reportada; contar toda ficha do banco sem filtrar internação. Três perguntas no ADR-0002 §8 | CS-008 |
-| D-05 | Denominador 2023 (IBGE não publicou estimativa): repetir Censo 2022, interpolar 2022–2024 ou outra? | Interpolar linearmente. **Atualizada 2026-09-25 (ADR-0003):** o Censo 2022 fica 3,1–8,4 % abaixo da estimativa de 2024 em todos os 92 municípios; há 4 opções no ADR. Implementada a interpolação como provisória | CS-012 (comparação entre anos) |
-| D-06 | "Por bairro" na seção 4.2 do PDF: erro de digitação ou intenção futura? | Tratar como município; registrar em ADR-0005 | CS-022 |
+| D-04 | Critério de caso: estrito (`CLASSI_FIN` + laboratório) como o PDF escreve, ou laboratorial puro? Co-detecção conta em cada vírus? | ~~Estrito, co-detecção conta em cada agente e é reportada~~ **Atualizada 2026-09-25 (ADR-0002, com números sobre 99.880 fichas):** regra **R2 vigilância** (`CLASSI_FIN` do agente + critério laboratorial declarado ou checkbox), porque a estrita perde 27 % → 5 % dos casos de COVID entre 2022 e 2025 só por checkbox em branco; **atribuição única** por `CLASSI_FIN`, co-detecção só reportada; contar toda ficha do banco sem filtrar internação. Três perguntas no ADR-0002 §8 | **Decidida 2026-09-25 (autora):** regra R2 "vigilância"; atribuição única pelo `CLASSI_FIN`, co-detecção só reportada; toda ficha do banco conta, sem filtrar internação (ADR-0002 aceito) | CS-008 destravado |
+| D-05 | Denominador 2023 (IBGE não publicou estimativa): repetir Censo 2022, interpolar 2022–2024 ou outra? | Interpolar linearmente. **Atualizada 2026-09-25 (ADR-0003):** o Censo 2022 fica 3,1–8,4 % abaixo da estimativa de 2024 em todos os 92 municípios; há 4 opções no ADR. Implementada a interpolação como provisória | **Decidida 2026-09-25 (autora):** comparações entre anos com denominador único = estimativa 2024; mapa de cada ano com o número oficial daquele ano (Censo 2022, 2023 interpolado, estimativas 2024 e 2025); a outra versão como sensibilidade (ADR-0003 aceito) | CS-012 destravado |
+| D-06 | "Por bairro" na seção 4.2 do PDF: erro de digitação ou intenção futura? | Tratar como município; registrar em ADR-0005 | **Decidida 2026-09-25 (autora):** município; "por bairro" era erro de digitação (ADR-0005 item 3) | — |
 | D-07 | Data de corte do snapshot do banco 2025 (vivo, semanal). Uma vez fixada, o manifesto congela | Fixar na primeira execução real do CS-005 | **Decidida 2026-09-25: versão 14-09-2026** (ADR-0001) |
-| D-08 | Agregação quadrimestral: entra como série temporal no relatório ou só a anual vai para LISA? | Anual no LISA; quadrimestral só em gráfico de linha | CS-012, CS-019 |
-| D-09 | Suavização empírica de Bayes: só comparação no relatório ou substitui a taxa bruta no LISA? | Reportar as duas; LISA sobre a suavizada | CS-013, CS-017 |
-| D-10 | A mestranda aceita os objetivos novos da proposta v2 (OE9 padronização por idade, OE10 leitos do CNES, escala de região de saúde, hipóteses H1–H4)? | Aceitar região de saúde e H1–H3; OE9/OE10 como opcionais | CS-030 a CS-034 |
+| D-08 | Agregação quadrimestral: entra como série temporal no relatório ou só a anual vai para LISA? | Anual no LISA; quadrimestral só em gráfico de linha | **Decidida 2026-09-25 (autora):** quadrimestre só descritivo (gráfico de linha); LISA anual (ADR-0005 item 3) | — |
+| D-09 | Suavização empírica de Bayes: só comparação no relatório ou substitui a taxa bruta no LISA? | Reportar as duas; LISA sobre a suavizada | **Decidida 2026-09-25 (autora):** LISA sobre a taxa suavizada por Bayes empírico; taxa bruta como sensibilidade (entra no ADR-0004) | CS-013, CS-017 destravados |
+| D-10 | A mestranda aceita os objetivos novos da proposta v2 (OE9 padronização por idade, OE10 leitos do CNES, escala de região de saúde, hipóteses H1–H4)? | Aceitar região de saúde e H1–H3; OE9/OE10 como opcionais | **Decidida 2026-09-25 (autora):** H1–H3 e escala de região de saúde no escopo; OE9, OE10 e H4 opcionais | CS-030 a CS-032 e CS-035 no escopo; CS-033/CS-034 opcionais |
 
 ---
 
@@ -50,7 +53,7 @@ Prefixos: `CS` = tarefa · `D` = decisão que só o dono/mestranda fecha · `ADR
 
 | ID | Título | Evidência | Modelo · Esforço | Aceite |
 |---|---|---|---|---|
-| CS-012 | **`calcular_casos()`, `calcular_incidencia()`, `completar_municipios()`** — grade completa 92 × 3 × 4 (anual) e 92 × 3 × 12 (quadrimestral) com zero explícito; join por `cod6`; `incid_100k = casos/populacao*1e5` | trilha §3.3 invariantes 3 e 4; medido no CS-006: só 90 municípios têm ficha em 2023 e 91 em 2024, então a grade completa é necessária já nos dados brutos | Opus · medium | `nrow == 1104` (anual); 0 `NA`; município sem caso presente com 0; teste: remover um município do input e ver a grade completar |
+| CS-012 | **`calcular_casos()`, `calcular_incidencia()`, `completar_municipios()`** — grade completa 92 × 3 × 4 (anual) e 92 × 3 × 12 (quadrimestral) com zero explícito; join por `cod6`; `incid_100k = casos/populacao*1e5`; **D-05:** duas taxas, `incid_100k` (população oficial do ano, para o mapa do ano) e `incid_100k_pop2024` (estimativa 2024 em todos os anos, para comparar anos); exige `montar_populacao()` com o modo "denominador único" | trilha §3.3 invariantes 3 e 4; medido no CS-006: só 90 municípios têm ficha em 2023 e 91 em 2024, então a grade completa é necessária já nos dados brutos | Opus · medium | `nrow == 1104` (anual); 0 `NA`; município sem caso presente com 0; teste: remover um município do input e ver a grade completar |
 | CS-013 | **Suavização empírica de Bayes** — `spdep::EBest(casos, populacao)` por agente × ano; coluna `incid_eb_100k`; comparação bruta × EB no relatório | trilha §2.8; D-09 | **Fable · medium** | coluna preenchida 92 × 12; gráfico dispersão bruta × EB; nota metodológica no relatório |
 
 ### F3 — Cartografia
@@ -84,7 +87,7 @@ Prefixos: `CS` = tarefa · `D` = decisão que só o dono/mestranda fecha · `ADR
 | CS-026 | **Repositório público** — licença (D-01), `CITATION.cff`, README com badge da CI, link no PDF seção 4.5 | PDF §4.5 | Opus · low | URL público; `CITATION.cff` valida |
 | CS-027 | **Auditoria final** — reexecução em máquina limpa; conferir cada número do relatório contra `resultados/`; verificar que os 5 erros factuais do PDF (trilha §2.1–2.5) estão cobertos por ADR; lista de limitações para a seção 5.3 | trilha §2 | **Fable · high** | 0 divergências número-relatório; 5 ADRs referenciados; relatório de auditoria em `docs/release-history/` |
 
-### Propostos pela proposta v2 (condicionados à D-10)
+### Propostos pela proposta v2 (D-10 aceita em 2026-09-25: CS-030 a CS-032 e CS-035 no escopo; CS-033 e CS-034 opcionais)
 
 | ID | Título | Evidência | Modelo · Esforço | Aceite |
 |---|---|---|---|---|
@@ -110,7 +113,7 @@ Prefixos: `CS` = tarefa · `D` = decisão que só o dono/mestranda fecha · `ADR
 
 | ID | Título | Evidência | Modelo · Esforço | Aceite |
 |---|---|---|---|---|
-| CS-039 | **Efeito de borda e municípios com 1 vizinho** — Paraty (só Angra), Itatiaia (só Resende) e Armação dos Búzios (só Cabo Frio) têm 1 vizinho; com pesos W, o LISA deles é a comparação com um único município. Paraty e Itatiaia, e outros municípios de divisa, perdem vizinhos de SP, MG e ES. Decidir no ADR-0004: (a) só declarar na limitação; (b) sensibilidade com k vizinhos mais próximos (k = 4); (c) marcar a classe LISA desses 3 como "instável" no mapa | `resultados/estatistica/vizinhos_por_municipio.csv` · CS-016 | Fable · medium (entra no ADR-0004) | ADR-0004 decide; relatório §5.3 cita os 3 municípios |
+| CS-039 | **Efeito de borda e municípios com 1 vizinho** — Paraty (só Angra), Itatiaia (só Resende) e Armação dos Búzios (só Cabo Frio) têm 1 vizinho; com pesos W, o LISA deles é a comparação com um único município. Paraty e Itatiaia, e outros municípios de divisa, perdem vizinhos de SP, MG e ES. **Decidido 2026-09-25 (autora): (c) marcar a classe LISA desses 3 como "instável" + (a) declarar na limitação; (b) fica para uma segunda fase.** Opções eram: (a) só declarar na limitação; (b) sensibilidade com k vizinhos mais próximos (k = 4); (c) marcar a classe LISA desses 3 como "instável" no mapa | `resultados/estatistica/vizinhos_por_municipio.csv` · CS-016 | Fable · medium (entra no ADR-0004) | ADR-0004 decide; relatório §5.3 cita os 3 municípios |
 
 ### Achados do CS-007
 
@@ -131,8 +134,8 @@ Prefixos: `CS` = tarefa · `D` = decisão que só o dono/mestranda fecha · `ADR
 | ADR | Título | Nasce em |
 |---|---|---|
 | ADR-0001 | Extração do SIVEP-Gripe por download direto do portal (não `microdatasus`) | CS-005 · **escrito e aceito** (decide D-03 e D-07) |
-| ADR-0002 | Critério de caso por agente e tratamento de co-detecção | CS-007 · **escrito, proposto** (aguarda D-04) |
-| ADR-0003 | Denominador populacional por ano, incluindo 2023 | CS-011 · **escrito, proposto** (aguarda D-05) |
+| ADR-0002 | Critério de caso por agente e tratamento de co-detecção | CS-007 · **aceito 2026-09-25** |
+| ADR-0003 | Denominador populacional por ano, incluindo 2023 | CS-011 · **aceito 2026-09-25** (implementação do denominador único no CS-012) |
 | ADR-0004 | LISA: permutação, correção FDR, variável (bruta × EB), α | CS-017 |
 | ADR-0006 | Malha oficial do IBGE em resolução completa, não o `geobr` simplificado | CS-014 · **escrito e aceito** |
 | ADR-0005 | Escopo: município (não bairro); scripts numerados (não `targets`); quadrimestre só descritivo | CS-002 · **escrito**, itens 1–2 aceitos |

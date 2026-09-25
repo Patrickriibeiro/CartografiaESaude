@@ -1,7 +1,7 @@
 # ADR-0003 — Denominador populacional por ano
 
-- **Status:** **proposto**. Implementado como padrão provisório; a escolha final é da
-  autora (D-05), à luz do achado 2 abaixo.
+- **Status:** **aceito em 2026-09-25** pela autora (D-05): opção D para comparar anos, opção A
+  para o mapa de cada ano. Texto original preservado abaixo; ver a seção "Aceite" no fim.
 - **Data:** 2026-09-25
 - **Nasce em:** CS-011
 
@@ -73,3 +73,16 @@ reportando a sensibilidade. Mas isso muda a metodologia escrita, então é da au
   seção de limitações do relatório.
 - O CS-012 (incidência) usa o que `montar_populacao()` devolver; mudar de opção não
   exige mudar o CS-012.
+
+## Aceite (2026-09-25)
+
+A autora aceitou a recomendação: **dois denominadores, cada um com um uso**.
+
+| Uso | Denominador | Por quê |
+|---|---|---|
+| Mapa e LISA de **cada ano** | População oficial daquele ano: Censo 2022; 2023 interpolado (peso 0,4771); estimativas 2024 e 2025 (opção A) | Dentro de um ano, a razão estimativa/Censo varia pouco entre municípios (1,031 a 1,084); o número oficial é o mais fácil de defender |
+| **Comparação entre anos** (séries, variação 2022→2025, H3) | Estimativa 2024 para todos os anos (opção D) | Remove o degrau de 3–8 % entre a contagem do Censo e as estimativas ajustadas |
+
+Cada uso tem a outra versão como sensibilidade no relatório. Implementação: CS-012
+(`incid_100k` e `incid_100k_pop2024`), com um modo "denominador único" em
+`montar_populacao()`.

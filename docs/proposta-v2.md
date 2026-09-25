@@ -91,7 +91,7 @@ Este projeto ataca os três obstáculos com uma prova de conceito: um pipeline a
 R que vai do download ao mapa, com estatística espacial que trata os pequenos números e
 os testes múltiplos, e com painel interativo para a vigilância municipal.
 
-### 1.3 Hipótese de trabalho **[REVISAR: a autora escolhe quais manter]**
+### 1.3 Hipótese de trabalho *(decidido pela autora em 2026-09-25: H1–H3 principais; H4 opcional, junto com o OE10)*
 
 - **H1 (dependência espacial).** As taxas municipais de SRAG por SARS-CoV-2, Influenza e
   VSR no RJ não se distribuem aleatoriamente: apresentam autocorrelação espacial
@@ -104,7 +104,7 @@ os testes múltiplos, e com painel interativo para a vigilância municipal.
 - **H3 (dinâmica temporal).** A localização dos hotspots muda entre 2022 e 2025,
   refletindo a transição pós-emergência e a retomada da sazonalidade dos vírus
   endêmicos.
-- **H4 (viés assistencial, secundária).** Parte da heterogeneidade das taxas por
+- **H4 (viés assistencial, secundária e opcional).** Parte da heterogeneidade das taxas por
   município de residência é explicada pela oferta de leitos hospitalares (CNES), o que
   será verificado de forma descritiva, não causal.
 
@@ -146,8 +146,8 @@ Cada objetivo declara o produto e o critério pelo qual se verifica que foi cump
 | OE6 | Disponibilizar painel interativo (Shiny + leaflet) com filtros por agente e ano exibindo taxa bruta, taxa suavizada e classe LISA por município | `app.R` | 12 combinações filtram sem erro; popup com 6 campos |
 | OE7 | Gerar relatório e apresentação a partir do mesmo código-fonte (Quarto), com todos os números lidos dos objetos do pipeline | `08_relatorio.qmd` | `quarto render` sem erro; zero números digitados à mão no fonte |
 | OE8 | Publicar código, dados processados e documentação em repositório público com ambiente congelado (`renv`) e testes automatizados | repositório GitHub | Terceiro reexecuta do zero seguindo o README; testes verdes em integração contínua |
-| OE9 **[REVISAR: opcional]** | Calcular taxas padronizadas por idade (método direto, Censo 2022 por faixa etária) para VSR e Influenza | coluna `incid_pad_100k` | Comparação bruta × padronizada no relatório |
-| OE10 **[REVISAR: opcional]** | Descrever a relação entre taxa por residência e oferta de leitos (CNES) por região de saúde | tabela + gráfico | Coeficiente de correlação de Spearman por ano, sem inferência causal |
+| OE9 *(opcional, D-10)* | Calcular taxas padronizadas por idade (método direto, Censo 2022 por faixa etária) para VSR e Influenza | coluna `incid_pad_100k` | Comparação bruta × padronizada no relatório |
+| OE10 *(opcional, D-10)* | Descrever a relação entre taxa por residência e oferta de leitos (CNES) por região de saúde | tabela + gráfico | Coeficiente de correlação de Spearman por ano, sem inferência causal |
 
 ---
 
@@ -158,7 +158,7 @@ Cada objetivo declara o produto e o critério pelo qual se verifica que foi cump
 Estudo ecológico, exploratório e espaço-temporal. Unidade de análise: o município de
 **residência** do paciente (92 unidades), com agregação secundária em 9 regiões de saúde.
 Período: primeiros sintomas entre 01/01/2022 e a data de corte do snapshot de 2025
-**[REVISAR: fixar a data ao baixar]**, agregado por ano epidemiológico e, para
+(versão de 14/09/2026 do banco, ADR-0001), agregado por ano epidemiológico e, para
 descrição temporal, por semana epidemiológica (`SEM_PRI`). Agentes: SARS-CoV-2,
 Influenza (A e B, analisadas em conjunto e separadas quando o n permitir) e VSR.
 
@@ -185,7 +185,7 @@ Todas públicas, gratuitas e de acesso aberto.
 ### 3.3 Coleta, curadoria e tratamento dos dados do SIVEP-Gripe
 
 **Extração.** Os bancos anuais são baixados diretamente do Portal de Dados Abertos por
-HTTP, preferencialmente em PARQUET **[REVISAR: D-03]**, com leitura seletiva de ~25
+HTTP, em PARQUET (ADR-0001), com leitura seletiva de ~25
 colunas pelo pacote `arrow`, o que evita carregar em memória as ~190 colunas de cada
 banco. Cada arquivo baixado recebe entrada em `dados/MANIFESTO.md` com URL, data e hora,
 tamanho e hash SHA-256. O pipeline recusa-se a processar arquivo cujo hash não conste do
@@ -201,14 +201,14 @@ de internações (Cavalcante et al., 2021).
 notificação (`DT_NOTIFIC`), com a proporção de substituições reportada. Datas fora de
 [2022-01-01, data do snapshot] são tratadas como inválidas e contadas, não corrigidas.
 
-**Critério de caso por agente [REVISAR: D-04 pendente; recomendação do ADR-0002].** A
+**Critério de caso por agente (decidido pela autora em 2026-09-25; ADR-0002).** A
 leitura literal da v1 (classificação final **e** campo do vírus marcado) foi testada nas
 99.880 fichas do RJ e descartada: o campo "qual vírus" fica em branco em fichas com
 resultado positivo, em proporção que cai de 27 % (2022) para 5 % (2025) entre as
 encerradas como COVID, o que fabricaria uma queda artificial no período. A regra
-recomendada ancora o caso na declaração da vigilância:
+adotada ancora o caso na declaração da vigilância:
 
-| Agente | Regra recomendada (R2 "vigilância", ADR-0002) |
+| Agente | Regra adotada (R2 "vigilância", ADR-0002) |
 |---|---|
 | SARS-CoV-2 | `CLASSI_FIN == 5` **e** (`CRITERIO == 1` laboratorial **ou** `PCR_SARS2 == 1` **ou** `AN_SARS2 == 1`) |
 | Influenza | `CLASSI_FIN == 1` **e** (`CRITERIO == 1` **ou** `POS_PCRFLU == 1` **ou** `POS_AN_FLU == 1`); subtipo A/B por `TP_FLU_PCR` ou `TP_FLU_AN` |
@@ -227,9 +227,9 @@ respiratório; 3 outro agente etiológico; 4 não especificado; 5 COVID-19) e os
 por ano é reportada. No snapshot de 14/09/2026 ela **não** cresce no ano corrente:
 1.028, 481, 760 e 138 fichas em 2022–2025 (ADR-0002 §3.4).
 
-**Co-detecção [REVISAR: D-04].** Uma ficha pode ter mais de um dos três vírus
+**Co-detecção (decidido, ADR-0002).** Uma ficha pode ter mais de um dos três vírus
 detectado, mas isso é raro: 305 das 99.880 fichas (0,3 %). Como cada ficha tem uma só
-classificação final, a regra recomendada atribui cada caso a **um** agente, o da
+classificação final, a regra adotada atribui cada caso a **um** agente, o da
 classificação; as co-detecções são reportadas em tabela por agente e ano, e não contadas
 duas vezes. O campo oficial `CO_DETEC` não é usado: marca co-detecção com qualquer vírus
 e está vazio em 65 % das fichas.
@@ -244,16 +244,17 @@ fabricada, o que permite testar sem baixar dados reais.
 **Incidência acumulada bruta** por município, agente e ano:
 `casos / população × 100 000`.
 
-**Denominador ano a ano [REVISAR: D-05 pendente; ADR-0003].** O IBGE não publicou
+**Denominador ano a ano (decidido pela autora em 2026-09-25; ADR-0003).** O IBGE não publicou
 estimativa municipal em 2023, e as estimativas de 2024 e 2025 partem do Censo 2022
 **ajustado** pela Pesquisa de Pós-Enumeração, com ajuste maior nos municípios grandes
 (IBGE, Estimativas da População 2024, Nota metodológica n. 01, p. 6–7). Por isso a
 estimativa de 2024 fica de 3,1 % (Cambuci) a 8,4 % (Rio de Janeiro) acima da contagem do
 Censo, em todos os 92 municípios. Usar o Censo como denominador de 2022 infla a taxa
-daquele ano na mesma proporção. A implementação provisória usa o Censo em 2022, as
-estimativas em 2024–2025 e interpola 2023 nas datas de referência reais (peso 0,4771);
-o ADR-0003 lista quatro alternativas, e a recomendada é um denominador único para as
-comparações entre anos. A fonte de cada ano consta de uma coluna `fonte` da tabela de
+daquele ano na mesma proporção. Por isso o projeto usa dois denominadores, cada um com
+um uso: o **mapa e o LISA de cada ano** usam a população oficial daquele ano (Censo em
+2022; 2023 interpolado nas datas de referência reais, peso 0,4771; estimativas em
+2024–2025); as **comparações entre anos** usam a estimativa de 2024 como denominador
+único, o que remove o degrau. Cada uso traz o outro como sensibilidade. A fonte de cada ano consta de uma coluna `fonte` da tabela de
 população.
 
 **Grade completa.** A tabela final tem exatamente 92 × 3 × 4 linhas; município sem caso
@@ -262,8 +263,8 @@ distorce o Moran).
 
 **Suavização empírica de Bayes** (`spdep::EBest`): taxa que encolhe os municípios de
 população pequena em direção à média estadual, proporcionalmente à sua incerteza. O
-relatório apresenta bruta e suavizada lado a lado; o LISA roda sobre a suavizada
-**[REVISAR: D-09]**.
+relatório apresenta bruta e suavizada lado a lado; o LISA roda sobre a suavizada, e a
+bruta entra como sensibilidade (decidido pela autora, D-09).
 
 **Padronização por idade (OE9, opcional).** Método direto, faixas etárias do Censo 2022
 (tabela 9514), população-padrão = RJ 2022. Justificativa: VSR e Influenza têm perfis
@@ -351,7 +352,8 @@ incluir, em especial covariáveis ambientais (temperatura, umidade) para o VSR.
    estimativas de 2024–2025 são ajustadas (3,1–8,4 % acima, por município). Sem tratamento,
    a taxa de 2022 fica inflada em relação aos anos seguintes (ADR-0003).
 7. **Efeito de borda.** Municípios de divisa não têm os vizinhos de SP, MG e ES na
-   matriz; Paraty, Itatiaia e Armação dos Búzios têm um único vizinho (CS-039).
+   matriz; Paraty, Itatiaia e Armação dos Búzios têm um único vizinho, e a classe LISA
+   deles aparece no mapa marcada como "instável" (decidido pela autora, CS-039).
 3. **Pequenos números e MAUP.** Tratados com suavização; o problema da unidade de área
    modificável (o resultado depende do recorte) é inerente ao desenho e declarado.
 4. **Ecológico.** Nenhuma inferência individual.
