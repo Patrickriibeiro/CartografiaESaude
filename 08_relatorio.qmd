@@ -297,8 +297,11 @@ classe LISA entre as duas variáveis por mapa ficou entre `r fp(min(conc$concord
 
 ## Protótipo de painel para a vigilância
 
-O painel interativo (Shiny e leaflet), com filtros por agente e ano, está em desenvolvimento
-(item CS-021 do BACKLOG) e usará as mesmas tabelas e classes deste relatório.
+O painel interativo (`app.R`, Shiny e leaflet) permite escolher o agente, o ano e a camada
+(incidência suavizada ou agrupamentos do Moran local). Cada município, ao ser clicado, mostra
+casos, população, taxas bruta e suavizada e a classe do LISA; os municípios com um único
+vizinho têm borda tracejada. O painel lê as mesmas tabelas deste relatório e é aberto, na raiz
+do projeto, com `shiny::runApp()`.
 
 ## Disponibilidade de código e dados
 

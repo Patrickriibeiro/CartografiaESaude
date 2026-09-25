@@ -144,6 +144,81 @@ escala_lisa <- function() {
                              drop = FALSE, name = "Moran local (LISA)")
 }
 
+# ---------------------------------------------------------------------------
+# Painel interativo (CS-021)
+# ---------------------------------------------------------------------------
+
+ARQUIVOS_PAINEL <- c(
+  malha = file.path("dados", "processados", "municipios_rj.rds"),
+  indicadores = file.path("dados", "processados", "indicadores_municipais.parquet"),
+  moran_lisa = file.path("resultados", "estatistica", "moran_lisa.rds")
+)
+
+#' Carrega o que o painel usa, só de dados/processados e resultados/. Para com
+#' mensagem clara se o pipeline não rodou. A malha é simplificada SÓ para o
+#' desenho no navegador (tolerância de 100 m em UTM): a análise usou a completa.
+carregar_dados_painel <- function(tolerancia_m = 100) {
+  faltam <- ARQUIVOS_PAINEL[!file.exists(ARQUIVOS_PAINEL)]
+  if (length(faltam) > 0) {
+    stop("Rode o pipeline antes do painel (source(\"run.R\")). Faltam: ",
+         paste(faltam, collapse = ", "), call. = FALSE)
+  }
+  malha <- readRDS(ARQUIVOS_PAINEL[["malha"]])
+  desenho <- sf::st_transform(
+    sf::st_simplify(sf::st_transform(malha, 31983), preserveTopology = TRUE, dTolerance = tolerancia_m),
+    4326)  # o leaflet desenha em WGS 84
+  list(
+    malha = desenho[, c("cod6", "nome")],
+    ind = as.data.frame(arrow::read_parquet(ARQUIVOS_PAINEL[["indicadores"]])),
+    lisa = readRDS(ARQUIVOS_PAINEL[["moran_lisa"]])$principal$lisa
+  )
+}
+
+#' Recorte de um agente × ano, já com categoria LISA e popup.
+dados_painel <- function(base, agente, ano) {
+  d <- dados_mapa(base$malha, base$ind, base$lisa, agente, ano)
+  d$categoria <- categoria_lisa(d$quadrante, d$nivel)
+  d$classe_incidencia <- classes_quantil(d$incid_eb_100k)
+  d$popup <- popup_painel(d)
+  d
+}
+
+#' Popup com os 6 campos do aceite do CS-021.
+popup_painel <- function(d) {
+  num <- function(x, dig = 1) formatC(x, format = "f", digits = dig, decimal.mark = ",", big.mark = ".")
+  int <- function(x) formatC(x, format = "d", big.mark = ".", decimal.mark = ",")
+  instavel <- ifelse(d$instavel, "<br><i>Um único vizinho: classe instável.</i>", "")
+  sprintf(paste0("<b>%s</b><br>Casos: %s<br>População: %s<br>Taxa bruta: %s por 100 mil",
+                 "<br>Taxa suavizada: %s por 100 mil<br>Moran local: %s%s"),
+          htmltools::htmlEscape(d$nome), int(d$casos), int(d$populacao), num(d$incid_100k),
+          num(d$incid_eb_100k), as.character(categoria_lisa(d$quadrante, d$nivel)), instavel)
+}
+
+#' Mapa leaflet de um recorte, na camada "incidencia" ou "lisa".
+mapa_painel <- function(d, camada = c("incidencia", "lisa")) {
+  camada <- match.arg(camada)
+  if (camada == "incidencia") {
+    niveis <- levels(d$classe_incidencia)
+    cores <- viridisLite::magma(length(niveis), begin = 0.1, end = 0.95, direction = -1)
+    pal <- leaflet::colorFactor(cores, levels = niveis)
+    valor <- d$classe_incidencia
+    titulo <- "Taxa suavizada<br>por 100 mil hab."
+  } else {
+    pal <- leaflet::colorFactor(unname(PALETA_LISA), levels = names(PALETA_LISA))
+    valor <- d$categoria
+    titulo <- "Moran local (LISA)"
+  }
+  leaflet::leaflet(d) |>
+    leaflet::addProviderTiles("CartoDB.Positron") |>
+    leaflet::addPolygons(
+      fillColor = pal(valor), fillOpacity = 0.85, color = ifelse(d$instavel, "#333333", "white"),
+      weight = ifelse(d$instavel, 2.5, 0.6), dashArray = ifelse(d$instavel, "4", NA_character_),
+      popup = d$popup, label = d$nome,
+      highlightOptions = leaflet::highlightOptions(weight = 2, color = "#000000", bringToFront = TRUE)
+    ) |>
+    leaflet::addLegend("bottomright", pal = pal, values = valor, title = titulo, opacity = 0.9)
+}
+
 #' Junta malha, indicadores e LISA de um agente × ano num sf pronto para os mapas.
 dados_mapa <- function(malha, ind, lisa, agente, ano) {
   i <- ind[ind$agente == agente & ind$ano == ano, ]
