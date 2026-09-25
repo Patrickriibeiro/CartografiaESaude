@@ -155,7 +155,7 @@ Prefixos: `CS` = tarefa · `D` = decisão que só o dono/mestranda fecha · `ADR
 | CS-014 | **Malha municipal** — IBGE oficial em resolução completa (ADR-0006), não o `geobr` simplificado, que perdia 8 pares de vizinhos; 92 feições válidas, EPSG 4674; casa 92/92 com população e SIVEP por `cod6` | 2026-09-25 | idem · ADR-0006 |
 | CS-015 | **Testes da malha** — 92 códigos únicos com prefixo 33, área 43.750,4 km² (dentro de 2 % da oficial). Fechado junto com o CS-014, com aviso ao dono, porque os critérios já eram exercidos pelo mesmo teste | 2026-09-25 | idem |
 | CS-016 | **Vizinhança Queen e pesos W** — 92 municípios, **456 ligações** (bate com o ADR-0006), 1 bloco, mínimo 1 vizinho, máximo 10, mediana 5; `region.id` = cod6; tabela e histograma em `resultados/estatistica/` | 2026-09-25 | `docs/release-history/cs-016-vizinhanca-queen.md` · commit `72970cf` |
-| CS-007 | **ADR-0002, critério de caso** — 5 regras candidatas em código (`REGRAS_CASO`, 6 testes), tabela 5 regras × 3 agentes × 4 anos sobre 99.880 fichas, decomposição das fichas sem checkbox, co-detecção; ADR **proposto** com recomendação R2 e 3 perguntas à autora (D-04) | 2026-09-25 | `docs/release-history/cs-007-criterio-de-caso.md` · ADR-0002 · commit PENDENTE |
+| CS-007 | **ADR-0002, critério de caso** — 5 regras candidatas em código (`REGRAS_CASO`, 6 testes), tabela 5 regras × 3 agentes × 4 anos sobre 99.880 fichas, decomposição das fichas sem checkbox, co-detecção; ADR **proposto** com recomendação R2 e 3 perguntas à autora (D-04) | 2026-09-25 | `docs/release-history/cs-007-criterio-de-caso.md` · ADR-0002 · commit `df1606a` |
 
 ## Descartados
 
