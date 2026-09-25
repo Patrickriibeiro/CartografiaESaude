@@ -1,0 +1,21 @@
+# Dados brutos e intermediários nunca entram no git (trilha §3.3, invariante 1; LGPD)
+dados/brutos/*
+dados/intermediarios/*
+!dados/**/.gitkeep
+
+# Saídas regeneráveis
+resultados/mapas/*
+resultados/objetos/*
+!resultados/**/.gitkeep
+*_files/
+08_relatorio.html
+08_apresentacao.html
+.quarto/
+
+# R e editores
+.Rhistory
+.RData
+.Rproj.user/
+renv/library/
+renv/staging/
+renv/local/

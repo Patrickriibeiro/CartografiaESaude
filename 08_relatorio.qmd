@@ -1,0 +1,18 @@
+---
+title: "Análise espaço-temporal de vírus respiratórios no Estado do Rio de Janeiro (2022–2025)"
+author: "Gabrielle Barbosa Teixeira Coelho"
+lang: pt-BR
+format:
+  html: default
+  revealjs:
+    output-file: 08_apresentacao.html
+execute:
+  echo: false
+---
+
+<!-- Esqueleto do CS-002. Conteúdo: CS-022. Todo número deste arquivo deve vir de
+resultados/, nunca digitado à mão (trilha §3.3, invariante 2). -->
+
+## Resultados
+
+Relatório ainda não implementado.
