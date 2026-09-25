@@ -248,7 +248,10 @@ Testes verificam o contrato, não a implementação.
                     agente ∈ {sarscov2, influenza, vsr}; coluna codeteccao
 02_indicadores.R ─► dados/processados/populacao_rj.parquet           (CS-011, entregue)
                     contrato: 92 × 4, cod6 texto, populacao inteira, fonte por linha (ADR-0003)
-                ─► dados/processados/indicadores_municipais.parquet (CS-012)
+                ─► dados/processados/indicadores_municipais.parquet (CS-012, entregue: 1.104 linhas)
+                    contrato: 92 × 3 × 4 com zero explícito; casos, populacao, populacao_unica,
+                    incid_100k (população do ano), incid_100k_pop2024 (D-05), fonte_populacao
+                ─► dados/processados/indicadores_quadrimestrais.parquet (CS-012; 3.312 linhas, só descritivo)
                     contrato: 92 municípios × 3 agentes × N períodos, SEM linha faltante
                     (zero explícito); casos, populacao, incid_100k, incid_eb_100k
 03_cartografia.R ─► dados/processados/municipios_rj.rds             (CS-014, entregue; malha IBGE, ADR-0006)

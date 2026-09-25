@@ -29,3 +29,12 @@ explícita antes do primeiro commit, porque moldam o esqueleto.
   `run.R`.
 - Se o pipeline crescer (mais anos, escala de setor censitário), migrar para `targets`
   vira um novo ADR.
+
+## Adendo (2026-09-25, CS-012): quadrimestre epidemiológico
+
+Como o ano do estudo é o ano epidemiológico do banco (ADR-0001, CS-036), o quadrimestre
+também é epidemiológico, definido pela semana epidemiológica do início dos sintomas:
+**semanas 1–17, 18–34 e 35–52/53**. Pelo mês de `DT_SIN_PRI`, uma ficha de 29/12/2024
+do banco de 2025 cairia no 3º quadrimestre, e não no 1º. O 3º quadrimestre tem 18
+semanas (19 em ano com semana 53); a taxa quadrimestral é do período, não anualizada,
+e fica só no descritivo (D-08).

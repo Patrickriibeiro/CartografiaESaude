@@ -1,0 +1,1105 @@
+"cod6","ano","agente","casos","populacao","fonte_populacao","populacao_unica","incid_100k","incid_100k_pop2024"
+"330010",2022,"influenza",1,167434,"Censo 2022, população residente (data de referência 01/08/2022)",179120,0.597250259803863,0.558284948637785
+"330010",2023,"influenza",19,173010,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",179120,10.9820241604532,10.6074140241179
+"330010",2024,"influenza",21,179120,"Estimativa da população residente, 1º de julho de 2024",179120,11.7239839213935,11.7239839213935
+"330010",2025,"influenza",15,179142,"Estimativa da população residente, 1º de julho de 2025",179120,8.37324580500385,8.37427422956677
+"330010",2022,"sarscov2",145,167434,"Censo 2022, população residente (data de referência 01/08/2022)",179120,86.6012876715601,80.9513175524788
+"330010",2023,"sarscov2",31,173010,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",179120,17.9180394196867,17.3068334077713
+"330010",2024,"sarscov2",21,179120,"Estimativa da população residente, 1º de julho de 2024",179120,11.7239839213935,11.7239839213935
+"330010",2025,"sarscov2",13,179142,"Estimativa da população residente, 1º de julho de 2025",179120,7.25681303100334,7.2577043322912
+"330010",2022,"vsr",4,167434,"Censo 2022, população residente (data de referência 01/08/2022)",179120,2.38900103921545,2.23313979455114
+"330010",2023,"vsr",12,173010,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",179120,6.93601525923357,6.69941938365342
+"330010",2024,"vsr",27,179120,"Estimativa da população residente, 1º de julho de 2024",179120,15.0736936132202,15.0736936132202
+"330010",2025,"vsr",46,179142,"Estimativa da população residente, 1º de julho de 2025",179120,25.6779538020118,25.6811076373381
+"330015",2022,"influenza",0,11034,"Censo 2022, população residente (data de referência 01/08/2022)",11420,0,0
+"330015",2023,"influenza",0,11218,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",11420,0,0
+"330015",2024,"influenza",3,11420,"Estimativa da população residente, 1º de julho de 2024",11420,26.2697022767075,26.2697022767075
+"330015",2025,"influenza",0,11426,"Estimativa da população residente, 1º de julho de 2025",11420,0,0
+"330015",2022,"sarscov2",2,11034,"Censo 2022, população residente (data de referência 01/08/2022)",11420,18.1257930034439,17.5131348511384
+"330015",2023,"sarscov2",1,11218,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",11420,8.9142449634516,8.75656742556918
+"330015",2024,"sarscov2",0,11420,"Estimativa da população residente, 1º de julho de 2024",11420,0,0
+"330015",2025,"sarscov2",0,11426,"Estimativa da população residente, 1º de julho de 2025",11420,0,0
+"330015",2022,"vsr",0,11034,"Censo 2022, população residente (data de referência 01/08/2022)",11420,0,0
+"330015",2023,"vsr",0,11218,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",11420,0,0
+"330015",2024,"vsr",0,11420,"Estimativa da população residente, 1º de julho de 2024",11420,0,0
+"330015",2025,"vsr",0,11426,"Estimativa da população residente, 1º de julho de 2025",11420,0,0
+"330020",2022,"influenza",9,129671,"Censo 2022, população residente (data de referência 01/08/2022)",137773,6.94064208651125,6.53248459422383
+"330020",2023,"influenza",9,133537,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",137773,6.73970510045905,6.53248459422383
+"330020",2024,"influenza",10,137773,"Estimativa da população residente, 1º de julho de 2024",137773,7.25831621580426,7.25831621580426
+"330020",2025,"influenza",11,137906,"Estimativa da população residente, 1º de julho de 2025",137773,7.97644772526214,7.98414783738468
+"330020",2022,"sarscov2",66,129671,"Censo 2022, população residente (data de referência 01/08/2022)",137773,50.8980419677491,47.9048870243081
+"330020",2023,"sarscov2",11,133537,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",137773,8.2374173450055,7.98414783738468
+"330020",2024,"sarscov2",5,137773,"Estimativa da população residente, 1º de julho de 2024",137773,3.62915810790213,3.62915810790213
+"330020",2025,"sarscov2",1,137906,"Estimativa da população residente, 1º de julho de 2025",137773,0.725131611387467,0.725831621580426
+"330020",2022,"vsr",4,129671,"Censo 2022, população residente (data de referência 01/08/2022)",137773,3.08472981622722,2.9033264863217
+"330020",2023,"vsr",4,133537,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",137773,2.99542448909291,2.9033264863217
+"330020",2024,"vsr",10,137773,"Estimativa da população residente, 1º de julho de 2024",137773,7.25831621580426,7.25831621580426
+"330020",2025,"vsr",33,137906,"Estimativa da população residente, 1º de julho de 2025",137773,23.9293431757864,23.9524435121541
+"330022",2022,"influenza",0,11828,"Censo 2022, população residente (data de referência 01/08/2022)",12236,0,0
+"330022",2023,"influenza",2,12023,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",12236,16.6347833319471,16.34521085322
+"330022",2024,"influenza",1,12236,"Estimativa da população residente, 1º de julho de 2024",12236,8.17260542661,8.17260542661
+"330022",2025,"influenza",0,12239,"Estimativa da população residente, 1º de julho de 2025",12236,0,0
+"330022",2022,"sarscov2",14,11828,"Censo 2022, população residente (data de referência 01/08/2022)",12236,118.363205951978,114.41647597254
+"330022",2023,"sarscov2",3,12023,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",12236,24.9521749979207,24.51781627983
+"330022",2024,"sarscov2",2,12236,"Estimativa da população residente, 1º de julho de 2024",12236,16.34521085322,16.34521085322
+"330022",2025,"sarscov2",0,12239,"Estimativa da população residente, 1º de julho de 2025",12236,0,0
+"330022",2022,"vsr",0,11828,"Censo 2022, população residente (data de referência 01/08/2022)",12236,0,0
+"330022",2023,"vsr",1,12023,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",12236,8.31739166597355,8.17260542661
+"330022",2024,"vsr",0,12236,"Estimativa da população residente, 1º de julho de 2024",12236,0,0
+"330022",2025,"vsr",2,12239,"Estimativa da população residente, 1º de julho de 2025",12236,16.3412043467604,16.34521085322
+"330023",2022,"influenza",0,40006,"Censo 2022, população residente (data de referência 01/08/2022)",42442,0,0
+"330023",2023,"influenza",1,41168,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",42442,2.42907112320249,2.35615663729325
+"330023",2024,"influenza",2,42442,"Estimativa da população residente, 1º de julho de 2024",42442,4.71231327458649,4.71231327458649
+"330023",2025,"influenza",1,42527,"Estimativa da população residente, 1º de julho de 2025",42442,2.35144731582289,2.35615663729325
+"330023",2022,"sarscov2",15,40006,"Censo 2022, população residente (data de referência 01/08/2022)",42442,37.4943758436235,35.3423495593987
+"330023",2023,"sarscov2",0,41168,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",42442,0,0
+"330023",2024,"sarscov2",3,42442,"Estimativa da população residente, 1º de julho de 2024",42442,7.06846991187974,7.06846991187974
+"330023",2025,"sarscov2",4,42527,"Estimativa da população residente, 1º de julho de 2025",42442,9.40578926329156,9.42462654917299
+"330023",2022,"vsr",1,40006,"Censo 2022, população residente (data de referência 01/08/2022)",42442,2.49962505624156,2.35615663729325
+"330023",2023,"vsr",0,41168,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",42442,0,0
+"330023",2024,"vsr",0,42442,"Estimativa da população residente, 1º de julho de 2024",42442,0,0
+"330023",2025,"vsr",3,42527,"Estimativa da população residente, 1º de julho de 2025",42442,7.05434194746867,7.06846991187974
+"330025",2022,"influenza",0,30986,"Censo 2022, população residente (data de referência 01/08/2022)",32794,0,0
+"330025",2023,"influenza",0,31849,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",32794,0,0
+"330025",2024,"influenza",1,32794,"Estimativa da população residente, 1º de julho de 2024",32794,3.04933829359029,3.04933829359029
+"330025",2025,"influenza",4,32822,"Estimativa da população residente, 1º de julho de 2025",32794,12.1869477789288,12.1973531743612
+"330025",2022,"sarscov2",5,30986,"Censo 2022, população residente (data de referência 01/08/2022)",32794,16.1363196282192,15.2466914679515
+"330025",2023,"sarscov2",4,31849,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",32794,12.559264027128,12.1973531743612
+"330025",2024,"sarscov2",1,32794,"Estimativa da população residente, 1º de julho de 2024",32794,3.04933829359029,3.04933829359029
+"330025",2025,"sarscov2",0,32822,"Estimativa da população residente, 1º de julho de 2025",32794,0,0
+"330025",2022,"vsr",1,30986,"Censo 2022, população residente (data de referência 01/08/2022)",32794,3.22726392564384,3.04933829359029
+"330025",2023,"vsr",0,31849,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",32794,0,0
+"330025",2024,"vsr",2,32794,"Estimativa da população residente, 1º de julho de 2024",32794,6.09867658718058,6.09867658718058
+"330025",2025,"vsr",3,32822,"Estimativa da população residente, 1º de julho de 2025",32794,9.14021083419658,9.14801488077087
+"330030",2022,"influenza",2,92883,"Censo 2022, população residente (data de referência 01/08/2022)",98501,2.15324655749707,2.030436239226
+"330030",2023,"influenza",8,95564,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",98501,8.37135322924951,8.12174495690399
+"330030",2024,"influenza",45,98501,"Estimativa da população residente, 1º de julho de 2024",98501,45.684815382585,45.684815382585
+"330030",2025,"influenza",28,98506,"Estimativa da população residente, 1º de julho de 2025",98501,28.4246644874424,28.426107349164
+"330030",2022,"sarscov2",208,92883,"Censo 2022, população residente (data de referência 01/08/2022)",98501,223.937641979695,211.165368879504
+"330030",2023,"sarscov2",44,95564,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",98501,46.0424427608723,44.6695972629719
+"330030",2024,"sarscov2",19,98501,"Estimativa da população residente, 1º de julho de 2024",98501,19.289144272647,19.289144272647
+"330030",2025,"sarscov2",9,98506,"Estimativa da população residente, 1º de julho de 2025",98501,9.13649929953505,9.13696307651699
+"330030",2022,"vsr",1,92883,"Censo 2022, população residente (data de referência 01/08/2022)",98501,1.07662327874853,1.015218119613
+"330030",2023,"vsr",6,95564,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",98501,6.27851492193713,6.09130871767799
+"330030",2024,"vsr",29,98501,"Estimativa da população residente, 1º de julho de 2024",98501,29.441325468777,29.441325468777
+"330030",2025,"vsr",53,98506,"Estimativa da população residente, 1º de julho de 2025",98501,53.8038292083731,53.8065603394889
+"330040",2022,"influenza",2,169894,"Censo 2022, população residente (data de referência 01/08/2022)",181688,1.17720460993325,1.10078816432566
+"330040",2023,"influenza",3,175521,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",181688,1.70919719007982,1.65118224648849
+"330040",2024,"influenza",11,181688,"Estimativa da população residente, 1º de julho de 2024",181688,6.05433490379111,6.05433490379111
+"330040",2025,"influenza",64,181679,"Estimativa da população residente, 1º de julho de 2025",181688,35.2269662426588,35.225221258421
+"330040",2022,"sarscov2",120,169894,"Censo 2022, população residente (data de referência 01/08/2022)",181688,70.6322765959952,66.0472898595394
+"330040",2023,"sarscov2",30,175521,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",181688,17.0919719007982,16.5118224648849
+"330040",2024,"sarscov2",20,181688,"Estimativa da população residente, 1º de julho de 2024",181688,11.0078816432566,11.0078816432566
+"330040",2025,"sarscov2",19,181679,"Estimativa da população residente, 1º de julho de 2025",181688,10.4580056032893,10.4574875610937
+"330040",2022,"vsr",1,169894,"Censo 2022, população residente (data de referência 01/08/2022)",181688,0.588602304966626,0.550394082162829
+"330040",2023,"vsr",1,175521,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",181688,0.569732396693273,0.550394082162829
+"330040",2024,"vsr",6,181688,"Estimativa da população residente, 1º de julho de 2024",181688,3.30236449297697,3.30236449297697
+"330040",2025,"vsr",6,181679,"Estimativa da população residente, 1º de julho de 2025",181688,3.30252808524926,3.30236449297697
+"330045",2022,"influenza",3,483087,"Censo 2022, população residente (data de referência 01/08/2022)",518263,0.621006154170988,0.578856680874382
+"330045",2023,"influenza",5,499871,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",518263,1.00025806658118,0.964761134790637
+"330045",2024,"influenza",19,518263,"Estimativa da população residente, 1º de julho de 2024",518263,3.66609231220442,3.66609231220442
+"330045",2025,"influenza",18,518384,"Estimativa da população residente, 1º de julho de 2025",518263,3.4723293928825,3.47314008524629
+"330045",2022,"sarscov2",163,483087,"Censo 2022, população residente (data de referência 01/08/2022)",518263,33.7413343766237,31.4512129941748
+"330045",2023,"sarscov2",21,499871,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",518263,4.20108387964095,4.05199676612068
+"330045",2024,"sarscov2",12,518263,"Estimativa da população residente, 1º de julho de 2024",518263,2.31542672349753,2.31542672349753
+"330045",2025,"sarscov2",17,518384,"Estimativa da população residente, 1º de julho de 2025",518263,3.27942220438902,3.28018785828817
+"330045",2022,"vsr",12,483087,"Censo 2022, população residente (data de referência 01/08/2022)",518263,2.48402461668395,2.31542672349753
+"330045",2023,"vsr",13,499871,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",518263,2.60067097311106,2.50837895045566
+"330045",2024,"vsr",41,518263,"Estimativa da população residente, 1º de julho de 2024",518263,7.91104130528322,7.91104130528322
+"330045",2025,"vsr",55,518384,"Estimativa da população residente, 1º de julho de 2025",518263,10.609895367141,10.612372482697
+"330050",2022,"influenza",0,28102,"Censo 2022, população residente (data de referência 01/08/2022)",29736,0,0
+"330050",2023,"influenza",1,28882,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",29736,3.46236410220899,3.36292709174065
+"330050",2024,"influenza",5,29736,"Estimativa da população residente, 1º de julho de 2024",29736,16.8146354587033,16.8146354587033
+"330050",2025,"influenza",8,29758,"Estimativa da população residente, 1º de julho de 2025",29736,26.883527118758,26.9034167339252
+"330050",2022,"sarscov2",25,28102,"Censo 2022, população residente (data de referência 01/08/2022)",29736,88.9616397409437,84.0731772935163
+"330050",2023,"sarscov2",8,28882,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",29736,27.6989128176719,26.9034167339252
+"330050",2024,"sarscov2",7,29736,"Estimativa da população residente, 1º de julho de 2024",29736,23.5404896421846,23.5404896421846
+"330050",2025,"sarscov2",0,29758,"Estimativa da população residente, 1º de julho de 2025",29736,0,0
+"330050",2022,"vsr",0,28102,"Censo 2022, população residente (data de referência 01/08/2022)",29736,0,0
+"330050",2023,"vsr",2,28882,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",29736,6.92472820441798,6.7258541834813
+"330050",2024,"vsr",0,29736,"Estimativa da população residente, 1º de julho de 2024",29736,0,0
+"330050",2025,"vsr",0,29758,"Estimativa da população residente, 1º de julho de 2025",29736,0,0
+"330060",2022,"influenza",0,35173,"Censo 2022, população residente (data de referência 01/08/2022)",37172,0,0
+"330060",2023,"influenza",0,36127,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",37172,0,0
+"330060",2024,"influenza",0,37172,"Estimativa da população residente, 1º de julho de 2024",37172,0,0
+"330060",2025,"influenza",20,37176,"Estimativa da população residente, 1º de julho de 2025",37172,53.7981493436626,53.8039384482944
+"330060",2022,"sarscov2",12,35173,"Censo 2022, população residente (data de referência 01/08/2022)",37172,34.1170784408495,32.2823630689767
+"330060",2023,"sarscov2",0,36127,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",37172,0,0
+"330060",2024,"sarscov2",0,37172,"Estimativa da população residente, 1º de julho de 2024",37172,0,0
+"330060",2025,"sarscov2",3,37176,"Estimativa da população residente, 1º de julho de 2025",37172,8.06972240154939,8.07059076724416
+"330060",2022,"vsr",0,35173,"Censo 2022, população residente (data de referência 01/08/2022)",37172,0,0
+"330060",2023,"vsr",0,36127,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",37172,0,0
+"330060",2024,"vsr",0,37172,"Estimativa da população residente, 1º de julho de 2024",37172,0,0
+"330060",2025,"vsr",0,37176,"Estimativa da população residente, 1º de julho de 2025",37172,0,0
+"330070",2022,"influenza",2,222161,"Censo 2022, população residente (data de referência 01/08/2022)",238166,0.90024801832905,0.839750426173341
+"330070",2023,"influenza",16,229798,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",238166,6.96263675053743,6.71800340938673
+"330070",2024,"influenza",34,238166,"Estimativa da população residente, 1º de julho de 2024",238166,14.2757572449468,14.2757572449468
+"330070",2025,"influenza",23,238438,"Estimativa da população residente, 1º de julho de 2025",238166,9.64611345507008,9.65712990099343
+"330070",2022,"sarscov2",248,222161,"Censo 2022, população residente (data de referência 01/08/2022)",238166,111.630754272802,104.129052845494
+"330070",2023,"sarscov2",56,229798,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",238166,24.369228626881,23.5130119328536
+"330070",2024,"sarscov2",28,238166,"Estimativa da população residente, 1º de julho de 2024",238166,11.7565059664268,11.7565059664268
+"330070",2025,"sarscov2",19,238438,"Estimativa da população residente, 1º de julho de 2025",238166,7.96852850636224,7.97762904864674
+"330070",2022,"vsr",14,222161,"Censo 2022, população residente (data de referência 01/08/2022)",238166,6.30173612830335,5.87825298321339
+"330070",2023,"vsr",5,229798,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",238166,2.17582398454295,2.09937606543335
+"330070",2024,"vsr",25,238166,"Estimativa da população residente, 1º de julho de 2024",238166,10.4968803271668,10.4968803271668
+"330070",2025,"vsr",34,238438,"Estimativa da população residente, 1º de julho de 2025",238166,14.2594720640166,14.2757572449468
+"330080",2022,"influenza",2,56943,"Censo 2022, população residente (data de referência 01/08/2022)",59837,3.5122842140386,3.34241355682939
+"330080",2023,"influenza",1,58324,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",59837,1.71456004389274,1.67120677841469
+"330080",2024,"influenza",8,59837,"Estimativa da população residente, 1º de julho de 2024",59837,13.3696542273175,13.3696542273175
+"330080",2025,"influenza",5,59861,"Estimativa da população residente, 1º de julho de 2025",59837,8.35268371727836,8.35603389207347
+"330080",2022,"sarscov2",30,56943,"Censo 2022, população residente (data de referência 01/08/2022)",59837,52.684263210579,50.1362033524408
+"330080",2023,"sarscov2",7,58324,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",59837,12.0019203072492,11.6984474489029
+"330080",2024,"sarscov2",4,59837,"Estimativa da população residente, 1º de julho de 2024",59837,6.68482711365877,6.68482711365877
+"330080",2025,"sarscov2",2,59861,"Estimativa da população residente, 1º de julho de 2025",59837,3.34107348691134,3.34241355682939
+"330080",2022,"vsr",0,56943,"Censo 2022, população residente (data de referência 01/08/2022)",59837,0,0
+"330080",2023,"vsr",9,58324,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",59837,15.4310403950346,15.0408610057322
+"330080",2024,"vsr",14,59837,"Estimativa da população residente, 1º de julho de 2024",59837,23.3968948978057,23.3968948978057
+"330080",2025,"vsr",15,59861,"Estimativa da população residente, 1º de julho de 2025",59837,25.0580511518351,25.0681016762204
+"330090",2022,"influenza",0,14616,"Censo 2022, população residente (data de referência 01/08/2022)",15070,0,0
+"330090",2023,"influenza",0,14833,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",15070,0,0
+"330090",2024,"influenza",10,15070,"Estimativa da população residente, 1º de julho de 2024",15070,66.35700066357,66.35700066357
+"330090",2025,"influenza",12,15069,"Estimativa da população residente, 1º de julho de 2025",15070,79.6336850487756,79.628400796284
+"330090",2022,"sarscov2",66,14616,"Censo 2022, população residente (data de referência 01/08/2022)",15070,451.559934318555,437.956204379562
+"330090",2023,"sarscov2",13,14833,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",15070,87.6424189307625,86.264100862641
+"330090",2024,"sarscov2",21,15070,"Estimativa da população residente, 1º de julho de 2024",15070,139.349701393497,139.349701393497
+"330090",2025,"sarscov2",2,15069,"Estimativa da população residente, 1º de julho de 2025",15070,13.2722808414626,13.271400132714
+"330090",2022,"vsr",0,14616,"Censo 2022, população residente (data de referência 01/08/2022)",15070,0,0
+"330090",2023,"vsr",0,14833,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",15070,0,0
+"330090",2024,"vsr",0,15070,"Estimativa da população residente, 1º de julho de 2024",15070,0,0
+"330090",2025,"vsr",0,15069,"Estimativa da população residente, 1º de julho de 2025",15070,0,0
+"330093",2022,"influenza",0,13847,"Censo 2022, população residente (data de referência 01/08/2022)",14325,0,0
+"330093",2023,"influenza",1,14075,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",14325,7.10479573712256,6.98080279232112
+"330093",2024,"influenza",8,14325,"Estimativa da população residente, 1º de julho de 2024",14325,55.8464223385689,55.8464223385689
+"330093",2025,"influenza",12,14329,"Estimativa da população residente, 1º de julho de 2025",14325,83.7462488659362,83.7696335078534
+"330093",2022,"sarscov2",12,13847,"Censo 2022, população residente (data de referência 01/08/2022)",14325,86.6613706940131,83.7696335078534
+"330093",2023,"sarscov2",2,14075,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",14325,14.2095914742451,13.9616055846422
+"330093",2024,"sarscov2",0,14325,"Estimativa da população residente, 1º de julho de 2024",14325,0,0
+"330093",2025,"sarscov2",1,14329,"Estimativa da população residente, 1º de julho de 2025",14325,6.97885407216135,6.98080279232112
+"330093",2022,"vsr",0,13847,"Censo 2022, população residente (data de referência 01/08/2022)",14325,0,0
+"330093",2023,"vsr",0,14075,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",14325,0,0
+"330093",2024,"vsr",1,14325,"Estimativa da população residente, 1º de julho de 2024",14325,6.98080279232112,6.98080279232112
+"330093",2025,"vsr",0,14329,"Estimativa da população residente, 1º de julho de 2025",14325,0,0
+"330095",2022,"influenza",0,8741,"Censo 2022, população residente (data de referência 01/08/2022)",9044,0,0
+"330095",2023,"influenza",2,8886,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",9044,22.5073148773351,22.1141088014153
+"330095",2024,"influenza",1,9044,"Estimativa da população residente, 1º de julho de 2024",9044,11.0570544007077,11.0570544007077
+"330095",2025,"influenza",2,9048,"Estimativa da população residente, 1º de julho de 2025",9044,22.10433244916,22.1141088014153
+"330095",2022,"sarscov2",1,8741,"Censo 2022, população residente (data de referência 01/08/2022)",9044,11.4403386340236,11.0570544007077
+"330095",2023,"sarscov2",0,8886,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",9044,0,0
+"330095",2024,"sarscov2",0,9044,"Estimativa da população residente, 1º de julho de 2024",9044,0,0
+"330095",2025,"sarscov2",0,9048,"Estimativa da população residente, 1º de julho de 2025",9044,0,0
+"330095",2022,"vsr",0,8741,"Censo 2022, população residente (data de referência 01/08/2022)",9044,0,0
+"330095",2023,"vsr",0,8886,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",9044,0,0
+"330095",2024,"vsr",0,9044,"Estimativa da população residente, 1º de julho de 2024",9044,0,0
+"330095",2025,"vsr",0,9048,"Estimativa da população residente, 1º de julho de 2025",9044,0,0
+"330100",2022,"influenza",8,483540,"Censo 2022, população residente (data de referência 01/08/2022)",519011,1.6544649873847,1.54139314966349
+"330100",2023,"influenza",15,500465,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",519011,2.99721259228917,2.89011215561905
+"330100",2024,"influenza",23,519011,"Estimativa da população residente, 1º de julho de 2024",519011,4.43150530528255,4.43150530528255
+"330100",2025,"influenza",42,519259,"Estimativa da população residente, 1º de julho de 2025",519011,8.08844911691468,8.09231403573335
+"330100",2022,"sarscov2",459,483540,"Censo 2022, população residente (data de referência 01/08/2022)",519011,94.9249286511974,88.437431961943
+"330100",2023,"sarscov2",139,500465,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",519011,27.7741700218797,26.7817059754032
+"330100",2024,"sarscov2",81,519011,"Estimativa da população residente, 1º de julho de 2024",519011,15.6066056403429,15.6066056403429
+"330100",2025,"sarscov2",14,519259,"Estimativa da população residente, 1º de julho de 2025",519011,2.69614970563823,2.69743801191112
+"330100",2022,"vsr",19,483540,"Censo 2022, população residente (data de referência 01/08/2022)",519011,3.92935434503867,3.6608087304508
+"330100",2023,"vsr",31,500465,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",519011,6.19423935739762,5.97289845494604
+"330100",2024,"vsr",46,519011,"Estimativa da população residente, 1º de julho de 2024",519011,8.86301061056509,8.86301061056509
+"330100",2025,"vsr",52,519259,"Estimativa da população residente, 1º de julho de 2025",519011,10.0142703352277,10.0190554728127
+"330110",2022,"influenza",2,19390,"Censo 2022, população residente (data de referência 01/08/2022)",19996,10.3145951521403,10.00200040008
+"330110",2023,"influenza",2,19679,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",19996,10.1631180446161,10.00200040008
+"330110",2024,"influenza",3,19996,"Estimativa da população residente, 1º de julho de 2024",19996,15.00300060012,15.00300060012
+"330110",2025,"influenza",4,19995,"Estimativa da população residente, 1º de julho de 2025",19996,20.0050012503126,20.00400080016
+"330110",2022,"sarscov2",39,19390,"Censo 2022, população residente (data de referência 01/08/2022)",19996,201.134605466735,195.03900780156
+"330110",2023,"sarscov2",4,19679,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",19996,20.3262360892322,20.00400080016
+"330110",2024,"sarscov2",1,19996,"Estimativa da população residente, 1º de julho de 2024",19996,5.00100020004001,5.00100020004001
+"330110",2025,"sarscov2",0,19995,"Estimativa da população residente, 1º de julho de 2025",19996,0,0
+"330110",2022,"vsr",0,19390,"Censo 2022, população residente (data de referência 01/08/2022)",19996,0,0
+"330110",2023,"vsr",0,19679,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",19996,0,0
+"330110",2024,"vsr",0,19996,"Estimativa da população residente, 1º de julho de 2024",19996,0,0
+"330110",2025,"vsr",1,19995,"Estimativa da população residente, 1º de julho de 2025",19996,5.00125031257814,5.00100020004001
+"330115",2022,"influenza",0,12958,"Censo 2022, população residente (data de referência 01/08/2022)",13403,0,0
+"330115",2023,"influenza",1,13170,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",13403,7.59301442672741,7.46101619040513
+"330115",2024,"influenza",3,13403,"Estimativa da população residente, 1º de julho de 2024",13403,22.3830485712154,22.3830485712154
+"330115",2025,"influenza",0,13407,"Estimativa da população residente, 1º de julho de 2025",13403,0,0
+"330115",2022,"sarscov2",2,12958,"Censo 2022, população residente (data de referência 01/08/2022)",13403,15.4344806297268,14.9220323808103
+"330115",2023,"sarscov2",0,13170,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",13403,0,0
+"330115",2024,"sarscov2",0,13403,"Estimativa da população residente, 1º de julho de 2024",13403,0,0
+"330115",2025,"sarscov2",0,13407,"Estimativa da população residente, 1º de julho de 2025",13403,0,0
+"330115",2022,"vsr",0,12958,"Censo 2022, população residente (data de referência 01/08/2022)",13403,0,0
+"330115",2023,"vsr",0,13170,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",13403,0,0
+"330115",2024,"vsr",0,13403,"Estimativa da população residente, 1º de julho de 2024",13403,0,0
+"330115",2025,"vsr",0,13407,"Estimativa da população residente, 1º de julho de 2025",13403,0,0
+"330120",2022,"influenza",3,17198,"Censo 2022, população residente (data de referência 01/08/2022)",17740,17.4438888242819,16.9109357384442
+"330120",2023,"influenza",0,17457,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",17740,0,0
+"330120",2024,"influenza",2,17740,"Estimativa da população residente, 1º de julho de 2024",17740,11.2739571589628,11.2739571589628
+"330120",2025,"influenza",3,17741,"Estimativa da população residente, 1º de julho de 2025",17740,16.9099825263514,16.9109357384442
+"330120",2022,"sarscov2",24,17198,"Censo 2022, população residente (data de referência 01/08/2022)",17740,139.551110594255,135.287485907554
+"330120",2023,"sarscov2",11,17457,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",17740,63.0119722747322,62.0067643742954
+"330120",2024,"sarscov2",5,17740,"Estimativa da população residente, 1º de julho de 2024",17740,28.184892897407,28.184892897407
+"330120",2025,"sarscov2",0,17741,"Estimativa da população residente, 1º de julho de 2025",17740,0,0
+"330120",2022,"vsr",0,17198,"Censo 2022, população residente (data de referência 01/08/2022)",17740,0,0
+"330120",2023,"vsr",0,17457,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",17740,0,0
+"330120",2024,"vsr",1,17740,"Estimativa da população residente, 1º de julho de 2024",17740,5.6369785794814,5.6369785794814
+"330120",2025,"vsr",9,17741,"Estimativa da população residente, 1º de julho de 2025",17740,50.7299475790542,50.7328072153326
+"330130",2022,"influenza",4,46110,"Censo 2022, população residente (data de referência 01/08/2022)",48563,8.67490782910432,8.23672343141898
+"330130",2023,"influenza",0,47280,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",48563,0,0
+"330130",2024,"influenza",10,48563,"Estimativa da população residente, 1º de julho de 2024",48563,20.5918085785475,20.5918085785475
+"330130",2025,"influenza",7,48636,"Estimativa da população residente, 1º de julho de 2025",48563,14.3926309729419,14.4142660049832
+"330130",2022,"sarscov2",49,46110,"Censo 2022, população residente (data de referência 01/08/2022)",48563,106.267620906528,100.899862034883
+"330130",2023,"sarscov2",3,47280,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",48563,6.34517766497462,6.17754257356424
+"330130",2024,"sarscov2",4,48563,"Estimativa da população residente, 1º de julho de 2024",48563,8.23672343141898,8.23672343141898
+"330130",2025,"sarscov2",5,48636,"Estimativa da população residente, 1º de julho de 2025",48563,10.2804506949585,10.2959042892737
+"330130",2022,"vsr",1,46110,"Censo 2022, população residente (data de referência 01/08/2022)",48563,2.16872695727608,2.05918085785475
+"330130",2023,"vsr",1,47280,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",48563,2.11505922165821,2.05918085785475
+"330130",2024,"vsr",8,48563,"Estimativa da população residente, 1º de julho de 2024",48563,16.473446862838,16.473446862838
+"330130",2025,"vsr",5,48636,"Estimativa da população residente, 1º de julho de 2025",48563,10.2804506949585,10.2959042892737
+"330140",2022,"influenza",0,21104,"Censo 2022, população residente (data de referência 01/08/2022)",21769,0,0
+"330140",2023,"influenza",3,21421,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",21769,14.0049484151067,13.7810648169415
+"330140",2024,"influenza",3,21769,"Estimativa da população residente, 1º de julho de 2024",21769,13.7810648169415,13.7810648169415
+"330140",2025,"influenza",4,21770,"Estimativa da população residente, 1º de julho de 2025",21769,18.3739090491502,18.3747530892554
+"330140",2022,"sarscov2",19,21104,"Censo 2022, população residente (data de referência 01/08/2022)",21769,90.0303260045489,87.280077173963
+"330140",2023,"sarscov2",6,21421,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",21769,28.0098968302133,27.562129633883
+"330140",2024,"sarscov2",2,21769,"Estimativa da população residente, 1º de julho de 2024",21769,9.18737654462768,9.18737654462768
+"330140",2025,"sarscov2",0,21770,"Estimativa da população residente, 1º de julho de 2025",21769,0,0
+"330140",2022,"vsr",0,21104,"Censo 2022, população residente (data de referência 01/08/2022)",21769,0,0
+"330140",2023,"vsr",1,21421,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",21769,4.66831613836889,4.59368827231384
+"330140",2024,"vsr",0,21769,"Estimativa da população residente, 1º de julho de 2024",21769,0,0
+"330140",2025,"vsr",5,21770,"Estimativa da população residente, 1º de julho de 2025",21769,22.9673863114378,22.9684413615692
+"330150",2022,"influenza",0,20783,"Censo 2022, população residente (data de referência 01/08/2022)",21444,0,0
+"330150",2023,"influenza",4,21098,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",21444,18.9591430467343,18.6532363365044
+"330150",2024,"influenza",2,21444,"Estimativa da população residente, 1º de julho de 2024",21444,9.32661816825219,9.32661816825219
+"330150",2025,"influenza",3,21448,"Estimativa da população residente, 1º de julho de 2025",21444,13.9873181648639,13.9899272523783
+"330150",2022,"sarscov2",22,20783,"Censo 2022, população residente (data de referência 01/08/2022)",21444,105.855747485926,102.592799850774
+"330150",2023,"sarscov2",1,21098,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",21444,4.73978576168357,4.6633090841261
+"330150",2024,"sarscov2",0,21444,"Estimativa da população residente, 1º de julho de 2024",21444,0,0
+"330150",2025,"sarscov2",0,21448,"Estimativa da população residente, 1º de julho de 2025",21444,0,0
+"330150",2022,"vsr",0,20783,"Censo 2022, população residente (data de referência 01/08/2022)",21444,0,0
+"330150",2023,"vsr",0,21098,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",21444,0,0
+"330150",2024,"vsr",1,21444,"Estimativa da população residente, 1º de julho de 2024",21444,4.6633090841261,4.6633090841261
+"330150",2025,"vsr",0,21448,"Estimativa da população residente, 1º de julho de 2025",21444,0,0
+"330160",2022,"influenza",0,10980,"Censo 2022, população residente (data de referência 01/08/2022)",11354,0,0
+"330160",2023,"influenza",1,11158,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",11354,8.96217960207922,8.807468733486
+"330160",2024,"influenza",2,11354,"Estimativa da população residente, 1º de julho de 2024",11354,17.614937466972,17.614937466972
+"330160",2025,"influenza",7,11355,"Estimativa da população residente, 1º de julho de 2025",11354,61.6468516072215,61.652281134402
+"330160",2022,"sarscov2",9,10980,"Censo 2022, população residente (data de referência 01/08/2022)",11354,81.9672131147541,79.267218601374
+"330160",2023,"sarscov2",5,11158,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",11354,44.8108980103961,44.03734366743
+"330160",2024,"sarscov2",0,11354,"Estimativa da população residente, 1º de julho de 2024",11354,0,0
+"330160",2025,"sarscov2",0,11355,"Estimativa da população residente, 1º de julho de 2025",11354,0,0
+"330160",2022,"vsr",0,10980,"Censo 2022, população residente (data de referência 01/08/2022)",11354,0,0
+"330160",2023,"vsr",0,11158,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",11354,0,0
+"330160",2024,"vsr",0,11354,"Estimativa da população residente, 1º de julho de 2024",11354,0,0
+"330160",2025,"vsr",1,11355,"Estimativa da população residente, 1º de julho de 2025",11354,8.80669308674593,8.807468733486
+"330170",2022,"influenza",15,808161,"Censo 2022, população residente (data de referência 01/08/2022)",866347,1.85606580866931,1.73140785389688
+"330170",2023,"influenza",23,835924,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",866347,2.75144630373096,2.65482537597522
+"330170",2024,"influenza",57,866347,"Estimativa da população residente, 1º de julho de 2024",866347,6.57934984480814,6.57934984480814
+"330170",2025,"influenza",60,866225,"Estimativa da população residente, 1º de julho de 2025",866347,6.9266068284799,6.92563141558752
+"330170",2022,"sarscov2",445,808161,"Censo 2022, população residente (data de referência 01/08/2022)",866347,55.0632856571896,51.3650996656074
+"330170",2023,"sarscov2",80,835924,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",866347,9.57024801297726,9.23417522078336
+"330170",2024,"sarscov2",68,866347,"Estimativa da população residente, 1º de julho de 2024",866347,7.84904893766585,7.84904893766585
+"330170",2025,"sarscov2",36,866225,"Estimativa da população residente, 1º de julho de 2025",866347,4.15596409708794,4.15537884935251
+"330170",2022,"vsr",84,808161,"Censo 2022, população residente (data de referência 01/08/2022)",866347,10.3939685285481,9.69588398182253
+"330170",2023,"vsr",26,835924,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",866347,3.11033060421761,3.00110694675459
+"330170",2024,"vsr",45,866347,"Estimativa da população residente, 1º de julho de 2024",866347,5.19422356169064,5.19422356169064
+"330170",2025,"vsr",101,866225,"Estimativa da população residente, 1º de julho de 2025",866347,11.6597881612745,11.658146216239
+"330180",2022,"influenza",0,12242,"Censo 2022, população residente (data de referência 01/08/2022)",12648,0,0
+"330180",2023,"influenza",0,12436,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",12648,0,0
+"330180",2024,"influenza",0,12648,"Estimativa da população residente, 1º de julho de 2024",12648,0,0
+"330180",2025,"influenza",2,12644,"Estimativa da população residente, 1º de julho de 2025",12648,15.8177791838026,15.8127767235927
+"330180",2022,"sarscov2",7,12242,"Censo 2022, população residente (data de referência 01/08/2022)",12648,57.1801993138376,55.3447185325743
+"330180",2023,"sarscov2",2,12436,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",12648,16.0823415889353,15.8127767235927
+"330180",2024,"sarscov2",0,12648,"Estimativa da população residente, 1º de julho de 2024",12648,0,0
+"330180",2025,"sarscov2",2,12644,"Estimativa da população residente, 1º de julho de 2025",12648,15.8177791838026,15.8127767235927
+"330180",2022,"vsr",0,12242,"Censo 2022, população residente (data de referência 01/08/2022)",12648,0,0
+"330180",2023,"vsr",1,12436,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",12648,8.04117079446767,7.90638836179633
+"330180",2024,"vsr",0,12648,"Estimativa da população residente, 1º de julho de 2024",12648,0,0
+"330180",2025,"vsr",1,12644,"Estimativa da população residente, 1º de julho de 2025",12648,7.9088895919013,7.90638836179633
+"330185",2022,"influenza",0,51696,"Censo 2022, população residente (data de referência 01/08/2022)",54300,0,0
+"330185",2023,"influenza",0,52938,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",54300,0,0
+"330185",2024,"influenza",1,54300,"Estimativa da população residente, 1º de julho de 2024",54300,1.84162062615101,1.84162062615101
+"330185",2025,"influenza",6,54311,"Estimativa da população residente, 1º de julho de 2025",54300,11.0474857763621,11.0497237569061
+"330185",2022,"sarscov2",26,51696,"Censo 2022, população residente (data de referência 01/08/2022)",54300,50.2940266171464,47.8821362799263
+"330185",2023,"sarscov2",5,52938,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",54300,9.44501114511315,9.20810313075506
+"330185",2024,"sarscov2",8,54300,"Estimativa da população residente, 1º de julho de 2024",54300,14.7329650092081,14.7329650092081
+"330185",2025,"sarscov2",3,54311,"Estimativa da população residente, 1º de julho de 2025",54300,5.52374288818103,5.52486187845304
+"330185",2022,"vsr",3,51696,"Censo 2022, população residente (data de referência 01/08/2022)",54300,5.80315691736305,5.52486187845304
+"330185",2023,"vsr",0,52938,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",54300,0,0
+"330185",2024,"vsr",1,54300,"Estimativa da população residente, 1º de julho de 2024",54300,1.84162062615101,1.84162062615101
+"330185",2025,"vsr",3,54311,"Estimativa da população residente, 1º de julho de 2025",54300,5.52374288818103,5.52486187845304
+"330187",2022,"influenza",1,27920,"Censo 2022, população residente (data de referência 01/08/2022)",29577,3.58166189111748,3.38100551103898
+"330187",2023,"influenza",1,28711,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",29577,3.48298561526941,3.38100551103898
+"330187",2024,"influenza",4,29577,"Estimativa da população residente, 1º de julho de 2024",29577,13.5240220441559,13.5240220441559
+"330187",2025,"influenza",4,29616,"Estimativa da população residente, 1º de julho de 2025",29577,13.5062128579146,13.5240220441559
+"330187",2022,"sarscov2",53,27920,"Censo 2022, população residente (data de referência 01/08/2022)",29577,189.828080229226,179.193292085066
+"330187",2023,"sarscov2",5,28711,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",29577,17.414928076347,16.9050275551949
+"330187",2024,"sarscov2",6,29577,"Estimativa da população residente, 1º de julho de 2024",29577,20.2860330662339,20.2860330662339
+"330187",2025,"sarscov2",1,29616,"Estimativa da população residente, 1º de julho de 2025",29577,3.37655321447866,3.38100551103898
+"330187",2022,"vsr",0,27920,"Censo 2022, população residente (data de referência 01/08/2022)",29577,0,0
+"330187",2023,"vsr",0,28711,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",29577,0,0
+"330187",2024,"vsr",1,29577,"Estimativa da população residente, 1º de julho de 2024",29577,3.38100551103898,3.38100551103898
+"330187",2025,"vsr",3,29616,"Estimativa da população residente, 1º de julho de 2025",29577,10.129659643436,10.1430165331169
+"330190",2022,"influenza",1,224267,"Censo 2022, população residente (data de referência 01/08/2022)",240040,0.445897078036448,0.416597233794368
+"330190",2023,"influenza",6,231793,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",240040,2.58851647806448,2.49958340276621
+"330190",2024,"influenza",19,240040,"Estimativa da população residente, 1º de julho de 2024",240040,7.91534744209299,7.91534744209299
+"330190",2025,"influenza",18,240127,"Estimativa da população residente, 1º de julho de 2025",240040,7.49603334901948,7.49875020829862
+"330190",2022,"sarscov2",264,224267,"Censo 2022, população residente (data de referência 01/08/2022)",240040,117.716828601622,109.981669721713
+"330190",2023,"sarscov2",41,231793,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",240040,17.6881959334406,17.0804865855691
+"330190",2024,"sarscov2",24,240040,"Estimativa da população residente, 1º de julho de 2024",240040,9.99833361106482,9.99833361106482
+"330190",2025,"sarscov2",13,240127,"Estimativa da população residente, 1º de julho de 2025",240040,5.41380186318073,5.41576403932678
+"330190",2022,"vsr",12,224267,"Censo 2022, população residente (data de referência 01/08/2022)",240040,5.35076493643737,4.99916680553241
+"330190",2023,"vsr",14,231793,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",240040,6.03987178215045,5.83236127312115
+"330190",2024,"vsr",32,240040,"Estimativa da população residente, 1º de julho de 2024",240040,13.3311114814198,13.3311114814198
+"330190",2025,"vsr",67,240127,"Estimativa da população residente, 1º de julho de 2025",240040,27.9019019102392,27.9120146642226
+"330200",2022,"influenza",1,116841,"Censo 2022, população residente (data de referência 01/08/2022)",123980,0.855863951866211,0.806581706726891
+"330200",2023,"influenza",3,120247,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",123980,2.49486473675019,2.41974512018067
+"330200",2024,"influenza",6,123980,"Estimativa da população residente, 1º de julho de 2024",123980,4.83949024036135,4.83949024036135
+"330200",2025,"influenza",24,124021,"Estimativa da população residente, 1º de julho de 2025",123980,19.3515614291128,19.3579609614454
+"330200",2022,"sarscov2",94,116841,"Censo 2022, população residente (data de referência 01/08/2022)",123980,80.4512114754239,75.8186804323278
+"330200",2023,"sarscov2",9,120247,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",123980,7.48459421025057,7.25923536054202
+"330200",2024,"sarscov2",7,123980,"Estimativa da população residente, 1º de julho de 2024",123980,5.64607194708824,5.64607194708824
+"330200",2025,"sarscov2",7,124021,"Estimativa da população residente, 1º de julho de 2025",123980,5.64420541682457,5.64607194708824
+"330200",2022,"vsr",1,116841,"Censo 2022, população residente (data de referência 01/08/2022)",123980,0.855863951866211,0.806581706726891
+"330200",2023,"vsr",5,120247,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",123980,4.15810789458365,4.03290853363446
+"330200",2024,"vsr",9,123980,"Estimativa da população residente, 1º de julho de 2024",123980,7.25923536054202,7.25923536054202
+"330200",2025,"vsr",18,124021,"Estimativa da população residente, 1º de julho de 2025",123980,14.5136710718346,14.518470721084
+"330205",2022,"influenza",0,14073,"Censo 2022, população residente (data de referência 01/08/2022)",14517,0,0
+"330205",2023,"influenza",0,14285,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",14517,0,0
+"330205",2024,"influenza",1,14517,"Estimativa da população residente, 1º de julho de 2024",14517,6.88847558035407,6.88847558035407
+"330205",2025,"influenza",3,14518,"Estimativa da população residente, 1º de julho de 2025",14517,20.6640033062405,20.6654267410622
+"330205",2022,"sarscov2",4,14073,"Censo 2022, população residente (data de referência 01/08/2022)",14517,28.4232217721879,27.5539023214163
+"330205",2023,"sarscov2",1,14285,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",14517,7.00035001750088,6.88847558035407
+"330205",2024,"sarscov2",2,14517,"Estimativa da população residente, 1º de julho de 2024",14517,13.7769511607081,13.7769511607081
+"330205",2025,"sarscov2",0,14518,"Estimativa da população residente, 1º de julho de 2025",14517,0,0
+"330205",2022,"vsr",0,14073,"Censo 2022, população residente (data de referência 01/08/2022)",14517,0,0
+"330205",2023,"vsr",0,14285,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",14517,0,0
+"330205",2024,"vsr",0,14517,"Estimativa da população residente, 1º de julho de 2024",14517,0,0
+"330205",2025,"vsr",0,14518,"Estimativa da população residente, 1º de julho de 2025",14517,0,0
+"330210",2022,"influenza",0,22919,"Censo 2022, população residente (data de referência 01/08/2022)",23643,0,0
+"330210",2023,"influenza",0,23264,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",23643,0,0
+"330210",2024,"influenza",5,23643,"Estimativa da população residente, 1º de julho de 2024",23643,21.1479084718521,21.1479084718521
+"330210",2025,"influenza",3,23645,"Estimativa da população residente, 1º de julho de 2025",23643,12.6876718122225,12.6887450831113
+"330210",2022,"sarscov2",7,22919,"Censo 2022, população residente (data de referência 01/08/2022)",23643,30.5423447794406,29.607071860593
+"330210",2023,"sarscov2",4,23264,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",23643,17.1939477303989,16.9183267774817
+"330210",2024,"sarscov2",2,23643,"Estimativa da população residente, 1º de julho de 2024",23643,8.45916338874085,8.45916338874085
+"330210",2025,"sarscov2",2,23645,"Estimativa da população residente, 1º de julho de 2025",23643,8.45844787481497,8.45916338874085
+"330210",2022,"vsr",0,22919,"Censo 2022, população residente (data de referência 01/08/2022)",23643,0,0
+"330210",2023,"vsr",0,23264,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",23643,0,0
+"330210",2024,"vsr",0,23643,"Estimativa da população residente, 1º de julho de 2024",23643,0,0
+"330210",2025,"vsr",0,23645,"Estimativa da população residente, 1º de julho de 2025",23643,0,0
+"330220",2022,"influenza",0,101041,"Censo 2022, população residente (data de referência 01/08/2022)",107246,0,0
+"330220",2023,"influenza",5,104002,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",107246,4.80759985384896,4.66217854278947
+"330220",2024,"influenza",29,107246,"Estimativa da população residente, 1º de julho de 2024",107246,27.040635548179,27.040635548179
+"330220",2025,"influenza",22,107297,"Estimativa da população residente, 1º de julho de 2025",107246,20.5038351491654,20.5135855882737
+"330220",2022,"sarscov2",64,101041,"Censo 2022, população residente (data de referência 01/08/2022)",107246,63.3406241030869,59.6758853477053
+"330220",2023,"sarscov2",11,104002,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",107246,10.5767196784677,10.2567927941368
+"330220",2024,"sarscov2",1,107246,"Estimativa da população residente, 1º de julho de 2024",107246,0.932435708557895,0.932435708557895
+"330220",2025,"sarscov2",2,107297,"Estimativa da população residente, 1º de julho de 2025",107246,1.86398501356049,1.86487141711579
+"330220",2022,"vsr",0,101041,"Censo 2022, população residente (data de referência 01/08/2022)",107246,0,0
+"330220",2023,"vsr",0,104002,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",107246,0,0
+"330220",2024,"vsr",4,107246,"Estimativa da população residente, 1º de julho de 2024",107246,3.72974283423158,3.72974283423158
+"330220",2025,"vsr",16,107297,"Estimativa da população residente, 1º de julho de 2025",107246,14.9118801084839,14.9189713369263
+"330225",2022,"influenza",1,30908,"Censo 2022, população residente (data de referência 01/08/2022)",32694,3.23540830852854,3.05866519850737
+"330225",2023,"influenza",8,31760,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",32694,25.1889168765743,24.469321588059
+"330225",2024,"influenza",2,32694,"Estimativa da população residente, 1º de julho de 2024",32694,6.11733039701474,6.11733039701474
+"330225",2025,"influenza",11,32713,"Estimativa da população residente, 1º de julho de 2025",32694,33.6257756855073,33.6453171835811
+"330225",2022,"sarscov2",46,30908,"Censo 2022, população residente (data de referência 01/08/2022)",32694,148.828782192313,140.698599131339
+"330225",2023,"sarscov2",12,31760,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",32694,37.7833753148615,36.7039823820885
+"330225",2024,"sarscov2",9,32694,"Estimativa da população residente, 1º de julho de 2024",32694,27.5279867865663,27.5279867865663
+"330225",2025,"sarscov2",1,32713,"Estimativa da população residente, 1º de julho de 2025",32694,3.05688869868248,3.05866519850737
+"330225",2022,"vsr",1,30908,"Censo 2022, população residente (data de referência 01/08/2022)",32694,3.23540830852854,3.05866519850737
+"330225",2023,"vsr",0,31760,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",32694,0,0
+"330225",2024,"vsr",0,32694,"Estimativa da população residente, 1º de julho de 2024",32694,0,0
+"330225",2025,"vsr",0,32713,"Estimativa da população residente, 1º de julho de 2025",32694,0,0
+"330227",2022,"influenza",0,96289,"Censo 2022, população residente (data de referência 01/08/2022)",102149,0,0
+"330227",2023,"influenza",1,99085,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",102149,1.00923449563506,0.97896210437694
+"330227",2024,"influenza",7,102149,"Estimativa da população residente, 1º de julho de 2024",102149,6.85273473063858,6.85273473063858
+"330227",2025,"influenza",1,102171,"Estimativa da população residente, 1º de julho de 2025",102149,0.978751309079876,0.97896210437694
+"330227",2022,"sarscov2",25,96289,"Censo 2022, população residente (data de referência 01/08/2022)",102149,25.9635056963931,24.4740526094235
+"330227",2023,"sarscov2",5,99085,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",102149,5.0461724781753,4.8948105218847
+"330227",2024,"sarscov2",2,102149,"Estimativa da população residente, 1º de julho de 2024",102149,1.95792420875388,1.95792420875388
+"330227",2025,"sarscov2",4,102171,"Estimativa da população residente, 1º de julho de 2025",102149,3.9150052363195,3.91584841750776
+"330227",2022,"vsr",2,96289,"Censo 2022, população residente (data de referência 01/08/2022)",102149,2.07708045571145,1.95792420875388
+"330227",2023,"vsr",3,99085,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",102149,3.02770348690518,2.93688631313082
+"330227",2024,"vsr",3,102149,"Estimativa da população residente, 1º de julho de 2024",102149,2.93688631313082,2.93688631313082
+"330227",2025,"vsr",6,102171,"Estimativa da população residente, 1º de julho de 2025",102149,5.87250785447926,5.87377262626164
+"330230",2022,"influenza",0,7336,"Censo 2022, população residente (data de referência 01/08/2022)",7584,0,0
+"330230",2023,"influenza",0,7454,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",7584,0,0
+"330230",2024,"influenza",0,7584,"Estimativa da população residente, 1º de julho de 2024",7584,0,0
+"330230",2025,"influenza",0,7584,"Estimativa da população residente, 1º de julho de 2025",7584,0,0
+"330230",2022,"sarscov2",1,7336,"Censo 2022, população residente (data de referência 01/08/2022)",7584,13.6314067611778,13.1856540084388
+"330230",2023,"sarscov2",2,7454,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",7584,26.8312315535283,26.3713080168776
+"330230",2024,"sarscov2",0,7584,"Estimativa da população residente, 1º de julho de 2024",7584,0,0
+"330230",2025,"sarscov2",1,7584,"Estimativa da população residente, 1º de julho de 2025",7584,13.1856540084388,13.1856540084388
+"330230",2022,"vsr",0,7336,"Censo 2022, população residente (data de referência 01/08/2022)",7584,0,0
+"330230",2023,"vsr",0,7454,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",7584,0,0
+"330230",2024,"vsr",0,7584,"Estimativa da população residente, 1º de julho de 2024",7584,0,0
+"330230",2025,"vsr",1,7584,"Estimativa da população residente, 1º de julho de 2025",7584,13.1856540084388,13.1856540084388
+"330240",2022,"influenza",48,246391,"Censo 2022, população residente (data de referência 01/08/2022)",264138,19.4812310514589,18.1723190150603
+"330240",2023,"influenza",29,254859,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",264138,11.3788408492539,10.9791094049323
+"330240",2024,"influenza",52,264138,"Estimativa da população residente, 1º de julho de 2024",264138,19.686678932982,19.686678932982
+"330240",2025,"influenza",119,264439,"Estimativa da população residente, 1º de julho de 2025",264138,45.000926489663,45.0522075581704
+"330240",2022,"sarscov2",383,246391,"Censo 2022, população residente (data de referência 01/08/2022)",264138,155.443989431432,144.999962141002
+"330240",2023,"sarscov2",140,254859,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",264138,54.9323351343292,53.0025971272592
+"330240",2024,"sarscov2",35,264138,"Estimativa da população residente, 1º de julho de 2024",264138,13.2506492818148,13.2506492818148
+"330240",2025,"sarscov2",58,264439,"Estimativa da população residente, 1º de julho de 2025",264138,21.9332246756341,21.9582188098645
+"330240",2022,"vsr",5,246391,"Censo 2022, população residente (data de referência 01/08/2022)",264138,2.02929490119363,1.89294989740212
+"330240",2023,"vsr",5,254859,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",264138,1.96186911194033,1.89294989740212
+"330240",2024,"vsr",19,264138,"Estimativa da população residente, 1º de julho de 2024",264138,7.19320961012804,7.19320961012804
+"330240",2025,"vsr",156,264439,"Estimativa da população residente, 1º de julho de 2025",264138,58.992811196533,59.060036798946
+"330245",2022,"influenza",0,5415,"Censo 2022, população residente (data de referência 01/08/2022)",5601,0,0
+"330245",2023,"influenza",0,5504,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",5601,0,0
+"330245",2024,"influenza",1,5601,"Estimativa da população residente, 1º de julho de 2024",5601,17.8539546509552,17.8539546509552
+"330245",2025,"influenza",1,5602,"Estimativa da população residente, 1º de julho de 2025",5601,17.8507675830061,17.8539546509552
+"330245",2022,"sarscov2",13,5415,"Censo 2022, população residente (data de referência 01/08/2022)",5601,240.073868882733,232.101410462417
+"330245",2023,"sarscov2",1,5504,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",5601,18.1686046511628,17.8539546509552
+"330245",2024,"sarscov2",0,5601,"Estimativa da população residente, 1º de julho de 2024",5601,0,0
+"330245",2025,"sarscov2",0,5602,"Estimativa da população residente, 1º de julho de 2025",5601,0,0
+"330245",2022,"vsr",0,5415,"Censo 2022, população residente (data de referência 01/08/2022)",5601,0,0
+"330245",2023,"vsr",0,5504,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",5601,0,0
+"330245",2024,"vsr",0,5601,"Estimativa da população residente, 1º de julho de 2024",5601,0,0
+"330245",2025,"vsr",0,5602,"Estimativa da população residente, 1º de julho de 2025",5601,0,0
+"330250",2022,"influenza",4,228127,"Censo 2022, população residente (data de referência 01/08/2022)",244092,1.75340928517887,1.63872638185602
+"330250",2023,"influenza",4,235745,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",244092,1.69674860548474,1.63872638185602
+"330250",2024,"influenza",21,244092,"Estimativa da população residente, 1º de julho de 2024",244092,8.60331350474411,8.60331350474411
+"330250",2025,"influenza",19,244142,"Estimativa da população residente, 1º de julho de 2025",244092,7.78235616977005,7.7839503138161
+"330250",2022,"sarscov2",90,228127,"Censo 2022, população residente (data de referência 01/08/2022)",244092,39.4517089165246,36.8713435917605
+"330250",2023,"sarscov2",17,235745,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",244092,7.21118157331014,6.96458712288809
+"330250",2024,"sarscov2",11,244092,"Estimativa da população residente, 1º de julho de 2024",244092,4.50649755010406,4.50649755010406
+"330250",2025,"sarscov2",7,244142,"Estimativa da população residente, 1º de julho de 2025",244092,2.86718385202055,2.86777116824804
+"330250",2022,"vsr",17,228127,"Censo 2022, população residente (data de referência 01/08/2022)",244092,7.4519894620102,6.96458712288809
+"330250",2023,"vsr",5,235745,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",244092,2.12093575685592,2.04840797732003
+"330250",2024,"vsr",12,244092,"Estimativa da população residente, 1º de julho de 2024",244092,4.91617914556806,4.91617914556806
+"330250",2025,"vsr",61,244142,"Estimativa da população residente, 1º de julho de 2025",244092,24.9854592818933,24.9905773233043
+"330260",2022,"influenza",0,41220,"Censo 2022, população residente (data de referência 01/08/2022)",43624,0,0
+"330260",2023,"influenza",0,42367,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",43624,0,0
+"330260",2024,"influenza",1,43624,"Estimativa da população residente, 1º de julho de 2024",43624,2.29231615624427,2.29231615624427
+"330260",2025,"influenza",5,43660,"Estimativa da população residente, 1º de julho de 2025",43624,11.4521300961979,11.4615807812213
+"330260",2022,"sarscov2",24,41220,"Censo 2022, população residente (data de referência 01/08/2022)",43624,58.2241630276565,55.0155877498625
+"330260",2023,"sarscov2",5,42367,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",43624,11.8016380673638,11.4615807812213
+"330260",2024,"sarscov2",4,43624,"Estimativa da população residente, 1º de julho de 2024",43624,9.16926462497708,9.16926462497708
+"330260",2025,"sarscov2",2,43660,"Estimativa da população residente, 1º de julho de 2025",43624,4.58085203847916,4.58463231248854
+"330260",2022,"vsr",2,41220,"Censo 2022, população residente (data de referência 01/08/2022)",43624,4.85201358563804,4.58463231248854
+"330260",2023,"vsr",1,42367,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",43624,2.36032761347275,2.29231615624427
+"330260",2024,"vsr",1,43624,"Estimativa da população residente, 1º de julho de 2024",43624,2.29231615624427,2.29231615624427
+"330260",2025,"vsr",4,43660,"Estimativa da população residente, 1º de julho de 2025",43624,9.16170407695831,9.16926462497708
+"330270",2022,"influenza",1,197277,"Censo 2022, população residente (data de referência 01/08/2022)",211986,0.506901463424525,0.471729265140151
+"330270",2023,"influenza",2,204295,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",211986,0.978976480090066,0.943458530280301
+"330270",2024,"influenza",14,211986,"Estimativa da população residente, 1º de julho de 2024",211986,6.60420971196211,6.60420971196211
+"330270",2025,"influenza",36,212470,"Estimativa da população residente, 1º de julho de 2025",211986,16.9435685037888,16.9822535450454
+"330270",2022,"sarscov2",273,197277,"Censo 2022, população residente (data de referência 01/08/2022)",211986,138.384099514895,128.782089383261
+"330270",2023,"sarscov2",95,204295,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",211986,46.5013828042781,44.8142801883143
+"330270",2024,"sarscov2",64,211986,"Estimativa da população residente, 1º de julho de 2024",211986,30.1906729689696,30.1906729689696
+"330270",2025,"sarscov2",18,212470,"Estimativa da população residente, 1º de julho de 2025",211986,8.47178425189438,8.49112677252271
+"330270",2022,"vsr",26,197277,"Censo 2022, população residente (data de referência 01/08/2022)",211986,13.1794380490376,12.2649608936439
+"330270",2023,"vsr",12,204295,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",211986,5.87385888054039,5.66075118168181
+"330270",2024,"vsr",41,211986,"Estimativa da população residente, 1º de julho de 2024",211986,19.3408998707462,19.3408998707462
+"330270",2025,"vsr",99,212470,"Estimativa da população residente, 1º de julho de 2025",211986,46.5948133854191,46.7011972488749
+"330280",2022,"influenza",0,17502,"Censo 2022, população residente (data de referência 01/08/2022)",18049,0,0
+"330280",2023,"influenza",1,17763,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",18049,5.62967967122671,5.54047315640756
+"330280",2024,"influenza",1,18049,"Estimativa da população residente, 1º de julho de 2024",18049,5.54047315640756,5.54047315640756
+"330280",2025,"influenza",4,18048,"Estimativa da população residente, 1º de julho de 2025",18049,22.1631205673759,22.1618926256302
+"330280",2022,"sarscov2",11,17502,"Censo 2022, população residente (data de referência 01/08/2022)",18049,62.8499600045709,60.9452047204831
+"330280",2023,"sarscov2",3,17763,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",18049,16.8890390136801,16.6214194692227
+"330280",2024,"sarscov2",0,18049,"Estimativa da população residente, 1º de julho de 2024",18049,0,0
+"330280",2025,"sarscov2",0,18048,"Estimativa da população residente, 1º de julho de 2025",18049,0,0
+"330280",2022,"vsr",0,17502,"Censo 2022, população residente (data de referência 01/08/2022)",18049,0,0
+"330280",2023,"vsr",0,17763,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",18049,0,0
+"330280",2024,"vsr",0,18049,"Estimativa da população residente, 1º de julho de 2024",18049,0,0
+"330280",2025,"vsr",3,18048,"Estimativa da população residente, 1º de julho de 2025",18049,16.6223404255319,16.6214194692227
+"330285",2022,"influenza",0,167127,"Censo 2022, população residente (data de referência 01/08/2022)",178803,0,0
+"330285",2023,"influenza",2,172698,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",178803,1.158091002791,1.11854946505372
+"330285",2024,"influenza",10,178803,"Estimativa da população residente, 1º de julho de 2024",178803,5.59274732526859,5.59274732526859
+"330285",2025,"influenza",13,178830,"Estimativa da população residente, 1º de julho de 2025",178803,7.2694738019348,7.27057152284917
+"330285",2022,"sarscov2",75,167127,"Censo 2022, população residente (data de referência 01/08/2022)",178803,44.8760523434275,41.9456049395144
+"330285",2023,"sarscov2",16,172698,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",178803,9.264728022328,8.94839572042975
+"330285",2024,"sarscov2",15,178803,"Estimativa da população residente, 1º de julho de 2024",178803,8.38912098790289,8.38912098790289
+"330285",2025,"sarscov2",9,178830,"Estimativa da população residente, 1º de julho de 2025",178803,5.03271263210871,5.03347259274173
+"330285",2022,"vsr",5,167127,"Censo 2022, população residente (data de referência 01/08/2022)",178803,2.99173682289516,2.7963736626343
+"330285",2023,"vsr",4,172698,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",178803,2.316182005582,2.23709893010744
+"330285",2024,"vsr",9,178803,"Estimativa da população residente, 1º de julho de 2024",178803,5.03347259274173,5.03347259274173
+"330285",2025,"vsr",32,178830,"Estimativa da população residente, 1º de julho de 2025",178803,17.8940893586087,17.8967914408595
+"330290",2022,"influenza",0,26582,"Censo 2022, população residente (data de referência 01/08/2022)",28123,0,0
+"330290",2023,"influenza",1,27317,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",28123,3.66072409122524,3.55580841304271
+"330290",2024,"influenza",0,28123,"Estimativa da população residente, 1º de julho de 2024",28123,0,0
+"330290",2025,"influenza",6,28142,"Estimativa da população residente, 1º de julho de 2025",28123,21.3204463080094,21.3348504782562
+"330290",2022,"sarscov2",8,26582,"Censo 2022, população residente (data de referência 01/08/2022)",28123,30.0955533819878,28.4464673043416
+"330290",2023,"sarscov2",3,27317,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",28123,10.9821722736757,10.6674252391281
+"330290",2024,"sarscov2",1,28123,"Estimativa da população residente, 1º de julho de 2024",28123,3.55580841304271,3.55580841304271
+"330290",2025,"sarscov2",0,28142,"Estimativa da população residente, 1º de julho de 2025",28123,0,0
+"330290",2022,"vsr",0,26582,"Censo 2022, população residente (data de referência 01/08/2022)",28123,0,0
+"330290",2023,"vsr",0,27317,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",28123,0,0
+"330290",2024,"vsr",1,28123,"Estimativa da população residente, 1º de julho de 2024",28123,3.55580841304271,3.55580841304271
+"330290",2025,"vsr",0,28142,"Estimativa da população residente, 1º de julho de 2025",28123,0,0
+"330300",2022,"influenza",0,26881,"Censo 2022, população residente (data de referência 01/08/2022)",28411,0,0
+"330300",2023,"influenza",0,27611,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",28411,0,0
+"330300",2024,"influenza",3,28411,"Estimativa da população residente, 1º de julho de 2024",28411,10.5592904156841,10.5592904156841
+"330300",2025,"influenza",1,28416,"Estimativa da população residente, 1º de julho de 2025",28411,3.51914414414414,3.51976347189469
+"330300",2022,"sarscov2",26,26881,"Censo 2022, população residente (data de referência 01/08/2022)",28411,96.72259216547,91.5138502692619
+"330300",2023,"sarscov2",0,27611,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",28411,0,0
+"330300",2024,"sarscov2",0,28411,"Estimativa da população residente, 1º de julho de 2024",28411,0,0
+"330300",2025,"sarscov2",0,28416,"Estimativa da população residente, 1º de julho de 2025",28411,0,0
+"330300",2022,"vsr",0,26881,"Censo 2022, população residente (data de referência 01/08/2022)",28411,0,0
+"330300",2023,"vsr",0,27611,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",28411,0,0
+"330300",2024,"vsr",1,28411,"Estimativa da população residente, 1º de julho de 2024",28411,3.51976347189469,3.51976347189469
+"330300",2025,"vsr",1,28416,"Estimativa da população residente, 1º de julho de 2025",28411,3.51914414414414,3.51976347189469
+"330310",2022,"influenza",0,15074,"Censo 2022, população residente (data de referência 01/08/2022)",15550,0,0
+"330310",2023,"influenza",0,15301,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",15550,0,0
+"330310",2024,"influenza",2,15550,"Estimativa da população residente, 1º de julho de 2024",15550,12.8617363344051,12.8617363344051
+"330310",2025,"influenza",2,15551,"Estimativa da população residente, 1º de julho de 2025",15550,12.8609092662851,12.8617363344051
+"330310",2022,"sarscov2",4,15074,"Censo 2022, população residente (data de referência 01/08/2022)",15550,26.5357569324665,25.7234726688103
+"330310",2023,"sarscov2",0,15301,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",15550,0,0
+"330310",2024,"sarscov2",0,15550,"Estimativa da população residente, 1º de julho de 2024",15550,0,0
+"330310",2025,"sarscov2",0,15551,"Estimativa da população residente, 1º de julho de 2025",15550,0,0
+"330310",2022,"vsr",0,15074,"Censo 2022, população residente (data de referência 01/08/2022)",15550,0,0
+"330310",2023,"vsr",0,15301,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",15550,0,0
+"330310",2024,"vsr",0,15550,"Estimativa da população residente, 1º de julho de 2024",15550,0,0
+"330310",2025,"vsr",4,15551,"Estimativa da população residente, 1º de julho de 2025",15550,25.7218185325702,25.7234726688103
+"330320",2022,"influenza",1,146774,"Censo 2022, população residente (data de referência 01/08/2022)",155544,0.681319579762083,0.642904901506969
+"330320",2023,"influenza",5,150959,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",155544,3.31215760570751,3.21452450753485
+"330320",2024,"influenza",15,155544,"Estimativa da população residente, 1º de julho de 2024",155544,9.64357352260454,9.64357352260454
+"330320",2025,"influenza",18,155500,"Estimativa da população residente, 1º de julho de 2025",155544,11.5755627009646,11.5722882271254
+"330320",2022,"sarscov2",93,146774,"Censo 2022, população residente (data de referência 01/08/2022)",155544,63.3627209178737,59.7901558401481
+"330320",2023,"sarscov2",16,150959,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",155544,10.598904338264,10.2864784241115
+"330320",2024,"sarscov2",14,155544,"Estimativa da população residente, 1º de julho de 2024",155544,9.00066862109757,9.00066862109757
+"330320",2025,"sarscov2",4,155500,"Estimativa da população residente, 1º de julho de 2025",155544,2.57234726688103,2.57161960602788
+"330320",2022,"vsr",4,146774,"Censo 2022, população residente (data de referência 01/08/2022)",155544,2.72527831904833,2.57161960602788
+"330320",2023,"vsr",2,150959,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",155544,1.324863042283,1.28580980301394
+"330320",2024,"vsr",15,155544,"Estimativa da população residente, 1º de julho de 2024",155544,9.64357352260454,9.64357352260454
+"330320",2025,"vsr",40,155500,"Estimativa da população residente, 1º de julho de 2025",155544,25.7234726688103,25.7161960602788
+"330330",2022,"influenza",11,481749,"Censo 2022, população residente (data de referência 01/08/2022)",516720,2.2833467220482,2.12881250967642
+"330330",2023,"influenza",43,498435,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",516720,8.62700251788097,8.3217216287351
+"330330",2024,"influenza",50,516720,"Estimativa da população residente, 1º de julho de 2024",516720,9.67642049852918,9.67642049852918
+"330330",2025,"influenza",126,516787,"Estimativa da população residente, 1º de julho de 2025",516720,24.3814182632303,24.3845796562935
+"330330",2022,"sarscov2",1130,481749,"Censo 2022, população residente (data de referência 01/08/2022)",516720,234.56198144677,218.68710326676
+"330330",2023,"sarscov2",271,498435,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",516720,54.3701786592033,52.4461991020282
+"330330",2024,"sarscov2",107,516720,"Estimativa da população residente, 1º de julho de 2024",516720,20.7075398668525,20.7075398668525
+"330330",2025,"sarscov2",45,516787,"Estimativa da população residente, 1º de julho de 2025",516720,8.70764937972511,8.70877844867627
+"330330",2022,"vsr",99,481749,"Censo 2022, população residente (data de referência 01/08/2022)",516720,20.5501204984338,19.1593125870878
+"330330",2023,"vsr",86,498435,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",516720,17.2540050357619,16.6434432574702
+"330330",2024,"vsr",116,516720,"Estimativa da população residente, 1º de julho de 2024",516720,22.4492955565877,22.4492955565877
+"330330",2025,"vsr",184,516787,"Estimativa da população residente, 1º de julho de 2025",516720,35.6046107970982,35.6092274345874
+"330340",2022,"influenza",35,189939,"Censo 2022, população residente (data de referência 01/08/2022)",203328,18.4269686583587,17.2135662574756
+"330340",2023,"influenza",38,196327,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",203328,19.3554630794542,18.6890147938307
+"330340",2024,"influenza",53,203328,"Estimativa da população residente, 1º de julho de 2024",203328,26.0662574756059,26.0662574756059
+"330340",2025,"influenza",110,203417,"Estimativa da população residente, 1º de julho de 2025",203328,54.0761096663504,54.0997796663519
+"330340",2022,"sarscov2",718,189939,"Censo 2022, população residente (data de referência 01/08/2022)",203328,378.016099905759,353.124016367642
+"330340",2023,"sarscov2",272,196327,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",203328,138.544367305567,133.774000629525
+"330340",2024,"sarscov2",117,203328,"Estimativa da população residente, 1º de julho de 2024",203328,57.542492917847,57.542492917847
+"330340",2025,"sarscov2",36,203417,"Estimativa da população residente, 1º de julho de 2025",203328,17.6976358908056,17.7053824362606
+"330340",2022,"vsr",1,189939,"Censo 2022, população residente (data de referência 01/08/2022)",203328,0.52648481881025,0.491816178785017
+"330340",2023,"vsr",8,196327,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",203328,4.07483433251667,3.93452943028014
+"330340",2024,"vsr",32,203328,"Estimativa da população residente, 1º de julho de 2024",203328,15.7381177211206,15.7381177211206
+"330340",2025,"vsr",8,203417,"Estimativa da população residente, 1º de julho de 2025",203328,3.93280797573457,3.93452943028014
+"330350",2022,"influenza",8,785867,"Censo 2022, população residente (data de referência 01/08/2022)",843046,1.01798395911776,0.948939915496901
+"330350",2023,"influenza",15,813150,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",843046,1.84467810367091,1.77926234155669
+"330350",2024,"influenza",49,843046,"Estimativa da população residente, 1º de julho de 2024",843046,5.81225698241852,5.81225698241852
+"330350",2025,"influenza",62,843220,"Estimativa da população residente, 1º de julho de 2025",843046,7.35276677498162,7.35428434510098
+"330350",2022,"sarscov2",384,785867,"Censo 2022, população residente (data de referência 01/08/2022)",843046,48.8632300376527,45.5491159438512
+"330350",2023,"sarscov2",68,813150,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",843046,8.36254073664146,8.06598928172365
+"330350",2024,"sarscov2",37,843046,"Estimativa da população residente, 1º de julho de 2024",843046,4.38884710917316,4.38884710917316
+"330350",2025,"sarscov2",41,843220,"Estimativa da população residente, 1º de julho de 2025",843046,4.86231351248784,4.86331706692162
+"330350",2022,"vsr",20,785867,"Censo 2022, população residente (data de referência 01/08/2022)",843046,2.54495989779441,2.37234978874225
+"330350",2023,"vsr",17,813150,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",843046,2.09063518416036,2.01649732043091
+"330350",2024,"vsr",72,843046,"Estimativa da população residente, 1º de julho de 2024",843046,8.5404592394721,8.5404592394721
+"330350",2025,"vsr",130,843220,"Estimativa da população residente, 1º de julho de 2025",843046,15.4170916249615,15.4202736268246
+"330360",2022,"influenza",5,41375,"Censo 2022, população residente (data de referência 01/08/2022)",43656,12.0845921450151,11.4531794026022
+"330360",2023,"influenza",0,42463,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",43656,0,0
+"330360",2024,"influenza",1,43656,"Estimativa da população residente, 1º de julho de 2024",43656,2.29063588052043,2.29063588052043
+"330360",2025,"influenza",2,43627,"Estimativa da população residente, 1º de julho de 2025",43656,4.58431705136727,4.58127176104087
+"330360",2022,"sarscov2",23,41375,"Censo 2022, população residente (data de referência 01/08/2022)",43656,55.5891238670695,52.6846252519699
+"330360",2023,"sarscov2",3,42463,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",43656,7.06497421284412,6.8719076415613
+"330360",2024,"sarscov2",5,43656,"Estimativa da população residente, 1º de julho de 2024",43656,11.4531794026022,11.4531794026022
+"330360",2025,"sarscov2",1,43627,"Estimativa da população residente, 1º de julho de 2025",43656,2.29215852568364,2.29063588052043
+"330360",2022,"vsr",2,41375,"Censo 2022, população residente (data de referência 01/08/2022)",43656,4.83383685800604,4.58127176104087
+"330360",2023,"vsr",0,42463,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",43656,0,0
+"330360",2024,"vsr",0,43656,"Estimativa da população residente, 1º de julho de 2024",43656,0,0
+"330360",2025,"vsr",3,43627,"Estimativa da população residente, 1º de julho de 2025",43656,6.87647557705091,6.8719076415613
+"330370",2022,"influenza",0,42063,"Censo 2022, população residente (data de referência 01/08/2022)",44467,0,0
+"330370",2023,"influenza",2,43210,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",44467,4.62855820411942,4.49771740841523
+"330370",2024,"influenza",1,44467,"Estimativa da população residente, 1º de julho de 2024",44467,2.24885870420761,2.24885870420761
+"330370",2025,"influenza",3,44479,"Estimativa da população residente, 1º de julho de 2025",44467,6.74475595224713,6.74657611262284
+"330370",2022,"sarscov2",88,42063,"Censo 2022, população residente (data de referência 01/08/2022)",44467,209.209994532012,197.89956597027
+"330370",2023,"sarscov2",2,43210,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",44467,4.62855820411942,4.49771740841523
+"330370",2024,"sarscov2",1,44467,"Estimativa da população residente, 1º de julho de 2024",44467,2.24885870420761,2.24885870420761
+"330370",2025,"sarscov2",1,44479,"Estimativa da população residente, 1º de julho de 2025",44467,2.24825198408238,2.24885870420761
+"330370",2022,"vsr",0,42063,"Censo 2022, população residente (data de referência 01/08/2022)",44467,0,0
+"330370",2023,"vsr",0,43210,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",44467,0,0
+"330370",2024,"vsr",0,44467,"Estimativa da população residente, 1º de julho de 2024",44467,0,0
+"330370",2025,"vsr",0,44479,"Estimativa da população residente, 1º de julho de 2025",44467,0,0
+"330380",2022,"influenza",0,45243,"Censo 2022, população residente (data de referência 01/08/2022)",47614,0,0
+"330380",2023,"influenza",0,46374,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",47614,0,0
+"330380",2024,"influenza",2,47614,"Estimativa da população residente, 1º de julho de 2024",47614,4.2004452471962,4.2004452471962
+"330380",2025,"influenza",2,47668,"Estimativa da população residente, 1º de julho de 2025",47614,4.19568683393472,4.2004452471962
+"330380",2022,"sarscov2",15,45243,"Censo 2022, população residente (data de referência 01/08/2022)",47614,33.1543001127246,31.5033393539715
+"330380",2023,"sarscov2",2,46374,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",47614,4.31276146116358,4.2004452471962
+"330380",2024,"sarscov2",4,47614,"Estimativa da população residente, 1º de julho de 2024",47614,8.40089049439241,8.40089049439241
+"330380",2025,"sarscov2",4,47668,"Estimativa da população residente, 1º de julho de 2025",47614,8.39137366786943,8.40089049439241
+"330380",2022,"vsr",1,45243,"Censo 2022, população residente (data de referência 01/08/2022)",47614,2.21028667418164,2.1002226235981
+"330380",2023,"vsr",0,46374,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",47614,0,0
+"330380",2024,"vsr",1,47614,"Estimativa da população residente, 1º de julho de 2024",47614,2.1002226235981,2.1002226235981
+"330380",2025,"vsr",0,47668,"Estimativa da população residente, 1º de julho de 2025",47614,0,0
+"330385",2022,"influenza",0,29619,"Censo 2022, população residente (data de referência 01/08/2022)",31345,0,0
+"330385",2023,"influenza",0,30443,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",31345,0,0
+"330385",2024,"influenza",1,31345,"Estimativa da população residente, 1º de julho de 2024",31345,3.19030148349019,3.19030148349019
+"330385",2025,"influenza",2,31370,"Estimativa da população residente, 1º de julho de 2025",31345,6.37551801083838,6.38060296698038
+"330385",2022,"sarscov2",4,29619,"Censo 2022, população residente (data de referência 01/08/2022)",31345,13.5048448630946,12.7612059339608
+"330385",2023,"sarscov2",1,30443,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",31345,3.28482738232106,3.19030148349019
+"330385",2024,"sarscov2",0,31345,"Estimativa da população residente, 1º de julho de 2024",31345,0,0
+"330385",2025,"sarscov2",0,31370,"Estimativa da população residente, 1º de julho de 2025",31345,0,0
+"330385",2022,"vsr",0,29619,"Censo 2022, população residente (data de referência 01/08/2022)",31345,0,0
+"330385",2023,"vsr",0,30443,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",31345,0,0
+"330385",2024,"vsr",0,31345,"Estimativa da população residente, 1º de julho de 2024",31345,0,0
+"330385",2025,"vsr",2,31370,"Estimativa da população residente, 1º de julho de 2025",31345,6.37551801083838,6.38060296698038
+"330390",2022,"influenza",24,278881,"Censo 2022, população residente (data de referência 01/08/2022)",294983,8.60582112083648,8.13606207815366
+"330390",2023,"influenza",29,286564,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",294983,10.1199034072668,9.83107501110233
+"330390",2024,"influenza",39,294983,"Estimativa da população residente, 1º de julho de 2024",294983,13.2211008769997,13.2211008769997
+"330390",2025,"influenza",73,294926,"Estimativa da população residente, 1º de julho de 2025",294983,24.7519716810319,24.7471888210507
+"330390",2022,"sarscov2",500,278881,"Censo 2022, população residente (data de referência 01/08/2022)",294983,179.287940017427,169.501293294868
+"330390",2023,"sarscov2",251,286564,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",294983,87.5895088008264,85.0896492340237
+"330390",2024,"sarscov2",66,294983,"Estimativa da população residente, 1º de julho de 2024",294983,22.3741707149226,22.3741707149226
+"330390",2025,"sarscov2",27,294926,"Estimativa da população residente, 1º de julho de 2025",294983,9.15483884092959,9.15306983792286
+"330390",2022,"vsr",56,278881,"Censo 2022, população residente (data de referência 01/08/2022)",294983,20.0802492819518,18.9841448490252
+"330390",2023,"vsr",131,286564,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",294983,45.7140464259293,44.4093388432554
+"330390",2024,"vsr",75,294983,"Estimativa da população residente, 1º de julho de 2024",294983,25.4251939942302,25.4251939942302
+"330390",2025,"vsr",239,294926,"Estimativa da população residente, 1º de julho de 2025",294983,81.0372771474878,81.0216181949468
+"330395",2022,"influenza",1,24298,"Censo 2022, população residente (data de referência 01/08/2022)",25085,4.11556506708371,3.98644608331672
+"330395",2023,"influenza",1,24674,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",25085,4.05284915295453,3.98644608331672
+"330395",2024,"influenza",0,25085,"Estimativa da população residente, 1º de julho de 2024",25085,0,0
+"330395",2025,"influenza",14,25096,"Estimativa da população residente, 1º de julho de 2025",25085,55.7857825948358,55.8102451664341
+"330395",2022,"sarscov2",38,24298,"Censo 2022, população residente (data de referência 01/08/2022)",25085,156.391472549181,151.484951166036
+"330395",2023,"sarscov2",8,24674,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",25085,32.4227932236362,31.8915686665338
+"330395",2024,"sarscov2",6,25085,"Estimativa da população residente, 1º de julho de 2024",25085,23.9186764999003,23.9186764999003
+"330395",2025,"sarscov2",3,25096,"Estimativa da população residente, 1º de julho de 2025",25085,11.954096270322,11.9593382499502
+"330395",2022,"vsr",1,24298,"Censo 2022, população residente (data de referência 01/08/2022)",25085,4.11556506708371,3.98644608331672
+"330395",2023,"vsr",1,24674,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",25085,4.05284915295453,3.98644608331672
+"330395",2024,"vsr",3,25085,"Estimativa da população residente, 1º de julho de 2024",25085,11.9593382499502,11.9593382499502
+"330395",2025,"vsr",1,25096,"Estimativa da população residente, 1º de julho de 2025",25085,3.98469875677399,3.98644608331672
+"330400",2022,"influenza",1,27474,"Censo 2022, população residente (data de referência 01/08/2022)",29054,3.63980490645701,3.44186686858952
+"330400",2023,"influenza",0,28228,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",29054,0,0
+"330400",2024,"influenza",3,29054,"Estimativa da população residente, 1º de julho de 2024",29054,10.3256006057686,10.3256006057686
+"330400",2025,"influenza",4,29066,"Estimativa da população residente, 1º de julho de 2025",29054,13.7617835271451,13.7674674743581
+"330400",2022,"sarscov2",44,27474,"Censo 2022, população residente (data de referência 01/08/2022)",29054,160.151415884109,151.442142217939
+"330400",2023,"sarscov2",8,28228,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",29054,28.3406546691229,27.5349349487162
+"330400",2024,"sarscov2",5,29054,"Estimativa da população residente, 1º de julho de 2024",29054,17.2093343429476,17.2093343429476
+"330400",2025,"sarscov2",2,29066,"Estimativa da população residente, 1º de julho de 2025",29054,6.88089176357256,6.88373373717905
+"330400",2022,"vsr",0,27474,"Censo 2022, população residente (data de referência 01/08/2022)",29054,0,0
+"330400",2023,"vsr",1,28228,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",29054,3.54258183364036,3.44186686858952
+"330400",2024,"vsr",1,29054,"Estimativa da população residente, 1º de julho de 2024",29054,3.44186686858952,3.44186686858952
+"330400",2025,"vsr",3,29066,"Estimativa da população residente, 1º de julho de 2025",29054,10.3213376453588,10.3256006057686
+"330410",2022,"influenza",0,17288,"Censo 2022, população residente (data de referência 01/08/2022)",17832,0,0
+"330410",2023,"influenza",1,17548,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",17832,5.6986551173923,5.60789591745177
+"330410",2024,"influenza",1,17832,"Estimativa da população residente, 1º de julho de 2024",17832,5.60789591745177,5.60789591745177
+"330410",2025,"influenza",4,17832,"Estimativa da população residente, 1º de julho de 2025",17832,22.4315836698071,22.4315836698071
+"330410",2022,"sarscov2",14,17288,"Censo 2022, população residente (data de referência 01/08/2022)",17832,80.9810273021749,78.5105428443248
+"330410",2023,"sarscov2",6,17548,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",17832,34.1919307043538,33.6473755047106
+"330410",2024,"sarscov2",1,17832,"Estimativa da população residente, 1º de julho de 2024",17832,5.60789591745177,5.60789591745177
+"330410",2025,"sarscov2",0,17832,"Estimativa da população residente, 1º de julho de 2025",17832,0,0
+"330410",2022,"vsr",0,17288,"Censo 2022, população residente (data de referência 01/08/2022)",17832,0,0
+"330410",2023,"vsr",0,17548,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",17832,0,0
+"330410",2024,"vsr",0,17832,"Estimativa da população residente, 1º de julho de 2024",17832,0,0
+"330410",2025,"vsr",2,17832,"Estimativa da população residente, 1º de julho de 2025",17832,11.2157918349035,11.2157918349035
+"330411",2022,"influenza",1,20373,"Censo 2022, população residente (data de referência 01/08/2022)",21064,4.90845727187945,4.74743638435245
+"330411",2023,"influenza",3,20703,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",21064,14.4906535284741,14.2423091530573
+"330411",2024,"influenza",2,21064,"Estimativa da população residente, 1º de julho de 2024",21064,9.4948727687049,9.4948727687049
+"330411",2025,"influenza",4,21089,"Estimativa da população residente, 1º de julho de 2025",21064,18.9672341030869,18.9897455374098
+"330411",2022,"sarscov2",30,20373,"Censo 2022, população residente (data de referência 01/08/2022)",21064,147.253718156383,142.423091530573
+"330411",2023,"sarscov2",9,20703,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",21064,43.4719605854224,42.726927459172
+"330411",2024,"sarscov2",5,21064,"Estimativa da população residente, 1º de julho de 2024",21064,23.7371819217622,23.7371819217622
+"330411",2025,"sarscov2",2,21089,"Estimativa da população residente, 1º de julho de 2025",21064,9.48361705154346,9.4948727687049
+"330411",2022,"vsr",1,20373,"Censo 2022, população residente (data de referência 01/08/2022)",21064,4.90845727187945,4.74743638435245
+"330411",2023,"vsr",0,20703,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",21064,0,0
+"330411",2024,"vsr",0,21064,"Estimativa da população residente, 1º de julho de 2024",21064,0,0
+"330411",2025,"vsr",1,21089,"Estimativa da população residente, 1º de julho de 2025",21064,4.74180852577173,4.74743638435245
+"330412",2022,"influenza",2,13682,"Censo 2022, população residente (data de referência 01/08/2022)",14158,14.6177459435755,14.1262890238734
+"330412",2023,"influenza",1,13909,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",14158,7.18958947444101,7.06314451193671
+"330412",2024,"influenza",0,14158,"Estimativa da população residente, 1º de julho de 2024",14158,0,0
+"330412",2025,"influenza",4,14165,"Estimativa da população residente, 1º de julho de 2025",14158,28.2386163078009,28.2525780477469
+"330412",2022,"sarscov2",17,13682,"Censo 2022, população residente (data de referência 01/08/2022)",14158,124.250840520392,120.073456702924
+"330412",2023,"sarscov2",8,13909,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",14158,57.5167157955281,56.5051560954937
+"330412",2024,"sarscov2",7,14158,"Estimativa da população residente, 1º de julho de 2024",14158,49.442011583557,49.442011583557
+"330412",2025,"sarscov2",2,14165,"Estimativa da população residente, 1º de julho de 2025",14158,14.1193081539005,14.1262890238734
+"330412",2022,"vsr",0,13682,"Censo 2022, população residente (data de referência 01/08/2022)",14158,0,0
+"330412",2023,"vsr",0,13909,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",14158,0,0
+"330412",2024,"vsr",2,14158,"Estimativa da população residente, 1º de julho de 2024",14158,14.1262890238734,14.1262890238734
+"330412",2025,"vsr",1,14165,"Estimativa da população residente, 1º de julho de 2025",14158,7.05965407695023,7.06314451193671
+"330414",2022,"influenza",0,140523,"Censo 2022, população residente (data de referência 01/08/2022)",149093,0,0
+"330414",2023,"influenza",2,144612,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",149093,1.38301109174896,1.34144460169156
+"330414",2024,"influenza",8,149093,"Estimativa da população residente, 1º de julho de 2024",149093,5.36577840676625,5.36577840676625
+"330414",2025,"influenza",7,149135,"Estimativa da população residente, 1º de julho de 2025",149093,4.69373386528984,4.69505610592047
+"330414",2022,"sarscov2",32,140523,"Censo 2022, população residente (data de referência 01/08/2022)",149093,22.7720728990984,21.463113627065
+"330414",2023,"sarscov2",12,144612,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",149093,8.29806655049373,8.04866761014937
+"330414",2024,"sarscov2",1,149093,"Estimativa da população residente, 1º de julho de 2024",149093,0.670722300845781,0.670722300845781
+"330414",2025,"sarscov2",3,149135,"Estimativa da população residente, 1º de julho de 2025",149093,2.01160022798136,2.01216690253734
+"330414",2022,"vsr",1,140523,"Censo 2022, população residente (data de referência 01/08/2022)",149093,0.711627278096824,0.670722300845781
+"330414",2023,"vsr",5,144612,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",149093,3.45752772937239,3.3536115042289
+"330414",2024,"vsr",12,149093,"Estimativa da população residente, 1º de julho de 2024",149093,8.04866761014937,8.04866761014937
+"330414",2025,"vsr",12,149135,"Estimativa da população residente, 1º de julho de 2025",149093,8.04640091192544,8.04866761014937
+"330415",2022,"influenza",0,22393,"Censo 2022, população residente (data de referência 01/08/2022)",23126,0,0
+"330415",2023,"influenza",6,22743,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",23126,26.3817438332674,25.9448240076105
+"330415",2024,"influenza",1,23126,"Estimativa da população residente, 1º de julho de 2024",23126,4.32413733460175,4.32413733460175
+"330415",2025,"influenza",2,23142,"Estimativa da população residente, 1º de julho de 2025",23126,8.64229539365656,8.64827466920349
+"330415",2022,"sarscov2",19,22393,"Censo 2022, população residente (data de referência 01/08/2022)",23126,84.8479435537891,82.1586093574332
+"330415",2023,"sarscov2",8,22743,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",23126,35.1756584443565,34.593098676814
+"330415",2024,"sarscov2",17,23126,"Estimativa da população residente, 1º de julho de 2024",23126,73.5103346882297,73.5103346882297
+"330415",2025,"sarscov2",1,23142,"Estimativa da população residente, 1º de julho de 2025",23126,4.32114769682828,4.32413733460175
+"330415",2022,"vsr",0,22393,"Censo 2022, população residente (data de referência 01/08/2022)",23126,0,0
+"330415",2023,"vsr",1,22743,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",23126,4.39695730554456,4.32413733460175
+"330415",2024,"vsr",1,23126,"Estimativa da população residente, 1º de julho de 2024",23126,4.32413733460175,4.32413733460175
+"330415",2025,"vsr",0,23142,"Estimativa da população residente, 1º de julho de 2025",23126,0,0
+"330420",2022,"influenza",35,129612,"Censo 2022, população residente (data de referência 01/08/2022)",137612,27.0036724994599,25.4338284451937
+"330420",2023,"influenza",23,133429,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",137612,17.2376319990407,16.7136586925559
+"330420",2024,"influenza",58,137612,"Estimativa da população residente, 1º de julho de 2024",137612,42.1474871377496,42.1474871377496
+"330420",2025,"influenza",66,137697,"Estimativa da população residente, 1º de julho de 2025",137612,47.9313274799015,47.9609336395082
+"330420",2022,"sarscov2",356,129612,"Censo 2022, população residente (data de referência 01/08/2022)",137612,274.665925994507,258.698369328256
+"330420",2023,"sarscov2",61,133429,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",137612,45.7171979104992,44.3275295759091
+"330420",2024,"sarscov2",51,137612,"Estimativa da população residente, 1º de julho de 2024",137612,37.0607214487109,37.0607214487109
+"330420",2025,"sarscov2",9,137697,"Estimativa da população residente, 1º de julho de 2025",137612,6.53609011089566,6.54012731447839
+"330420",2022,"vsr",1,129612,"Censo 2022, população residente (data de referência 01/08/2022)",137612,0.771533499984569,0.726680812719821
+"330420",2023,"vsr",1,133429,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",137612,0.749462260827856,0.726680812719821
+"330420",2024,"vsr",4,137612,"Estimativa da população residente, 1º de julho de 2024",137612,2.90672325087928,2.90672325087928
+"330420",2025,"vsr",24,137697,"Estimativa da população residente, 1º de julho de 2025",137612,17.4295736290551,17.4403395052757
+"330430",2022,"influenza",3,56276,"Censo 2022, população residente (data de referência 01/08/2022)",59113,5.33086928708508,5.07502579804781
+"330430",2023,"influenza",9,57630,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",59113,15.6168662155128,15.2250773941434
+"330430",2024,"influenza",4,59113,"Estimativa da população residente, 1º de julho de 2024",59113,6.76670106406374,6.76670106406374
+"330430",2025,"influenza",9,59126,"Estimativa da população residente, 1º de julho de 2025",59113,15.221729865034,15.2250773941434
+"330430",2022,"sarscov2",117,56276,"Censo 2022, população residente (data de referência 01/08/2022)",59113,207.903902196318,197.926006123864
+"330430",2023,"sarscov2",35,57630,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",59113,60.7322575047718,59.2086343105577
+"330430",2024,"sarscov2",19,59113,"Estimativa da população residente, 1º de julho de 2024",59113,32.1418300543028,32.1418300543028
+"330430",2025,"sarscov2",13,59126,"Estimativa da população residente, 1º de julho de 2025",59113,21.9869431383824,21.9917784582072
+"330430",2022,"vsr",4,56276,"Censo 2022, população residente (data de referência 01/08/2022)",59113,7.10782571611344,6.76670106406374
+"330430",2023,"vsr",6,57630,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",59113,10.4112441436752,10.1500515960956
+"330430",2024,"vsr",26,59113,"Estimativa da população residente, 1º de julho de 2024",59113,43.9835569164143,43.9835569164143
+"330430",2025,"vsr",23,59126,"Estimativa da população residente, 1º de julho de 2025",59113,38.8999763217535,38.9085311183665
+"330440",2022,"influenza",1,17401,"Censo 2022, população residente (data de referência 01/08/2022)",17950,5.74679616114016,5.57103064066852
+"330440",2023,"influenza",0,17663,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",17950,0,0
+"330440",2024,"influenza",2,17950,"Estimativa da população residente, 1º de julho de 2024",17950,11.142061281337,11.142061281337
+"330440",2025,"influenza",3,17951,"Estimativa da população residente, 1º de julho de 2025",17950,16.7121608824021,16.7130919220056
+"330440",2022,"sarscov2",26,17401,"Censo 2022, população residente (data de referência 01/08/2022)",17950,149.416700189644,144.846796657382
+"330440",2023,"sarscov2",10,17663,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",17950,56.6155239766744,55.7103064066852
+"330440",2024,"sarscov2",4,17950,"Estimativa da população residente, 1º de julho de 2024",17950,22.2841225626741,22.2841225626741
+"330440",2025,"sarscov2",1,17951,"Estimativa da população residente, 1º de julho de 2025",17950,5.57072029413403,5.57103064066852
+"330440",2022,"vsr",0,17401,"Censo 2022, população residente (data de referência 01/08/2022)",17950,0,0
+"330440",2023,"vsr",1,17663,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",17950,5.66155239766744,5.57103064066852
+"330440",2024,"vsr",0,17950,"Estimativa da população residente, 1º de julho de 2024",17950,0,0
+"330440",2025,"vsr",1,17951,"Estimativa da população residente, 1º de julho de 2025",17950,5.57072029413403,5.57103064066852
+"330450",2022,"influenza",0,8954,"Censo 2022, população residente (data de referência 01/08/2022)",9264,0,0
+"330450",2023,"influenza",0,9102,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",9264,0,0
+"330450",2024,"influenza",0,9264,"Estimativa da população residente, 1º de julho de 2024",9264,0,0
+"330450",2025,"influenza",0,9267,"Estimativa da população residente, 1º de julho de 2025",9264,0,0
+"330450",2022,"sarscov2",9,8954,"Censo 2022, população residente (data de referência 01/08/2022)",9264,100.513736877373,97.1502590673575
+"330450",2023,"sarscov2",5,9102,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",9264,54.9329817622501,53.972366148532
+"330450",2024,"sarscov2",1,9264,"Estimativa da população residente, 1º de julho de 2024",9264,10.7944732297064,10.7944732297064
+"330450",2025,"sarscov2",0,9267,"Estimativa da população residente, 1º de julho de 2025",9264,0,0
+"330450",2022,"vsr",2,8954,"Censo 2022, população residente (data de referência 01/08/2022)",9264,22.3363859727496,21.5889464594128
+"330450",2023,"vsr",0,9102,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",9264,0,0
+"330450",2024,"vsr",1,9264,"Estimativa da população residente, 1º de julho de 2024",9264,10.7944732297064,10.7944732297064
+"330450",2025,"vsr",2,9267,"Estimativa da população residente, 1º de julho de 2025",9264,21.5819574835438,21.5889464594128
+"330452",2022,"influenza",9,156491,"Censo 2022, população residente (data de referência 01/08/2022)",168099,5.7511294579241,5.353987828601
+"330452",2023,"influenza",2,162030,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",168099,1.23433931987903,1.18977507302245
+"330452",2024,"influenza",17,168099,"Estimativa da população residente, 1º de julho de 2024",168099,10.1130881206908,10.1130881206908
+"330452",2025,"influenza",23,168455,"Estimativa da população residente, 1º de julho de 2025",168099,13.6534979668161,13.6824133397581
+"330452",2022,"sarscov2",188,156491,"Censo 2022, população residente (data de referência 01/08/2022)",168099,120.134704232192,111.83885686411
+"330452",2023,"sarscov2",16,162030,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",168099,9.87471455903228,9.51820058417956
+"330452",2024,"sarscov2",13,168099,"Estimativa da população residente, 1º de julho de 2024",168099,7.73353797464589,7.73353797464589
+"330452",2025,"sarscov2",10,168455,"Estimativa da população residente, 1º de julho de 2025",168099,5.93630346383307,5.94887536511223
+"330452",2022,"vsr",10,156491,"Censo 2022, população residente (data de referência 01/08/2022)",168099,6.39014384213789,5.94887536511223
+"330452",2023,"vsr",1,162030,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",168099,0.617169659939517,0.594887536511223
+"330452",2024,"vsr",17,168099,"Estimativa da população residente, 1º de julho de 2024",168099,10.1130881206908,10.1130881206908
+"330452",2025,"vsr",23,168455,"Estimativa da população residente, 1º de julho de 2025",168099,13.6534979668161,13.6824133397581
+"330455",2022,"influenza",89,6211223,"Censo 2022, população residente (data de referência 01/08/2022)",6729894,1.43289010875958,1.32245767912541
+"330455",2023,"influenza",209,6458703,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",6729894,3.23594381100973,3.10554668468775
+"330455",2024,"influenza",719,6729894,"Estimativa da população residente, 1º de julho de 2024",6729894,10.6836749583277,10.6836749583277
+"330455",2025,"influenza",1063,6730729,"Estimativa da população residente, 1º de julho de 2025",6729894,15.7932372555781,15.7951967742731
+"330455",2022,"sarscov2",6379,6211223,"Censo 2022, população residente (data de referência 01/08/2022)",6729894,102.701191053678,94.7860397206851
+"330455",2023,"sarscov2",1474,6458703,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",6729894,22.8219195092265,21.9022766183242
+"330455",2024,"sarscov2",890,6729894,"Estimativa da população residente, 1º de julho de 2024",6729894,13.2245767912541,13.2245767912541
+"330455",2025,"sarscov2",396,6730729,"Estimativa da população residente, 1º de julho de 2025",6729894,5.88346373773183,5.88419371835574
+"330455",2022,"vsr",654,6211223,"Censo 2022, população residente (data de referência 01/08/2022)",6729894,10.5293273160535,9.71783508031479
+"330455",2023,"vsr",425,6458703,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",6729894,6.58026851521118,6.31510689469998
+"330455",2024,"vsr",931,6729894,"Estimativa da população residente, 1º de julho de 2024",6729894,13.8337988681545,13.8337988681545
+"330455",2025,"vsr",1539,6730729,"Estimativa da população residente, 1º de julho de 2025",6729894,22.8652795261851,22.8681164963371
+"330460",2022,"influenza",0,10232,"Censo 2022, população residente (data de referência 01/08/2022)",10579,0,0
+"330460",2023,"influenza",0,10398,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",10579,0,0
+"330460",2024,"influenza",0,10579,"Estimativa da população residente, 1º de julho de 2024",10579,0,0
+"330460",2025,"influenza",0,10580,"Estimativa da população residente, 1º de julho de 2025",10579,0,0
+"330460",2022,"sarscov2",0,10232,"Censo 2022, população residente (data de referência 01/08/2022)",10579,0,0
+"330460",2023,"sarscov2",0,10398,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",10579,0,0
+"330460",2024,"sarscov2",0,10579,"Estimativa da população residente, 1º de julho de 2024",10579,0,0
+"330460",2025,"sarscov2",0,10580,"Estimativa da população residente, 1º de julho de 2025",10579,0,0
+"330460",2022,"vsr",0,10232,"Censo 2022, população residente (data de referência 01/08/2022)",10579,0,0
+"330460",2023,"vsr",1,10398,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",10579,9.61723408347759,9.45268929010303
+"330460",2024,"vsr",0,10579,"Estimativa da população residente, 1º de julho de 2024",10579,0,0
+"330460",2025,"vsr",0,10580,"Estimativa da população residente, 1º de julho de 2025",10579,0,0
+"330470",2022,"influenza",1,41325,"Censo 2022, população residente (data de referência 01/08/2022)",43686,2.41984271022384,2.28906285766607
+"330470",2023,"influenza",0,42452,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",43686,0,0
+"330470",2024,"influenza",11,43686,"Estimativa da população residente, 1º de julho de 2024",43686,25.1796914343268,25.1796914343268
+"330470",2025,"influenza",12,43697,"Estimativa da população residente, 1º de julho de 2025",43686,27.4618394855482,27.4687542919929
+"330470",2022,"sarscov2",27,41325,"Censo 2022, população residente (data de referência 01/08/2022)",43686,65.3357531760436,61.8046971569839
+"330470",2023,"sarscov2",7,42452,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",43686,16.4892113445774,16.0234400036625
+"330470",2024,"sarscov2",3,43686,"Estimativa da população residente, 1º de julho de 2024",43686,6.86718857299821,6.86718857299821
+"330470",2025,"sarscov2",0,43697,"Estimativa da população residente, 1º de julho de 2025",43686,0,0
+"330470",2022,"vsr",0,41325,"Censo 2022, população residente (data de referência 01/08/2022)",43686,0,0
+"330470",2023,"vsr",1,42452,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",43686,2.35560162065391,2.28906285766607
+"330470",2024,"vsr",1,43686,"Estimativa da população residente, 1º de julho de 2024",43686,2.28906285766607,2.28906285766607
+"330470",2025,"vsr",2,43697,"Estimativa da população residente, 1º de julho de 2025",43686,4.57697324759137,4.57812571533214
+"330475",2022,"influenza",2,45059,"Censo 2022, população residente (data de referência 01/08/2022)",47368,4.43862491400164,4.22225975342003
+"330475",2023,"influenza",0,46161,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",47368,0,0
+"330475",2024,"influenza",0,47368,"Estimativa da população residente, 1º de julho de 2024",47368,0,0
+"330475",2025,"influenza",2,47397,"Estimativa da população residente, 1º de julho de 2025",47368,4.21967635082389,4.22225975342003
+"330475",2022,"sarscov2",26,45059,"Censo 2022, população residente (data de referência 01/08/2022)",47368,57.7021238820214,54.8893767944604
+"330475",2023,"sarscov2",6,46161,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",47368,12.9979853122766,12.6667792602601
+"330475",2024,"sarscov2",1,47368,"Estimativa da população residente, 1º de julho de 2024",47368,2.11112987671002,2.11112987671002
+"330475",2025,"sarscov2",0,47397,"Estimativa da população residente, 1º de julho de 2025",47368,0,0
+"330475",2022,"vsr",1,45059,"Censo 2022, população residente (data de referência 01/08/2022)",47368,2.21931245700082,2.11112987671002
+"330475",2023,"vsr",0,46161,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",47368,0,0
+"330475",2024,"vsr",1,47368,"Estimativa da população residente, 1º de julho de 2024",47368,2.11112987671002,2.11112987671002
+"330475",2025,"vsr",3,47397,"Estimativa da população residente, 1º de julho de 2025",47368,6.32951452623584,6.33338963013005
+"330480",2022,"influenza",0,38961,"Censo 2022, população residente (data de referência 01/08/2022)",41197,0,0
+"330480",2023,"influenza",0,40028,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",41197,0,0
+"330480",2024,"influenza",1,41197,"Estimativa da população residente, 1º de julho de 2024",41197,2.4273612156225,2.4273612156225
+"330480",2025,"influenza",0,41212,"Estimativa da população residente, 1º de julho de 2025",41197,0,0
+"330480",2022,"sarscov2",16,38961,"Censo 2022, população residente (data de referência 01/08/2022)",41197,41.0667077333744,38.8377794499599
+"330480",2023,"sarscov2",2,40028,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",41197,4.9965024482862,4.85472243124499
+"330480",2024,"sarscov2",3,41197,"Estimativa da população residente, 1º de julho de 2024",41197,7.28208364686749,7.28208364686749
+"330480",2025,"sarscov2",2,41212,"Estimativa da população residente, 1º de julho de 2025",41197,4.85295544986897,4.85472243124499
+"330480",2022,"vsr",0,38961,"Censo 2022, população residente (data de referência 01/08/2022)",41197,0,0
+"330480",2023,"vsr",0,40028,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",41197,0,0
+"330480",2024,"vsr",1,41197,"Estimativa da população residente, 1º de julho de 2024",41197,2.4273612156225,2.4273612156225
+"330480",2025,"vsr",2,41212,"Estimativa da população residente, 1º de julho de 2025",41197,4.85295544986897,4.85472243124499
+"330490",2022,"influenza",7,896744,"Censo 2022, população residente (data de referência 01/08/2022)",960652,0.780601821701623,0.72867177708473
+"330490",2023,"influenza",25,927237,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",960652,2.69618231369111,2.60239920387404
+"330490",2024,"influenza",91,960652,"Estimativa da população residente, 1º de julho de 2024",960652,9.47273310210149,9.47273310210149
+"330490",2025,"influenza",106,960196,"Estimativa da população residente, 1º de julho de 2025",960652,11.0394127865561,11.0341726244259
+"330490",2022,"sarscov2",908,896744,"Censo 2022, população residente (data de referência 01/08/2022)",960652,101.255207729296,94.519139084705
+"330490",2023,"sarscov2",188,927237,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",960652,20.2752909989571,19.5700420131327
+"330490",2024,"sarscov2",157,960652,"Estimativa da população residente, 1º de julho de 2024",960652,16.3430670003289,16.3430670003289
+"330490",2025,"sarscov2",83,960196,"Estimativa da população residente, 1º de julho de 2025",960652,8.6440685026807,8.6399653568618
+"330490",2022,"vsr",42,896744,"Censo 2022, população residente (data de referência 01/08/2022)",960652,4.68361093020974,4.37203066250838
+"330490",2023,"vsr",45,927237,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",960652,4.85312816464399,4.68431856697326
+"330490",2024,"vsr",202,960652,"Estimativa da população residente, 1º de julho de 2024",960652,21.0273855673022,21.0273855673022
+"330490",2025,"vsr",388,960196,"Estimativa da população residente, 1º de julho de 2025",960652,40.4084166149411,40.389235644125
+"330500",2022,"influenza",0,36573,"Censo 2022, população residente (data de referência 01/08/2022)",38708,0,0
+"330500",2023,"influenza",0,37592,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",38708,0,0
+"330500",2024,"influenza",2,38708,"Estimativa da população residente, 1º de julho de 2024",38708,5.16689056525783,5.16689056525783
+"330500",2025,"influenza",5,38740,"Estimativa da população residente, 1º de julho de 2025",38708,12.9065565307176,12.9172264131446
+"330500",2022,"sarscov2",15,36573,"Censo 2022, população residente (data de referência 01/08/2022)",38708,41.0138626855877,38.7516792394337
+"330500",2023,"sarscov2",2,37592,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",38708,5.32028091083209,5.16689056525783
+"330500",2024,"sarscov2",2,38708,"Estimativa da população residente, 1º de julho de 2024",38708,5.16689056525783,5.16689056525783
+"330500",2025,"sarscov2",1,38740,"Estimativa da população residente, 1º de julho de 2025",38708,2.58131130614352,2.58344528262891
+"330500",2022,"vsr",2,36573,"Censo 2022, população residente (data de referência 01/08/2022)",38708,5.46851502474503,5.16689056525783
+"330500",2023,"vsr",1,37592,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",38708,2.66014045541605,2.58344528262891
+"330500",2024,"vsr",1,38708,"Estimativa da população residente, 1º de julho de 2024",38708,2.58344528262891,2.58344528262891
+"330500",2025,"vsr",1,38740,"Estimativa da população residente, 1º de julho de 2025",38708,2.58131130614352,2.58344528262891
+"330510",2022,"influenza",1,440962,"Censo 2022, população residente (data de referência 01/08/2022)",466536,0.226776910482082,0.21434573109042
+"330510",2023,"influenza",9,453164,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",466536,1.98603596049112,1.92911157981378
+"330510",2024,"influenza",19,466536,"Estimativa da população residente, 1º de julho de 2024",466536,4.07256889071797,4.07256889071797
+"330510",2025,"influenza",40,466503,"Estimativa da população residente, 1º de julho de 2025",466536,8.57443574853752,8.57382924361678
+"330510",2022,"sarscov2",222,440962,"Censo 2022, população residente (data de referência 01/08/2022)",466536,50.3444741270223,47.5847523020732
+"330510",2023,"sarscov2",32,453164,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",466536,7.06146119285733,6.85906339489343
+"330510",2024,"sarscov2",23,466536,"Estimativa da população residente, 1º de julho de 2024",466536,4.92995181507965,4.92995181507965
+"330510",2025,"sarscov2",19,466503,"Estimativa da população residente, 1º de julho de 2025",466536,4.07285698055532,4.07256889071797
+"330510",2022,"vsr",7,440962,"Censo 2022, população residente (data de referência 01/08/2022)",466536,1.58743837337458,1.50042011763294
+"330510",2023,"vsr",6,453164,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",466536,1.32402397366075,1.28607438654252
+"330510",2024,"vsr",37,466536,"Estimativa da população residente, 1º de julho de 2024",466536,7.93079205034553,7.93079205034553
+"330510",2025,"vsr",122,466503,"Estimativa da população residente, 1º de julho de 2025",466536,26.1520290330394,26.1501791930312
+"330513",2022,"influenza",0,7070,"Censo 2022, população residente (data de referência 01/08/2022)",7315,0,0
+"330513",2023,"influenza",0,7187,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",7315,0,0
+"330513",2024,"influenza",2,7315,"Estimativa da população residente, 1º de julho de 2024",7315,27.3410799726589,27.3410799726589
+"330513",2025,"influenza",4,7318,"Estimativa da população residente, 1º de julho de 2025",7315,54.6597430992074,54.6821599453178
+"330513",2022,"sarscov2",1,7070,"Censo 2022, população residente (data de referência 01/08/2022)",7315,14.1442715700141,13.6705399863295
+"330513",2023,"sarscov2",0,7187,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",7315,0,0
+"330513",2024,"sarscov2",0,7315,"Estimativa da população residente, 1º de julho de 2024",7315,0,0
+"330513",2025,"sarscov2",0,7318,"Estimativa da população residente, 1º de julho de 2025",7315,0,0
+"330513",2022,"vsr",0,7070,"Censo 2022, população residente (data de referência 01/08/2022)",7315,0,0
+"330513",2023,"vsr",0,7187,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",7315,0,0
+"330513",2024,"vsr",0,7315,"Estimativa da população residente, 1º de julho de 2024",7315,0,0
+"330513",2025,"vsr",1,7318,"Estimativa da população residente, 1º de julho de 2025",7315,13.6649357748019,13.6705399863295
+"330515",2022,"influenza",0,22080,"Censo 2022, população residente (data de referência 01/08/2022)",22799,0,0
+"330515",2023,"influenza",0,22423,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",22799,0,0
+"330515",2024,"influenza",2,22799,"Estimativa da população residente, 1º de julho de 2024",22799,8.77231457520067,8.77231457520067
+"330515",2025,"influenza",7,22813,"Estimativa da população residente, 1º de julho de 2025",22799,30.6842589751458,30.7031010132023
+"330515",2022,"sarscov2",4,22080,"Censo 2022, população residente (data de referência 01/08/2022)",22799,18.1159420289855,17.5446291504013
+"330515",2023,"sarscov2",0,22423,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",22799,0,0
+"330515",2024,"sarscov2",0,22799,"Estimativa da população residente, 1º de julho de 2024",22799,0,0
+"330515",2025,"sarscov2",1,22813,"Estimativa da população residente, 1º de julho de 2025",22799,4.38346556787796,4.38615728760033
+"330515",2022,"vsr",0,22080,"Censo 2022, população residente (data de referência 01/08/2022)",22799,0,0
+"330515",2023,"vsr",2,22423,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",22799,8.91941310261785,8.77231457520067
+"330515",2024,"vsr",1,22799,"Estimativa da população residente, 1º de julho de 2024",22799,4.38615728760033,4.38615728760033
+"330515",2025,"vsr",1,22813,"Estimativa da população residente, 1º de julho de 2025",22799,4.38346556787796,4.38615728760033
+"330520",2022,"influenza",2,104029,"Censo 2022, população residente (data de referência 01/08/2022)",110556,1.92254082996088,1.80903795361627
+"330520",2023,"influenza",9,107143,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",110556,8.39998880001493,8.1406707912732
+"330520",2024,"influenza",9,110556,"Estimativa da população residente, 1º de julho de 2024",110556,8.1406707912732,8.1406707912732
+"330520",2025,"influenza",14,110677,"Estimativa da população residente, 1º de julho de 2025",110556,12.649421288976,12.6632656753139
+"330520",2022,"sarscov2",46,104029,"Censo 2022, população residente (data de referência 01/08/2022)",110556,44.2184390891002,41.6078729331741
+"330520",2023,"sarscov2",9,107143,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",110556,8.39998880001493,8.1406707912732
+"330520",2024,"sarscov2",2,110556,"Estimativa da população residente, 1º de julho de 2024",110556,1.80903795361627,1.80903795361627
+"330520",2025,"sarscov2",4,110677,"Estimativa da população residente, 1º de julho de 2025",110556,3.61412036827887,3.61807590723253
+"330520",2022,"vsr",2,104029,"Censo 2022, população residente (data de referência 01/08/2022)",110556,1.92254082996088,1.80903795361627
+"330520",2023,"vsr",1,107143,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",110556,0.933332088890548,0.904518976808133
+"330520",2024,"vsr",8,110556,"Estimativa da população residente, 1º de julho de 2024",110556,7.23615181446507,7.23615181446507
+"330520",2025,"vsr",16,110677,"Estimativa da população residente, 1º de julho de 2025",110556,14.4564814731155,14.4723036289301
+"330530",2022,"influenza",0,7750,"Censo 2022, população residente (data de referência 01/08/2022)",7999,0,0
+"330530",2023,"influenza",0,7869,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",7999,0,0
+"330530",2024,"influenza",0,7999,"Estimativa da população residente, 1º de julho de 2024",7999,0,0
+"330530",2025,"influenza",0,7993,"Estimativa da população residente, 1º de julho de 2025",7999,0,0
+"330530",2022,"sarscov2",10,7750,"Censo 2022, população residente (data de referência 01/08/2022)",7999,129.032258064516,125.015626953369
+"330530",2023,"sarscov2",0,7869,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",7999,0,0
+"330530",2024,"sarscov2",0,7999,"Estimativa da população residente, 1º de julho de 2024",7999,0,0
+"330530",2025,"sarscov2",0,7993,"Estimativa da população residente, 1º de julho de 2025",7999,0,0
+"330530",2022,"vsr",0,7750,"Censo 2022, população residente (data de referência 01/08/2022)",7999,0,0
+"330530",2023,"vsr",0,7869,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",7999,0,0
+"330530",2024,"vsr",0,7999,"Estimativa da população residente, 1º de julho de 2024",7999,0,0
+"330530",2025,"vsr",1,7993,"Estimativa da população residente, 1º de julho de 2025",7999,12.5109470786939,12.5015626953369
+"330540",2022,"influenza",2,17729,"Censo 2022, população residente (data de referência 01/08/2022)",18289,11.2809521123583,10.9355350210509
+"330540",2023,"influenza",0,17996,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",18289,0,0
+"330540",2024,"influenza",2,18289,"Estimativa da população residente, 1º de julho de 2024",18289,10.9355350210509,10.9355350210509
+"330540",2025,"influenza",1,18291,"Estimativa da população residente, 1º de julho de 2025",18289,5.46716964627412,5.46776751052545
+"330540",2022,"sarscov2",25,17729,"Censo 2022, população residente (data de referência 01/08/2022)",18289,141.011901404479,136.694187763136
+"330540",2023,"sarscov2",4,17996,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",18289,22.2271615914648,21.8710700421018
+"330540",2024,"sarscov2",0,18289,"Estimativa da população residente, 1º de julho de 2024",18289,0,0
+"330540",2025,"sarscov2",2,18291,"Estimativa da população residente, 1º de julho de 2025",18289,10.9343392925482,10.9355350210509
+"330540",2022,"vsr",0,17729,"Censo 2022, população residente (data de referência 01/08/2022)",18289,0,0
+"330540",2023,"vsr",0,17996,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",18289,0,0
+"330540",2024,"vsr",0,18289,"Estimativa da população residente, 1º de julho de 2024",18289,0,0
+"330540",2025,"vsr",0,18291,"Estimativa da população residente, 1º de julho de 2025",18289,0,0
+"330550",2022,"influenza",1,89559,"Censo 2022, população residente (data de referência 01/08/2022)",95201,1.11658236469813,1.05040913435783
+"330550",2023,"influenza",18,92251,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",95201,19.5119836099338,18.907364418441
+"330550",2024,"influenza",17,95201,"Estimativa da população residente, 1º de julho de 2024",95201,17.8569552840831,17.8569552840831
+"330550",2025,"influenza",10,95315,"Estimativa da população residente, 1º de julho de 2025",95201,10.4915280910665,10.5040913435783
+"330550",2022,"sarscov2",22,89559,"Censo 2022, população residente (data de referência 01/08/2022)",95201,24.5648120233589,23.1090009558723
+"330550",2023,"sarscov2",17,92251,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",95201,18.427984520493,17.8569552840831
+"330550",2024,"sarscov2",19,95201,"Estimativa da população residente, 1º de julho de 2024",95201,19.9577735527988,19.9577735527988
+"330550",2025,"sarscov2",4,95315,"Estimativa da população residente, 1º de julho de 2025",95201,4.19661123642658,4.20163653743133
+"330550",2022,"vsr",1,89559,"Censo 2022, população residente (data de referência 01/08/2022)",95201,1.11658236469813,1.05040913435783
+"330550",2023,"vsr",3,92251,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",95201,3.25199726832229,3.1512274030735
+"330550",2024,"vsr",25,95201,"Estimativa da população residente, 1º de julho de 2024",95201,26.2602283589458,26.2602283589458
+"330550",2025,"vsr",10,95315,"Estimativa da população residente, 1º de julho de 2025",95201,10.4915280910665,10.5040913435783
+"330555",2022,"influenza",0,80596,"Censo 2022, população residente (data de referência 01/08/2022)",84737,0,0
+"330555",2023,"influenza",2,82572,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",84737,2.42212856658431,2.36024404923469
+"330555",2024,"influenza",3,84737,"Estimativa da população residente, 1º de julho de 2024",84737,3.54036607385204,3.54036607385204
+"330555",2025,"influenza",3,84794,"Estimativa da população residente, 1º de julho de 2025",84737,3.53798617826733,3.54036607385204
+"330555",2022,"sarscov2",39,80596,"Censo 2022, população residente (data de referência 01/08/2022)",84737,48.389498238126,46.0247589600765
+"330555",2023,"sarscov2",9,82572,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",84737,10.8995785496294,10.6210982215561
+"330555",2024,"sarscov2",7,84737,"Estimativa da população residente, 1º de julho de 2024",84737,8.26085417232142,8.26085417232142
+"330555",2025,"sarscov2",2,84794,"Estimativa da população residente, 1º de julho de 2025",84737,2.35865745217822,2.36024404923469
+"330555",2022,"vsr",1,80596,"Censo 2022, população residente (data de referência 01/08/2022)",84737,1.24075636508015,1.18012202461735
+"330555",2023,"vsr",0,82572,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",84737,0,0
+"330555",2024,"vsr",5,84737,"Estimativa da população residente, 1º de julho de 2024",84737,5.90061012308673,5.90061012308673
+"330555",2025,"vsr",9,84794,"Estimativa da população residente, 1º de julho de 2025",84737,10.613958534802,10.6210982215561
+"330560",2022,"influenza",2,21352,"Censo 2022, população residente (data de referência 01/08/2022)",22026,9.36680404645935,9.08017797148824
+"330560",2023,"influenza",1,21674,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",22026,4.61382301374919,4.54008898574412
+"330560",2024,"influenza",0,22026,"Estimativa da população residente, 1º de julho de 2024",22026,0,0
+"330560",2025,"influenza",0,22028,"Estimativa da população residente, 1º de julho de 2025",22026,0,0
+"330560",2022,"sarscov2",7,21352,"Censo 2022, população residente (data de referência 01/08/2022)",22026,32.7838141626077,31.7806229002088
+"330560",2023,"sarscov2",5,21674,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",22026,23.069115068746,22.7004449287206
+"330560",2024,"sarscov2",1,22026,"Estimativa da população residente, 1º de julho de 2024",22026,4.54008898574412,4.54008898574412
+"330560",2025,"sarscov2",1,22028,"Estimativa da população residente, 1º de julho de 2025",22026,4.53967677501362,4.54008898574412
+"330560",2022,"vsr",0,21352,"Censo 2022, população residente (data de referência 01/08/2022)",22026,0,0
+"330560",2023,"vsr",0,21674,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",22026,0,0
+"330560",2024,"vsr",4,22026,"Estimativa da população residente, 1º de julho de 2024",22026,18.1603559429765,18.1603559429765
+"330560",2025,"vsr",9,22028,"Estimativa da população residente, 1º de julho de 2025",22026,40.8570909751226,40.8608008716971
+"330570",2022,"influenza",0,15206,"Censo 2022, população residente (data de referência 01/08/2022)",15690,0,0
+"330570",2023,"influenza",1,15437,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",15690,6.47794260542852,6.37348629700446
+"330570",2024,"influenza",1,15690,"Estimativa da população residente, 1º de julho de 2024",15690,6.37348629700446,6.37348629700446
+"330570",2025,"influenza",6,15693,"Estimativa da população residente, 1º de julho de 2025",15690,38.2336073408526,38.2409177820268
+"330570",2022,"sarscov2",13,15206,"Censo 2022, população residente (data de referência 01/08/2022)",15690,85.4925687228725,82.855321861058
+"330570",2023,"sarscov2",2,15437,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",15690,12.955885210857,12.7469725940089
+"330570",2024,"sarscov2",2,15690,"Estimativa da população residente, 1º de julho de 2024",15690,12.7469725940089,12.7469725940089
+"330570",2025,"sarscov2",1,15693,"Estimativa da população residente, 1º de julho de 2025",15690,6.3722678901421,6.37348629700446
+"330570",2022,"vsr",0,15206,"Censo 2022, população residente (data de referência 01/08/2022)",15690,0,0
+"330570",2023,"vsr",0,15437,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",15690,0,0
+"330570",2024,"vsr",2,15690,"Estimativa da população residente, 1º de julho de 2024",15690,12.7469725940089,12.7469725940089
+"330570",2025,"vsr",4,15693,"Estimativa da população residente, 1º de julho de 2025",15690,25.4890715605684,25.4939451880178
+"330575",2022,"influenza",0,31086,"Censo 2022, população residente (data de referência 01/08/2022)",32858,0,0
+"330575",2023,"influenza",4,31931,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",32858,12.5270113682628,12.1735954714225
+"330575",2024,"influenza",0,32858,"Estimativa da população residente, 1º de julho de 2024",32858,0,0
+"330575",2025,"influenza",2,32865,"Estimativa da população residente, 1º de julho de 2025",32858,6.08550129316902,6.08679773571124
+"330575",2022,"sarscov2",46,31086,"Censo 2022, população residente (data de referência 01/08/2022)",32858,147.9765810976,139.996347921359
+"330575",2023,"sarscov2",11,31931,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",32858,34.4492812627227,33.4773875464118
+"330575",2024,"sarscov2",6,32858,"Estimativa da população residente, 1º de julho de 2024",32858,18.2603932071337,18.2603932071337
+"330575",2025,"sarscov2",5,32865,"Estimativa da população residente, 1º de julho de 2025",32858,15.2137532329226,15.2169943392781
+"330575",2022,"vsr",1,31086,"Censo 2022, população residente (data de referência 01/08/2022)",32858,3.21688219777392,3.04339886785562
+"330575",2023,"vsr",2,31931,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",32858,6.26350568413141,6.08679773571124
+"330575",2024,"vsr",9,32858,"Estimativa da população residente, 1º de julho de 2024",32858,27.3905898107006,27.3905898107006
+"330575",2025,"vsr",13,32865,"Estimativa da população residente, 1º de julho de 2025",32858,39.5557584055987,39.5641852821231
+"330580",2022,"influenza",2,165123,"Censo 2022, população residente (data de referência 01/08/2022)",176692,1.21121830393101,1.13191315962239
+"330580",2023,"influenza",1,170643,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",176692,0.586018764320834,0.565956579811197
+"330580",2024,"influenza",17,176692,"Estimativa da população residente, 1º de julho de 2024",176692,9.62126185679035,9.62126185679035
+"330580",2025,"influenza",33,176735,"Estimativa da população residente, 1º de julho de 2025",176692,18.6720230854104,18.6765671337695
+"330580",2022,"sarscov2",267,165123,"Censo 2022, população residente (data de referência 01/08/2022)",176692,161.69764357479,151.11040680959
+"330580",2023,"sarscov2",38,170643,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",176692,22.2687130441917,21.5063500328255
+"330580",2024,"sarscov2",43,176692,"Estimativa da população residente, 1º de julho de 2024",176692,24.3361329318815,24.3361329318815
+"330580",2025,"sarscov2",10,176735,"Estimativa da população residente, 1º de julho de 2025",176692,5.65818881376071,5.65956579811197
+"330580",2022,"vsr",0,165123,"Censo 2022, população residente (data de referência 01/08/2022)",176692,0,0
+"330580",2023,"vsr",2,170643,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",176692,1.17203752864167,1.13191315962239
+"330580",2024,"vsr",8,176692,"Estimativa da população residente, 1º de julho de 2024",176692,4.52765263848958,4.52765263848958
+"330580",2025,"vsr",12,176735,"Estimativa da população residente, 1º de julho de 2025",176692,6.78982657651286,6.79147895773436
+"330590",2022,"influenza",0,10302,"Censo 2022, população residente (data de referência 01/08/2022)",10652,0,0
+"330590",2023,"influenza",1,10469,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",10652,9.55201069825198,9.38790837401427
+"330590",2024,"influenza",0,10652,"Estimativa da população residente, 1º de julho de 2024",10652,0,0
+"330590",2025,"influenza",0,10654,"Estimativa da população residente, 1º de julho de 2025",10652,0,0
+"330590",2022,"sarscov2",5,10302,"Censo 2022, população residente (data de referência 01/08/2022)",10652,48.534265191225,46.9395418700713
+"330590",2023,"sarscov2",1,10469,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",10652,9.55201069825198,9.38790837401427
+"330590",2024,"sarscov2",3,10652,"Estimativa da população residente, 1º de julho de 2024",10652,28.1637251220428,28.1637251220428
+"330590",2025,"sarscov2",0,10654,"Estimativa da população residente, 1º de julho de 2025",10652,0,0
+"330590",2022,"vsr",0,10302,"Censo 2022, população residente (data de referência 01/08/2022)",10652,0,0
+"330590",2023,"vsr",0,10469,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",10652,0,0
+"330590",2024,"vsr",1,10652,"Estimativa da população residente, 1º de julho de 2024",10652,9.38790837401427,9.38790837401427
+"330590",2025,"vsr",0,10654,"Estimativa da população residente, 1º de julho de 2025",10652,0,0
+"330600",2022,"influenza",3,78346,"Censo 2022, população residente (data de referência 01/08/2022)",82300,3.8291680494218,3.64520048602673
+"330600",2023,"influenza",5,80233,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",82300,6.23184973763913,6.07533414337789
+"330600",2024,"influenza",3,82300,"Estimativa da população residente, 1º de julho de 2024",82300,3.64520048602673,3.64520048602673
+"330600",2025,"influenza",21,82319,"Estimativa da população residente, 1º de julho de 2025",82300,25.5105139761173,25.5164034021871
+"330600",2022,"sarscov2",96,78346,"Censo 2022, população residente (data de referência 01/08/2022)",82300,122.533377581497,116.646415552855
+"330600",2023,"sarscov2",10,80233,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",82300,12.4636994752783,12.1506682867558
+"330600",2024,"sarscov2",7,82300,"Estimativa da população residente, 1º de julho de 2024",82300,8.50546780072904,8.50546780072904
+"330600",2025,"sarscov2",2,82319,"Estimativa da população residente, 1º de julho de 2025",82300,2.42957275963022,2.43013365735115
+"330600",2022,"vsr",1,78346,"Censo 2022, população residente (data de referência 01/08/2022)",82300,1.27638934980727,1.21506682867558
+"330600",2023,"vsr",0,80233,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",82300,0,0
+"330600",2024,"vsr",1,82300,"Estimativa da população residente, 1º de julho de 2024",82300,1.21506682867558,1.21506682867558
+"330600",2025,"vsr",8,82319,"Estimativa da população residente, 1º de julho de 2025",82300,9.71829103852088,9.72053462940462
+"330610",2022,"influenza",11,68088,"Censo 2022, população residente (data de referência 01/08/2022)",71462,16.155563388556,15.3927961713918
+"330610",2023,"influenza",6,69698,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",71462,8.6085683950759,8.39607063894097
+"330610",2024,"influenza",6,71462,"Estimativa da população residente, 1º de julho de 2024",71462,8.39607063894097,8.39607063894097
+"330610",2025,"influenza",4,71449,"Estimativa da população residente, 1º de julho de 2025",71462,5.59839885792663,5.59738042596065
+"330610",2022,"sarscov2",242,68088,"Censo 2022, população residente (data de referência 01/08/2022)",71462,355.422394548232,338.641515770619
+"330610",2023,"sarscov2",61,69698,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",71462,87.5204453499383,85.3600514958999
+"330610",2024,"sarscov2",10,71462,"Estimativa da população residente, 1º de julho de 2024",71462,13.9934510649016,13.9934510649016
+"330610",2025,"sarscov2",8,71449,"Estimativa da população residente, 1º de julho de 2025",71462,11.1967977158533,11.1947608519213
+"330610",2022,"vsr",27,68088,"Censo 2022, população residente (data de referência 01/08/2022)",71462,39.6545646810011,37.7823178752344
+"330610",2023,"vsr",2,69698,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",71462,2.86952279835863,2.79869021298033
+"330610",2024,"vsr",17,71462,"Estimativa da população residente, 1º de julho de 2024",71462,23.7888668103328,23.7888668103328
+"330610",2025,"vsr",22,71449,"Estimativa da população residente, 1º de julho de 2025",71462,30.7911937185965,30.7855923427836
+"330615",2022,"influenza",0,10207,"Censo 2022, população residente (data de referência 01/08/2022)",10559,0,0
+"330615",2023,"influenza",0,10375,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",10559,0,0
+"330615",2024,"influenza",1,10559,"Estimativa da população residente, 1º de julho de 2024",10559,9.47059380623165,9.47059380623165
+"330615",2025,"influenza",0,10563,"Estimativa da população residente, 1º de julho de 2025",10559,0,0
+"330615",2022,"sarscov2",1,10207,"Censo 2022, população residente (data de referência 01/08/2022)",10559,9.79719800137161,9.47059380623165
+"330615",2023,"sarscov2",1,10375,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",10559,9.63855421686747,9.47059380623165
+"330615",2024,"sarscov2",0,10559,"Estimativa da população residente, 1º de julho de 2024",10559,0,0
+"330615",2025,"sarscov2",0,10563,"Estimativa da população residente, 1º de julho de 2025",10559,0,0
+"330615",2022,"vsr",1,10207,"Censo 2022, população residente (data de referência 01/08/2022)",10559,9.79719800137161,9.47059380623165
+"330615",2023,"vsr",0,10375,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",10559,0,0
+"330615",2024,"vsr",0,10559,"Estimativa da população residente, 1º de julho de 2024",10559,0,0
+"330615",2025,"vsr",2,10563,"Estimativa da população residente, 1º de julho de 2025",10559,18.9340149578718,18.9411876124633
+"330620",2022,"influenza",5,33976,"Censo 2022, população residente (data de referência 01/08/2022)",35904,14.716270308453,13.9260249554367
+"330620",2023,"influenza",2,34896,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",35904,5.73131591013297,5.57040998217469
+"330620",2024,"influenza",5,35904,"Estimativa da população residente, 1º de julho de 2024",35904,13.9260249554367,13.9260249554367
+"330620",2025,"influenza",41,35907,"Estimativa da população residente, 1º de julho de 2025",35904,114.183863870554,114.193404634581
+"330620",2022,"sarscov2",52,33976,"Censo 2022, população residente (data de referência 01/08/2022)",35904,153.049211207911,144.830659536542
+"330620",2023,"sarscov2",14,34896,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",35904,40.1192113709308,38.9928698752228
+"330620",2024,"sarscov2",3,35904,"Estimativa da população residente, 1º de julho de 2024",35904,8.35561497326203,8.35561497326203
+"330620",2025,"sarscov2",5,35907,"Estimativa da população residente, 1º de julho de 2025",35904,13.9248614476286,13.9260249554367
+"330620",2022,"vsr",0,33976,"Censo 2022, população residente (data de referência 01/08/2022)",35904,0,0
+"330620",2023,"vsr",1,34896,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",35904,2.86565795506648,2.78520499108734
+"330620",2024,"vsr",0,35904,"Estimativa da população residente, 1º de julho de 2024",35904,0,0
+"330620",2025,"vsr",6,35907,"Estimativa da população residente, 1º de julho de 2025",35904,16.7098337371543,16.7112299465241
+"330630",2022,"influenza",9,261563,"Censo 2022, população residente (data de referência 01/08/2022)",279898,3.44085363755577,3.21545705935734
+"330630",2023,"influenza",18,270311,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",279898,6.65899648922907,6.43091411871467
+"330630",2024,"influenza",46,279898,"Estimativa da população residente, 1º de julho de 2024",279898,16.4345583033819,16.4345583033819
+"330630",2025,"influenza",189,279971,"Estimativa da população residente, 1º de julho de 2025",279898,67.5069917955788,67.5245982465041
+"330630",2022,"sarscov2",646,261563,"Censo 2022, população residente (data de referência 01/08/2022)",279898,246.976827762336,230.798362260538
+"330630",2023,"sarscov2",240,270311,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",279898,88.7866198563876,85.7455215828623
+"330630",2024,"sarscov2",120,279898,"Estimativa da população residente, 1º de julho de 2024",279898,42.8727607914312,42.8727607914312
+"330630",2025,"sarscov2",63,279971,"Estimativa da população residente, 1º de julho de 2025",279898,22.5023305985263,22.5081994155014
+"330630",2022,"vsr",10,261563,"Censo 2022, população residente (data de referência 01/08/2022)",279898,3.8231707083953,3.5727300659526
+"330630",2023,"vsr",6,270311,"interpolação linear (peso 0.4771) entre 2022-08-01 e 2024-07-01",279898,2.21966549640969,2.14363803957156
+"330630",2024,"vsr",14,279898,"Estimativa da população residente, 1º de julho de 2024",279898,5.00182209233364,5.00182209233364
+"330630",2025,"vsr",43,279971,"Estimativa da população residente, 1º de julho de 2025",279898,15.3587335831211,15.3627392835962
