@@ -134,7 +134,7 @@ Prefixos: `CS` = tarefa · `D` = decisão que só o dono/mestranda fecha · `ADR
 | CS-002 | **Esqueleto do repositório** — árvore do PDF, `renv.lock` com 140 pacotes, 5/5 expectativas, `git init` | 2026-09-25 | idem · ADR-0005 |
 | CS-003 | **Manifesto de proveniência** — `registrar_fonte()`, `verificar_manifesto()`, `baixar_e_registrar()`; tabela Markdown escrita e relida por código; 12 testes, incluindo arquivo alterado em 1 byte | 2026-09-25 | `docs/release-history/cs-003-cs-004-proveniencia-e-dicionario.md` · commit `5f09f23` |
 | CS-004 | **Dicionário oficial no repositório** — PDF oficial (28 p., SHA-256 `6b92d438…`) registrado no manifesto; `docs/dicionario-sivep.md` com 34 campos, domínio de cada um e 4 marcados [CONFERIR] | 2026-09-25 | idem |
-| CS-005 | **Download do SIVEP sem `microdatasus`** — `baixar_sivep()` + `baixar_arquivo()` com retomada; 4 bancos PARQUET (113,9 MB) no manifesto; 2ª chamada usa o cache em 0,4 s | 2026-09-25 | `docs/release-history/cs-005-cs-006-etl-sivep.md` · ADR-0001 · commit PENDENTE |
+| CS-005 | **Download do SIVEP sem `microdatasus`** — `baixar_sivep()` + `baixar_arquivo()` com retomada; 4 bancos PARQUET (113,9 MB) no manifesto; 2ª chamada usa o cache em 0,4 s | 2026-09-25 | `docs/release-history/cs-005-cs-006-etl-sivep.md` · ADR-0001 · commit `0f38200` |
 | CS-006 | **`preparar_sivep()`** — 99.880 fichas de residentes do RJ, 34 colunas tipadas, datas lidas em UTC, semana epidemiológica recalculada; 4 dúvidas do dicionário conferidas; diagnóstico por ano em `resultados/tabelas/` | 2026-09-25 | idem |
 
 ## Descartados
