@@ -23,7 +23,9 @@ Testado do zero num clone limpo (ver `docs/release-history/cs-024-maquina-nova.m
 - **Git** — para clonar.
 
 **2. Clone e restaure os pacotes** (na primeira vez, baixa ~140 pacotes nas versões exatas
-do `renv.lock`)
+do `renv.lock`). **No Windows, clone numa pasta de caminho curto**, como `C:\Projetos\`: o
+`renv` instala pacotes em subpastas fundas e, a partir de ~150 caracteres de caminho, o
+limite de 260 caracteres do Windows faz a instalação falhar (visto na auditoria final).
 
 ```bash
 git clone https://github.com/Patrickriibeiro/CartografiaESaude.git
@@ -48,7 +50,8 @@ Rscript run.R --limpar         # apaga o que é derivado e refaz do zero
 ```
 
 Tempo medido: ~100 s com os dados já baixados; o tempo de cada etapa fica em
-`resultados/execucao.log`.
+`resultados/execucao.log`. Para conferir os resultados por um caminho independente do
+pipeline (sem o `spdep` nem as funções de `R/`), rode `Rscript tests/auditoria_independente.R`.
 
 **5. Abra o painel**
 

@@ -147,3 +147,10 @@ Esperado por acaso, sem correção: 92 × 0,05 = **4,6 municípios por mapa**.
   suavização puxa para a média do estado, não dos vizinhos); ver nota do CS-013.
 - Com 92 unidades, o poder do LISA é baixo; ausência de confirmação não é ausência
   de agrupamento.
+
+## Errata (2026-09-25, auditoria final CS-027)
+
+Na tabela 4.1, a célula "Bruta, Queen" da influenza 2023 mostra p = 0,001; o valor calculado
+é 0,0007, e o arredondamento a três decimais o levou a 0,001. O relatório apresenta o mesmo
+valor como "< 0,001". Nenhuma conclusão muda. A tabela original fica como está, por este
+arquivo ser de acréscimo, e esta errata registra a precisão.

@@ -20,7 +20,7 @@ D-06, D-08, D-09, D-10 e a opção do CS-039). **Só a D-02 (prazo) continua abe
 
 | ID | Pergunta | Recomendação | Bloqueia |
 |---|---|---|---|
-| D-01 | Quem é o dono do repositório GitHub público (item 4.5 do PDF): Patrick, Gabrielle ou ambos? Qual licença (MIT para código, CC-BY para relatório)? | Ambos como autores; MIT + CC-BY 4.0 | **Decidida 2026-09-25 (autora):** Gabrielle e Patrick como autores; MIT para o código, CC-BY 4.0 para o relatório; o PDF da proposta sai do repositório antes de publicar (ver CS-026: ele está no histórico desde `b66ae13`) | CS-025 | **CI no GitHub Actions — BLOQUEADA por cobrança da conta** — workflow escrito e validado; a 1ª execução (run 36170698073, 2026-09-25) **não começou**: o GitHub recusou o job porque "recent account payments have failed or your spending limit needs to be increased". Repositório privado consome minutos do Actions. Destravar: regularizar a cobrança da conta `Patrickriibeiro`, ou tornar o repositório público (Actions é gratuito em repositório público) | `docs/release-history/cs-025-integracao-continua.md`; aba Actions do repositório | Opus · low | 1ª execução verde, < 10 min, 6 testes pulados |
+| D-01 | Quem é o dono do repositório GitHub público (item 4.5 do PDF): Patrick, Gabrielle ou ambos? Qual licença (MIT para código, CC-BY para relatório)? | Ambos como autores; MIT + CC-BY 4.0 | **Decidida 2026-09-25 (autora):** Gabrielle e Patrick como autores; MIT para o código, CC-BY 4.0 para o relatório; o PDF da proposta sai do repositório antes de publicar (ver CS-026: ele está no histórico desde `b66ae13`) | CS-025 | **CI no GitHub Actions — BLOQUEADA por cobrança da conta** *(auditoria: no Windows, clonar em caminho curto; o bootstrap do `renv` falha acima de ~150 caracteres, README avisa)* — workflow escrito e validado; a 1ª execução (run 36170698073, 2026-09-25) **não começou**: o GitHub recusou o job porque "recent account payments have failed or your spending limit needs to be increased". Repositório privado consome minutos do Actions. Destravar: regularizar a cobrança da conta `Patrickriibeiro`, ou tornar o repositório público (Actions é gratuito em repositório público) | `docs/release-history/cs-025-integracao-continua.md`; aba Actions do repositório | Opus · low | 1ª execução verde, < 10 min, 6 testes pulados |
 | CS-026 | **Repositório — criado PRIVADO, falta torná-lo público** — feito: licenças, `CITATION.cff`, histórico reescrito sem o PDF (37 commits preservados, hashes citados atualizados; `docs/release-history/cs-026-historico-reescrito.md`), repositório privado `Patrickriibeiro/CartografiaESaude` criado e `main` enviada; conferido pela API que o único PDF no GitHub é o dicionário oficial. **Falta:** CI verde (CS-025) e a decisão do dono de tornar público | D-01; https://github.com/Patrickriibeiro/CartografiaESaude | Opus · low | repositório público, `CITATION.cff` reconhecido pelo GitHub |
 | D-02 | O `23092026` no nome do arquivo é data da apresentação (já passou) ou prazo de entrega? Existe prazo real para o produto final? | — | ordem da F5/F6 |
 | D-03 | Baixar CSV ou PARQUET do portal? PARQUET é menor e lê por coluna; CSV é o formato "clássico" que a banca conhece | PARQUET, com CSV como fallback | **Decidida 2026-09-25: PARQUET** (ADR-0001) |
@@ -73,7 +73,6 @@ D-06, D-08, D-09, D-10 e a opção do CS-039). **Só a D-02 (prazo) continua abe
 | ID | Título | Evidência | Modelo · Esforço | Aceite |
 |---|---|---|---|---|
 | CS-026 | **Repositório público** — licença (D-01), `CITATION.cff`, README com badge da CI, link no PDF seção 4.5 | PDF §4.5 | Opus · low | URL público; `CITATION.cff` valida |
-| CS-027 | **Auditoria final** — reexecução em máquina limpa; conferir cada número do relatório contra `resultados/`; verificar que os 5 erros factuais do PDF (trilha §2.1–2.5) estão cobertos por ADR; lista de limitações para a seção 5.3 | trilha §2 | **Fable · high** | 0 divergências número-relatório; 5 ADRs referenciados; relatório de auditoria em `docs/release-history/` |
 
 ### Propostos pela proposta v2 (D-10 aceita em 2026-09-25: CS-030 a CS-032 e CS-035 no escopo; CS-033 e CS-034 opcionais)
 
@@ -113,6 +112,13 @@ D-06, D-08, D-09, D-10 e a opção do CS-039). **Só a D-02 (prazo) continua abe
 | ID | Título | Evidência | Modelo · Esforço | Aceite |
 |---|---|---|---|---|
 
+### Achados da auditoria final (CS-027)
+
+| ID | Título | Evidência | Modelo · Esforço | Aceite |
+|---|---|---|---|---|
+| CS-043 | **Contagens pequenas publicadas** — 349 células município × agente × ano com 1 a 4 casos nos CSV versionados e no painel; o microdado de origem é público por ficha, então não há reidentificação adicional, mas algumas vigilâncias suprimem < 5. A autora decide: publicar como está (com nota) ou suprimir/agrupar nas tabelas exportadas | auditoria final, achado 5 | Opus · low | decisão registrada; se suprimir, `07_exportacao.R` e painel ajustados com teste |
+| CS-044 | **Completar o §5.3 do relatório e a proposta v2 §3.10** com a lista consolidada de limitações da auditoria (itens 7 a 16: residência × notificação com os números, 941 casos de critério declarado, agrupamentos de zeros, banco vivo, dicionário de 2023, `SEM_PRI` da semana 53, suavização global, malha simplificada no painel, escalas não entregues, contagens pequenas) | `docs/release-history/cs-027-auditoria-final.md` §3 | Opus · low | 16 itens no §5.3, todos com número lidos de `resultados/`; teste de números digitados continua verde |
+
 ### Fora do código (para a mestranda)
 
 | ID | Título | Evidência | Modelo · Esforço | Aceite |
@@ -130,6 +136,7 @@ D-06, D-08, D-09, D-10 e a opção do CS-039). **Só a D-02 (prazo) continua abe
 | ADR-0003 | Denominador populacional por ano, incluindo 2023 | CS-011 · **aceito 2026-09-25** (implementação do denominador único no CS-012) |
 | ADR-0004 | LISA: permutação, correção FDR, variável (bruta × EB), α | CS-017 · **escrito e aceito** (9.999 permutações; FDR-BH por mapa; dois níveis) |
 | ADR-0006 | Malha oficial do IBGE em resolução completa, não o `geobr` simplificado | CS-014 · **escrito e aceito** |
+| ADR-0007 | Nomes reais dos campos do SIVEP e chave de junção `cod6` (registro retroativo; fecha a cobertura dos 5 erros do PDF) | CS-027 · **escrito e aceito** |
 | ADR-0005 | Escopo: município (não bairro); scripts numerados (não `targets`); quadrimestre só descritivo | CS-002 · **escrito**, itens 1–2 aceitos |
 
 ---
@@ -163,6 +170,7 @@ D-06, D-08, D-09, D-10 e a opção do CS-039). **Só a D-02 (prazo) continua abe
 | CS-021 | **Painel Shiny + leaflet** — agente × ano × camada, popup com 6 campos, 3 estados, instáveis tracejados; `testServer` em 24 estados; carga em 2 s. Não aberto no navegador embutido (permissão negada): inspeção visual fica com o dono | 2026-09-25 | `docs/release-history/cs-021-painel.md` · commit `968fd97` |
 | CS-023 | **`run.R`** — 8 etapas isoladas, tempo por etapa em `resultados/execucao.log`, para no primeiro erro; `--limpar` refaz tudo em 97 s e os resultados versionados saem byte a byte idênticos | 2026-09-25 | `docs/release-history/cs-023-run.md` · commit `ce956b8` |
 | CS-024 | **README de máquina nova** — roteiro em 5 passos executado num clone limpo: restore, 383 expectativas sem dados (6 testes pulados), pipeline com download real em 89 s, 491/491 depois, resultados iguais aos do repositório. Tempo de instalação numa máquina realmente nova não medido (pacotes vieram do cache) | 2026-09-25 | `docs/release-history/cs-024-maquina-nova.md` · commit `b0b1420` |
+| CS-027 | **Auditoria final** — clone do GitHub reproduz tudo byte a byte (relatório inclusive); recálculo independente sem `spdep` e sem as funções do projeto: 118/118; ADRs × CSV: 86/86; HTML × CSV: 14/14; 0 residentes do RJ perdidos pelo filtro; 6 achados (ADR-0007 criado, aviso de caminho curto no README, errata no ADR-0004, 2 itens novos, 2 erros do próprio auditor); lista de 16 limitações | 2026-09-25 | `docs/release-history/cs-027-auditoria-final.md` · commit PENDENTE |
 | CS-037 | **Proposta v2 atualizada com as decisões de dados** — §2.2 OE4, §3.2, §3.3 (critério de caso e co-detecção), §3.4 (denominador), §3.5 (malha), §3.10 (limitações 2, 6, 7) e referências; D-04 e D-05 continuam pendentes e o texto traz a **recomendação** marcada [REVISAR]. Não inclui o CS-036 (ano epidemiológico em §3.1) | 2026-09-25 | `docs/release-history/cs-037-cs-038-proposta-e-ibge.md` · commit `9cb75c1` |
 | CS-038 | **Método de ajuste do IBGE citado** — Nota metodológica n. 01 das Estimativas 2024, p. 6–7: Censo 2022 ajustado pela PPE, maior ajuste em municípios grandes; citado no ADR-0003 e na proposta v2 | 2026-09-25 | idem |
 

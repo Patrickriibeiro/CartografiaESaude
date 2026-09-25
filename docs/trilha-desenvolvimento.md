@@ -68,6 +68,8 @@ Evidência: https://rfsaldanha.github.io/microdatasus/reference/fetch_datasus.ht
 
 ### 2.2 Nomes de campos do PDF não existem no dicionário oficial
 
+*Decisão registrada: ADR-0007 (auditoria final, CS-027).*
+
 Conferido no dicionário de dados do SIVEP-Gripe (versão SES-SP do dicionário do
 Ministério, 37 páginas):
 
@@ -281,6 +283,7 @@ app.R / 08_relatorio.qmd  consomem só dados/processados e resultados/
 6. **Vizinhança única**: `n.comp.nb == 1` é testado antes de qualquer Moran.
 7. **Fixture sintética é rotulada** como fabricada; nunca se parece com dado real de paciente.
 8. **Verificação com número**: "testes passando" não vale; "38/38 em 6 arquivos" vale.
+9. **Auditoria por outro caminho**: `tests/auditoria_independente.R` refaz os números sem as funções do projeto e sem o `spdep`; rodar antes de qualquer entrega (CS-027).
 
 > **Fixture** = um dado pequeno e controlado, criado só para testar. Aqui será um
 > CSV de ~200 linhas com as mesmas colunas do SIVEP, gerado por script com valores
