@@ -28,3 +28,6 @@ resultados/execucao.log
 
 # Proposta original (PDF da autora): fica só na máquina, fora do repositório (D-01, CS-026)
 /23092026_*.pdf
+
+# Claude Code: preferências locais de cada máquina (as do projeto ficam em .claude/settings.json)
+.claude/settings.local.json

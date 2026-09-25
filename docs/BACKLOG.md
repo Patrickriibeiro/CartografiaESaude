@@ -41,7 +41,6 @@ D-06, D-08, D-09, D-10 e a opção do CS-039). **Só a D-02 (prazo) continua abe
 
 | ID | Título | Evidência | Modelo · Esforço | Aceite |
 |---|---|---|---|---|
-| CS-029 | **Ecossistema `.claude/`** no padrão evidence: `CLAUDE.md` do projeto (constituição = PDF, invariantes §3.3 da trilha), hook `SessionStart` de contexto, hook que nega commit sem release-history. Adaptar, não copiar | memória do dono `ecossistema-segue-padrao-evidence` | Opus · medium | 2 hooks registrados; `CLAUDE.md` ≤ 150 linhas |
 
 ### F1 — ETL do SIVEP-Gripe
 
@@ -110,6 +109,12 @@ D-06, D-08, D-09, D-10 e a opção do CS-039). **Só a D-02 (prazo) continua abe
 | ID | Título | Evidência | Modelo · Esforço | Aceite |
 |---|---|---|---|---|
 
+### Achados do CS-029
+
+| ID | Título | Evidência | Modelo · Esforço | Aceite |
+|---|---|---|---|---|
+| CS-045 | **Hook de append-only** — negar `Edit` em `docs/decisoes/ADR-*.md` e `docs/release-history/*.md` já commitados quando o `old_string` não reaparece no `new_string` (edição destrutiva = fato binário); correção vira seção "Errata". Limite: edição por Bash (`sed`, Python) escapa do hook — o CLAUDE.md continua sendo a regra | deslize de 2026-09-25 no release-history do CS-034 (errata registrada) | Opus · medium | hook registrado; ≥ 4 casos testados (nega reescrita, deixa acrescentar, deixa arquivo não commitado, deixa outros docs) |
+
 ### Fora do código (para a mestranda)
 
 | ID | Título | Evidência | Modelo · Esforço | Aceite |
@@ -172,6 +177,7 @@ D-06, D-08, D-09, D-10 e a opção do CS-039). **Só a D-02 (prazo) continua abe
 | CS-009 | **Funções de validação do PDF** — `validar_variaveis/codigos_ibge/municipios_rj/datas()`, usadas no lugar das regras soltas em 5 funções do pipeline; janela de datas = ano epidemiológico (o critério '< 2022-01-01' do item estava errado, CS-036); 19 testes; dados reais passam sem mudar nenhuma tabela. Suíte 600/600 em 19 arquivos | 2026-09-25 | `docs/release-history/cs-009-validacao.md` · commit `7989ac4` |
 | CS-034 | **Leitos do CNES (OE10)** — conjunto aberto "Hospitais e Leitos" (não o microdatasus), competência de julho, junção por nome + 2 apelidos (conferida com CO_IBGE de 2025: 100 %); Spearman por ano com IC bootstrap: leitos SUS 0,18 · 0,27 · 0,04 · 0,11 (IC cruza 0 em 3/4), UTI SUS 0,40 · 0,33 · 0,37 · 0,35 (todos > 0); sem leitura causal; tabela regional; bug latente de codificação no zip achado por fixture e corrigido. Suíte 619/619 em 20 arquivos | 2026-09-25 | `docs/release-history/cs-034-leitos-cnes.md` · commit `df0304d` |
 | CS-041 | **Agrupamento de zeros na taxa bruta** — `diagnosticar_zeros()`: zeros observados × esperados por Poisson com a taxa do estado (excedem em 12/12; VSR 2022 44 × 14,2), notificação própria (só 10/44 sem), leito SUS, fichas e testagem dos residentes (VSR 2022: 2.064 fichas, 76 % × 88 % testadas; VSR 2025 34 % × 93 %); 12 dos 13 LISA brutos do VSR 2022 são zeros, nenhum confirmado; subseção e limitação no relatório. Suíte 630/630 em 20 arquivos | 2026-09-25 | `docs/release-history/cs-041-agrupamento-de-zeros.md` · commit `6eadb5f` |
+| CS-029 | **Ecossistema `.claude/`** — `CLAUDE.md` (127 linhas: exigências do dono, invariantes com cicatriz, classes de documento, fechamento de item, hooks, armadilhas), hook `SessionStart` de contexto e hook que nega commit de código sem release-history; 10/10 casos testados em repositório descartável | 2026-09-25 | `docs/release-history/cs-029-ecossistema-claude.md` · commit `(a registrar)` |
 | CS-037 | **Proposta v2 atualizada com as decisões de dados** — §2.2 OE4, §3.2, §3.3 (critério de caso e co-detecção), §3.4 (denominador), §3.5 (malha), §3.10 (limitações 2, 6, 7) e referências; D-04 e D-05 continuam pendentes e o texto traz a **recomendação** marcada [REVISAR]. Não inclui o CS-036 (ano epidemiológico em §3.1) | 2026-09-25 | `docs/release-history/cs-037-cs-038-proposta-e-ibge.md` · commit `9cb75c1` |
 | CS-038 | **Método de ajuste do IBGE citado** — Nota metodológica n. 01 das Estimativas 2024, p. 6–7: Censo 2022 ajustado pela PPE, maior ajuste em municípios grandes; citado no ADR-0003 e na proposta v2 | 2026-09-25 | idem |
 

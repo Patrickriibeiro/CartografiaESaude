@@ -62,3 +62,18 @@
    arquivo, não por heredoc.
 5. Primeiro rascunho do relatório tinha "entre 7 e 7 municípios", "positiva em todos os anos"
    fixo e "grande parte disso" sem medida; as três frases passaram a depender dos números.
+
+## Errata (2026-09-25, registrada no commit do CS-029)
+
+Este documento é append-only (trilha §3.4), mas no commit `6eadb5f` (CS-041) duas frases do
+item "Achados" foram **reescritas** em vez de corrigidas por errata. O que mudou:
+
+1. "mediana da taxa com UTI ≈ 2 vezes a sem UTI nos 4 anos" → "1,7 a 2,0 vezes": as
+   medianas são 114,7/57,2 · 31,2/16,2 · 32,5/17,8 · 39,2/23,6 por 100 mil (razões 2,0 · 1,9 ·
+   1,8 · 1,7); "≈ 2" arredondava demais o último ano.
+2. "A correlação com a UTI é, em boa parte, ter ou não ter UTI" foi retirada: "em boa parte"
+   não foi medido (o relatório já não dizia isso). A reescrita deixou a frase truncada; a
+   forma correta é: "A diferença entre ter e não ter UTI aparece nas medianas: a mediana da
+   taxa com UTI é de 1,7 a 2,0 vezes a mediana sem UTI nos 4 anos."
+
+O texto acima da errata fica como está, para não repetir o erro.
