@@ -128,7 +128,7 @@ Prefixos: `CS` = tarefa · `D` = decisão que só o dono/mestranda fecha · `ADR
 
 | ID | Título | Encerrado em | Commit/registro |
 |---|---|---|---|
-| CS-001 | **Ambiente R** — R 4.6.1, Quarto 1.10.18; 9/9 pacotes carregam; Rtools dispensado (nenhum pacote compilou) | 2026-09-25 | `docs/release-history/cs-001-cs-002-fundacao.md` · commit inicial |
+| CS-001 | **Ambiente R** — R 4.6.1, Quarto 1.10.18; 9/9 pacotes carregam; Rtools dispensado (nenhum pacote compilou) | 2026-09-25 | `docs/release-history/cs-001-cs-002-fundacao.md` · commit `b66ae13` |
 | CS-002 | **Esqueleto do repositório** — árvore do PDF, `renv.lock` com 140 pacotes, 5/5 expectativas, `git init` | 2026-09-25 | idem · ADR-0005 |
 
 ## Descartados

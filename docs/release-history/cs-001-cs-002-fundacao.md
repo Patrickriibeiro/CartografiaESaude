@@ -16,7 +16,7 @@
 | `renv::status()` limpo | "No issues found" |
 | Árvore idêntica ao PDF | 8 scripts `00`–`07`, `run.R`, `app.R`, `08_relatorio.qmd`, `_quarto.yml`, 6 `R/funcoes_*.R`, 4 pastas de dados, 4 de resultados, `tests/testthat` |
 | Testes do esqueleto | **5/5 expectativas em 1 arquivo**, 0 falhas |
-| Primeiro commit | 43 arquivos; nenhum de `renv/library/` nem de `dados/brutos/` |
+| Primeiro commit | `b66ae13`, 44 arquivos; nenhum de `renv/library/` nem de `dados/brutos/` |
 
 ## O que ficou de fora e por quê
 
