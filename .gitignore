@@ -21,3 +21,6 @@ resultados/objetos/*
 renv/library/
 renv/staging/
 renv/local/
+
+/.quarto/
+**/*.quarto_ipynb

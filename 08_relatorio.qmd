@@ -1,18 +1,362 @@
 ---
-title: "Análise espaço-temporal de vírus respiratórios no Estado do Rio de Janeiro (2022–2025)"
+title: "Análise espaço-temporal de vírus respiratórios no Estado do Rio de Janeiro"
+subtitle: "SRAG por SARS-CoV-2, influenza e VSR — prova de conceito reprodutível em R"
 author: "Gabrielle Barbosa Teixeira Coelho"
 lang: pt-BR
+bibliography: referencias.bib
 format:
-  html: default
+  html:
+    toc: true
+    toc-depth: 2
+    number-sections: false
+    embed-resources: true
+    fig-cap-location: bottom
+    tbl-cap-location: top
   revealjs:
     output-file: 08_apresentacao.html
+    scrollable: true
+    smaller: true
+    slide-number: true
+    embed-resources: true
 execute:
   echo: false
+  warning: false
+  message: false
 ---
 
-<!-- Esqueleto do CS-002. Conteúdo: CS-022. Todo número deste arquivo deve vir de
-resultados/, nunca digitado à mão (trilha §3.3, invariante 2). -->
+<!--
+CS-022. Todo número deste relatório é calculado a partir de resultados/ e dados/
+pelos chunks de R; nenhum é digitado (trilha §3.3, invariante 2). O teste
+tests/testthat/test-relatorio.R procura números digitados no texto e falha se
+encontrar. Rode o pipeline (run.R) antes de renderizar.
+-->
 
-## Resultados
+```{r setup}
+for (arquivo in list.files("R", pattern = "^funcoes_.*\\.R$", full.names = TRUE)) {
+  source(arquivo, encoding = "UTF-8", local = TRUE)
+}
+fi <- function(x) formatC(round(x), format = "d", big.mark = ".", decimal.mark = ",")
+fd <- function(x, d = 1) formatC(x, format = "f", digits = d, decimal.mark = ",", big.mark = ".")
+fp <- function(x, d = 1) paste0(fd(100 * x, d), " %")
+fpv <- function(p) ifelse(p < 0.001, "< 0,001", fd(p, 3))
+lista <- function(x) if (length(x) <= 1) x else paste(paste(utils::head(x, -1), collapse = ", "), "e", utils::tail(x, 1))
+ler <- function(...) utils::read.csv(file.path(...), encoding = "UTF-8", stringsAsFactors = FALSE)
+tab <- function(df, ...) knitr::kable(df, row.names = FALSE, ...)
 
-Relatório ainda não implementado.
+anos <- ANOS_ESTUDO; ano_ini <- min(anos); ano_fim <- max(anos)
+malha <- readRDS(file.path("dados", "processados", "municipios_rj.rds"))
+n_mun <- nrow(malha)
+man <- ler_manifesto()
+bancos <- man[grepl("^dados/brutos/INFLUD", man$arquivo), ]
+versao_ult <- bancos$versao[which.max(as.integer(sub(".*INFLUD(\\d\\d).*", "\\1", bancos$arquivo)))]
+
+diag <- ler("resultados", "tabelas", "diagnostico_sivep.csv")
+cpa <- ler("resultados", "tabelas", "casos_por_agente.csv")
+cmp <- ler("resultados", "tabelas", "comparacao_regras_caso.csv")
+dec <- ler("resultados", "tabelas", "decomposicao_sem_campo_especifico.csv")
+codet <- ler("resultados", "tabelas", "codeteccao_casos.csv")
+est <- ler("resultados", "tabelas", "incidencia_estado.csv")
+est <- est[order(match(est$agente, AGENTES), est$ano), ]
+suav <- ler("resultados", "tabelas", "suavizacao_bayes_empirico.csv")
+suav <- suav[order(match(suav$agente, AGENTES), suav$ano), ]
+subt <- ler("resultados", "tabelas", "subtipo_influenza.csv")
+popd <- ler("resultados", "tabelas", "diagnostico_populacao.csv")
+viz <- ler("resultados", "estatistica", "vizinhos_por_municipio.csv")
+ml <- readRDS(file.path("resultados", "estatistica", "moran_lisa.rds"))
+
+nomes <- stats::setNames(malha$nome, malha$cod6)
+g <- ml$principal$global
+lisa <- ml$principal$lisa; lisa$nome <- nomes[lisa$cod6]
+res <- ml$resumo; conc <- ml$concordancia
+alfa <- ml$alfa; nsim <- ml$nsim
+n_mapas <- nrow(g)
+esperado_acaso <- n_mun * alfa
+conf <- lisa[lisa$nivel == "confirmado", ]
+rot <- function(a) unname(ROTULOS_AGENTE[a])
+
+casos_ag <- tapply(cpa$casos, cpa$agente, sum)
+total_casos <- sum(cpa$casos)
+tx <- function(ag, a, col = "incid_100k_pop2024") est[est$agente == ag & est$ano == a, col]
+degrau_2022 <- tx("sarscov2", ano_ini, "incid_100k") / tx("sarscov2", ano_ini) - 1
+sig_global <- g$p_perm < alfa
+instaveis <- viz$nome[viz$n_vizinhos == 1]
+```
+
+## Resumo
+
+Entre `r ano_ini` e `r ano_fim`, o SIVEP-Gripe [@ms_srag] registrou `r fi(sum(diag$fichas_rj))` fichas de
+Síndrome Respiratória Aguda Grave (SRAG) de residentes nos `r n_mun` municípios do Estado do Rio
+de Janeiro. Pelo critério de caso adotado (ADR-0002), `r fi(total_casos)` foram casos confirmados
+de SARS-CoV-2 (`r fi(casos_ag[["sarscov2"]])`), influenza (`r fi(casos_ag[["influenza"]])`) e
+vírus sincicial respiratório, VSR (`r fi(casos_ag[["vsr"]])`).
+
+Com um denominador populacional comum aos anos, a incidência de SRAG por SARS-CoV-2 caiu de
+`r fd(tx("sarscov2", ano_ini))` para `r fd(tx("sarscov2", ano_fim))` casos por 100 mil
+habitantes, enquanto a de influenza subiu de `r fd(tx("influenza", ano_ini))` para
+`r fd(tx("influenza", ano_fim))` e a de VSR de `r fd(tx("vsr", ano_ini))` para
+`r fd(tx("vsr", ano_fim))`.
+
+A autocorrelação espacial global foi significativa em `r sum(sig_global)` de `r n_mapas` mapas
+(agente × ano), com I de Moran entre `r fd(min(g$I[sig_global]), 2)` e
+`r fd(max(g$I[sig_global]), 2)`: fraca a moderada. Após a correção para testes múltiplos, só
+`r lista(unique(paste(rot(conf$agente), conf$ano)))` apresentou agrupamentos confirmados:
+`r lista(conf$nome[conf$quadrante == "HH"])` (Alto-Alto).
+
+# Resultados
+
+## Arquitetura do pipeline reprodutível
+
+O pipeline vai do download dos dados abertos ao mapa em scripts R numerados, executados em
+ordem por `run.R`. Cada arquivo baixado é registrado com endereço, data e impressão digital
+SHA-256 em `dados/MANIFESTO.md`, e nenhuma etapa lê um arquivo que não confira com o registro.
+Os bancos do SIVEP-Gripe usados são as versões
+`r lista(unique(bancos$versao))` (o banco de `r ano_fim` é atualizado semanalmente; o recorte
+deste relatório é a versão `r versao_ult`).
+
+```{r tbl-pipeline}
+#| tbl-cap: "Etapas do pipeline"
+tab(data.frame(
+  Etapa = c("01_etl_sivep.R", "02_indicadores.R", "03_cartografia.R", "04_pesos_espaciais.R",
+            "05_moran_lisa.R", "06_visualizacoes.R", "07_exportacao.R", "08_relatorio.qmd"),
+  `O que faz` = c("Baixa e confere os bancos do SIVEP-Gripe, filtra o RJ, classifica os casos (ADR-0001, ADR-0002)",
+                  "População do IBGE, casos, incidência e suavização por Bayes empírico (ADR-0003)",
+                  "Malha municipal oficial do IBGE em SIRGAS 2000 (ADR-0006)",
+                  "Vizinhança Queen e pesos espaciais",
+                  "Moran global e LISA com correção para testes múltiplos (ADR-0004)",
+                  "Mapas de incidência e de agrupamentos",
+                  "Tabelas para planilha, com carimbo de versão",
+                  "Este relatório e a apresentação"),
+  check.names = FALSE))
+```
+
+A suíte de testes automatizados (`tests/testthat`) tem
+`r length(list.files(file.path("tests", "testthat"), pattern = "^test-.*\\.R$"))` arquivos e roda
+sobre uma base sintética, sem acesso à rede.
+
+## Distribuição espacial e taxas de incidência por município
+
+### Fichas e casos
+
+```{r tbl-casos}
+#| tbl-cap: "Fichas de SRAG de residentes no RJ e casos confirmados por agente (critério do ADR-0002)"
+largo <- stats::reshape(cpa, idvar = "ano", timevar = "agente", direction = "wide")
+t1 <- data.frame(Ano = diag$ano, `Fichas de SRAG` = fi(diag$fichas_rj), check.names = FALSE)
+for (ag in AGENTES) t1[[rot(ag)]] <- fi(largo[match(diag$ano, largo$ano), paste0("casos.", ag)])
+tab(t1)
+```
+
+O ano do estudo é o ano epidemiológico do banco: cada banco anual reúne as fichas cujo início
+de sintomas cai nas semanas epidemiológicas daquele ano (ADR-0001).
+
+### Incidência no estado e o denominador populacional
+
+```{r tbl-estado}
+#| tbl-cap: "Incidência de SRAG no estado, com os dois denominadores (ADR-0003)"
+t2 <- data.frame(Agente = rot(est$agente), Ano = est$ano, Casos = fi(est$casos),
+                 `Por 100 mil (população do ano)` = fd(est$incid_100k),
+                 `Por 100 mil (estimativa 2024)` = fd(est$incid_100k_pop2024), check.names = FALSE)
+tab(t2)
+```
+
+O Censo `r ano_ini` é uma contagem sem ajuste de cobertura, e as estimativas populacionais do
+IBGE posteriores partem dele ajustado [@ibge2024estimativas]. Em todos os municípios a
+estimativa de 2024 supera o Censo, de `r fp(min(popd$razao_2024_censo) - 1)` a
+`r fp(max(popd$razao_2024_censo) - 1)`. Com o Censo como denominador, a incidência de
+SARS-CoV-2 em `r ano_ini` fica `r fp(degrau_2022)` acima da calculada com a estimativa de
+2024. Por isso as comparações entre anos usam a estimativa de 2024 como denominador único, e
+os mapas de cada ano usam a população oficial daquele ano.
+
+### Mapas de incidência
+
+![Incidência de SRAG por município, agente e ano (taxa suavizada por Bayes empírico; escala comum aos anos de cada agente)](resultados/mapas/painel_incidencia.png){#fig-incidencia width=100%}
+
+### Suavização por Bayes empírico
+
+A incidência de um município pequeno é instável: um único caso muda muito a taxa. Por isso os
+mapas e a estatística espacial usam a taxa suavizada pelo estimador empírico de Bayes global
+[@marshall1991], que aproxima a taxa de cada município da média do estado com força
+proporcional à incerteza. A @tbl-suav mostra quanto a suavização alterou a ordem dos
+municípios: onde há poucos casos e muitos municípios sem nenhum caso, ela reordena bastante.
+
+```{r tbl-suav}
+#| tbl-cap: "Efeito da suavização por agente e ano"
+t3 <- data.frame(Agente = rot(suav$agente), Ano = suav$ano,
+                 `Municípios sem caso` = suav$municipios_sem_caso,
+                 `Maior taxa bruta` = fd(suav$bruta_max_100k), `Maior taxa suavizada` = fd(suav$eb_max_100k),
+                 `Correlação de postos` = fd(suav$spearman_bruta_eb, 2),
+                 `Mudança mediana` = paste0(fd(suav$mudanca_mediana_pct, 0), " %"), check.names = FALSE)
+tab(t3)
+```
+
+### Subtipos de influenza
+
+```{r subtipo}
+sa <- stats::aggregate(Freq ~ ano, subt[subt$subtipo == "A" & !is.na(subt$subtipo), ], sum)
+st <- stats::aggregate(Freq ~ ano, subt, sum)
+prop_a <- sa$Freq / st$Freq[match(sa$ano, st$ano)]
+```
+
+A influenza A predominou em todos os anos, de `r fp(min(prop_a), 0)` a `r fp(max(prop_a), 0)`
+dos casos de influenza, incluindo os que entraram no critério sem o subtipo informado.
+
+### Sensibilidade ao critério de caso
+
+::: {.content-visible when-format="html"}
+O critério adotado (regra "vigilância", ADR-0002) exige a classificação final do agente e a
+confirmação laboratorial declarada pela vigilância ou o campo do vírus marcado. A @tbl-regras
+compara com a leitura literal da proposta (campo do vírus obrigatório), com a classificação
+final sozinha e com a detecção laboratorial pura.
+:::
+
+```{r tbl-regras}
+#| tbl-cap: "Casos por agente, ano e regra de caso"
+r <- cmp[cmp$agente %in% AGENTES & cmp$regra %in% c("R1_estrita_pdf", "R2_vigilancia", "R4_classificacao", "R5_laboratorial"), ]
+r$regra <- c(R1_estrita_pdf = "Literal da proposta", R2_vigilancia = "Vigilância (adotada)",
+             R4_classificacao = "Só classificação", R5_laboratorial = "Detecção laboratorial")[r$regra]
+w <- stats::reshape(r[, c("regra", "agente", "ano", "casos")], idvar = c("agente", "regra"),
+                    timevar = "ano", direction = "wide")
+w <- w[order(match(w$agente, AGENTES), w$regra), ]
+t4 <- data.frame(Agente = rot(w$agente), Regra = w$regra, check.names = FALSE)
+for (a in anos) t4[[as.character(a)]] <- fi(w[[paste0("casos.", a)]])
+tab(t4)
+```
+
+```{r perda}
+dc <- dec[dec$agente == "sarscov2", ]
+perda <- dc$sem_campo_especifico / dc$classificados
+```
+
+A leitura literal da proposta perderia `r fp(perda[1])` dos casos de COVID de `r dc$ano[1]` e só
+`r fp(perda[nrow(dc)])` dos de `r dc$ano[nrow(dc)]`, porque o campo "qual vírus" fica em branco
+em fichas com resultado positivo, e com frequência que diminui ao longo do período. Essa regra
+fabricaria uma queda artificial de COVID. A regra adotada aceita a confirmação laboratorial
+declarada pela vigilância mesmo sem resultado nos campos exportados: são
+`r fi(dc$so_criterio_laboratorial_declarado[1])` casos de COVID em `r dc$ano[1]`
+(`r fp(dc$so_criterio_laboratorial_declarado[1] / tx("sarscov2", ano_ini, "casos"))` do ano),
+e essa confiança na declaração é uma limitação assumida.
+
+Cada caso é atribuído a um único agente, o da classificação final; os casos em que outro dos
+três vírus também foi detectado são reportados na @tbl-codet, e não contados duas vezes.
+
+```{r tbl-codet}
+#| tbl-cap: "Casos confirmados com outro dos três vírus também detectado (co-detecção)"
+cw <- stats::reshape(codet, idvar = "agente", timevar = "ano", direction = "wide")
+cw <- cw[order(match(cw$agente, AGENTES)), ]
+t7 <- data.frame(Agente = rot(cw$agente), check.names = FALSE)
+for (a in anos) t7[[as.character(a)]] <- fi(cw[[paste0("Freq.", a)]])
+tab(t7)
+```
+
+## Agrupamentos espaciais (Moran global e LISA)
+
+A vizinhança é de contiguidade Queen de 1ª ordem sobre a malha oficial do IBGE
+[@ibge_malha2022; @pebesma2018; @bivand2013]. O I de Moran global e o Moran local [@anselin1995] foram
+testados por `r fi(nsim)` permutações, e os p-valores locais foram corrigidos pelo método de
+Benjamini-Hochberg em cada mapa [@benjamini1995], com α = `r fd(alfa, 2)`.
+
+```{r tbl-moran}
+#| tbl-cap: "I de Moran global (p por permutação): taxa suavizada, taxa bruta e vizinhança Rook"
+glob <- rbind(ml$principal$global, ml$bruta$global, ml$rook$global)
+glob$chave <- paste(glob$variavel, glob$vizinhanca)
+fmt <- function(i, p) paste0(fd(i, 3), " (", fpv(p), ")")
+t5 <- unique(glob[, c("agente", "ano")])
+t5 <- t5[order(match(t5$agente, AGENTES), t5$ano), ]
+for (k in c("incid_eb_100k queen", "incid_100k queen", "incid_eb_100k rook")) {
+  x <- glob[glob$chave == k, ]; x <- x[match(paste(t5$agente, t5$ano), paste(x$agente, x$ano)), ]
+  t5[[k]] <- fmt(x$I, x$p_perm)
+}
+names(t5) <- c("Agente", "Ano", "Suavizada, Queen", "Bruta, Queen", "Suavizada, Rook")
+t5$Agente <- rot(t5$Agente)
+tab(t5)
+```
+
+```{r tbl-lisa}
+#| tbl-cap: "Municípios com LISA significativo por mapa, antes e depois da correção"
+t6 <- data.frame(Agente = rot(res$agente), Ano = res$ano,
+                 `Sem correção` = res$sig_sem_correcao, `Confirmados (FDR)` = res$sig_fdr,
+                 `Alto-Alto confirmados` = res$HH_confirmado, `Alto-Alto indicativos` = res$HH_indicativo,
+                 `Baixo-Baixo indicativos` = res$LL_indicativo, check.names = FALSE)
+t6 <- t6[order(match(res$agente, AGENTES), res$ano), ]
+tab(t6)
+```
+
+Sem correção, o acaso produziria cerca de `r fd(esperado_acaso)` municípios significativos por
+mapa. Os mapas ficam entre `r min(res$sig_sem_correcao)` e `r max(res$sig_sem_correcao)`, e só
+`r lista(unique(paste(rot(conf$agente), conf$ano)))` tem municípios que sobrevivem à correção:
+`r lista(paste0(conf$nome, " (", unname(NOMES_QUADRANTE[conf$quadrante]), ")"))`.
+
+![Agrupamentos espaciais por agente e ano. Cor cheia: confirmado após a correção; cor clara: indicativo; hachura: município com um único vizinho](resultados/mapas/painel_lisa.png){#fig-lisa width=100%}
+
+![Agrupamentos de SRAG por VSR em 2024, o único mapa com agrupamentos confirmados](resultados/mapas/lisa_vsr_2024.png){#fig-vsr width=85%}
+
+A taxa bruta encontra mais autocorrelação que a suavizada: o Moran global da bruta foi
+significativo em `r sum(ml$bruta$global$p_perm < alfa)` mapas. A diferença se concentra onde há
+muitos municípios sem caso, que formam "agrupamentos de zeros" na taxa bruta; a concordância da
+classe LISA entre as duas variáveis por mapa ficou entre `r fp(min(conc$concordancia), 0)` e
+`r fp(max(conc$concordancia), 0)`.
+
+## Protótipo de painel para a vigilância
+
+O painel interativo (Shiny e leaflet), com filtros por agente e ano, está em desenvolvimento
+(item CS-021 do BACKLOG) e usará as mesmas tabelas e classes deste relatório.
+
+## Disponibilidade de código e dados
+
+```{r tbl-dados}
+#| tbl-cap: "Arquivos de entrada registrados no manifesto"
+tab(data.frame(Arquivo = basename(man$arquivo), `Versão` = man$versao,
+               `Tamanho (kB)` = fi(as.numeric(man$bytes) / 1e3),
+               `SHA-256 (início)` = substr(man$sha256, 1, 12), check.names = FALSE))
+```
+
+# Discussão
+
+## Interpretação dos padrões espaciais
+
+```{r hipoteses}
+h1 <- tapply(g$p_perm < alfa, g$agente, any)[AGENTES]
+```
+
+A hipótese de dependência espacial (H1) se sustenta para
+`r lista(rot(names(h1)[h1]))`: todos têm ao menos um ano com Moran global significativo. O
+sinal, porém, é fraco a moderado, e a hipótese de agrupamentos distintos por agente (H2) só tem
+base confirmada em `r lista(unique(paste(rot(conf$agente), conf$ano)))`, no eixo leste da Baía
+de Guanabara (`r lista(conf$nome[conf$quadrante == "HH"])`). A hipótese de mudança no tempo
+(H3) aparece mais na série de incidência — a retração do SARS-CoV-2 e a expansão de influenza e
+VSR — do que na localização dos agrupamentos. Nenhuma dessas associações é causal; a
+concentração no eixo leste da região Metropolitana II pode refletir estrutura etária, oferta
+assistencial ou fluxo de internações [@cavalcante2021], hipóteses para uma fase seguinte.
+
+## Impacto na vigilância territorial do SUS
+
+O pipeline pode ser reexecutado a cada atualização semanal do banco do ano corrente, registrando
+a versão usada, o que transforma a leitura territorial de um exercício pontual em rotina. A
+distinção entre agrupamentos confirmados e indicativos permite à vigilância priorizar sem
+confundir sinal com acaso.
+
+## Dificuldades e limitações dos dados abertos
+
+```{r limitacoes}
+nao_int <- sum(diag$nao_internado) / sum(diag$fichas_rj)
+testado <- diag$com_resultado_de_teste / diag$fichas_rj
+zeros_vsr <- suav$municipios_sem_caso[suav$agente == "vsr" & suav$ano == ano_ini]
+```
+
+- **SRAG notificada, não infecção.** O banco registra casos graves; `r fp(nao_int)` das fichas
+  dizem que o paciente não foi internado, e o texto fala em SRAG notificada.
+- **Testagem.** A proporção de fichas com resultado laboratorial conclusivo passou de
+  `r fp(testado[1])` para `r fp(testado[length(testado)])`; parte do aumento de casos confirmados
+  pode vir daí.
+- **Denominador.** O degrau entre a contagem do Censo e as estimativas ajustadas foi tratado com
+  dois denominadores, mas continua sendo uma escolha.
+- **Efeito de borda.** A vizinhança ignora municípios de outros estados;
+  `r lista(instaveis)` têm um único vizinho, e a classe LISA deles é marcada como instável.
+- **Pequenos números.** Em VSR `r ano_ini`, `r zeros_vsr` municípios não tiveram nenhum caso; a
+  suavização atenua, mas não elimina, a incerteza.
+- **Estudo ecológico.** As conclusões valem para municípios, não para pessoas, e dependem do
+  recorte municipal.
+
+# Referências {.unnumbered}
+
+::: {#refs}
+:::

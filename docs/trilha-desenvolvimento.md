@@ -267,6 +267,7 @@ Testes verificam o contrato, não a implementação.
 06_visualizacoes.R ► resultados/mapas/*.png   (CS-019, entregue: 24 mapas + 2 painéis)
 07_exportacao.R ──► resultados/tabelas/*.csv
 app.R / 08_relatorio.qmd  consomem só dados/processados e resultados/
+08_relatorio.qmd (CS-022, entregue): HTML + revealjs; nenhum número digitado (teste)
 ```
 
 ### 3.3 Invariantes do projeto (as regras que nunca se quebram)
