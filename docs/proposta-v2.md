@@ -157,9 +157,11 @@ Cada objetivo declara o produto e o critério pelo qual se verifica que foi cump
 
 Estudo ecológico, exploratório e espaço-temporal. Unidade de análise: o município de
 **residência** do paciente (92 unidades), com agregação secundária em 9 regiões de saúde.
-Período: primeiros sintomas entre 01/01/2022 e a data de corte do snapshot de 2025
-(versão de 14/09/2026 do banco, ADR-0001), agregado por ano epidemiológico e, para
-descrição temporal, por semana epidemiológica (`SEM_PRI`). Agentes: SARS-CoV-2,
+Período: primeiros sintomas entre 02/01/2022 (início da semana epidemiológica 1 de 2022)
+e 03/01/2026 (sábado que fecha a semana 53 de 2025), no snapshot de 2025 de 14/09/2026 (ADR-0001),
+agregado por ano epidemiológico e, para descrição temporal, por semana epidemiológica
+recalculada de `DT_SIN_PRI` (o `SEM_PRI` do banco rotula a semana 53/2025 como 01; D-08).
+Série semanal entregue no CS-032: 209 semanas, estado e 9 regiões. Agentes: SARS-CoV-2,
 Influenza (A e B, analisadas em conjunto e separadas quando o n permitir) e VSR.
 
 > Estudo ecológico: a unidade de observação é o grupo, não o indivíduo. Conclusões

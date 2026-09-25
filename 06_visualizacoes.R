@@ -5,6 +5,9 @@
 #   resultados/mapas/painel_incidencia.png           3 agentes × 4 anos (para o relatório)
 #   resultados/mapas/painel_lisa.png                 3 agentes × 4 anos (para o relatório)
 #   resultados/mapas/regional_<agente>_<ano>.png     12 mapas por região de saúde (CS-030)
+#   resultados/tabelas/serie_semanal.csv             casos por semana × agente, estado e 9 regiões (CS-032)
+#   resultados/estatistica/serie_semanal_*.png       1 gráfico do estado + 9 regionais + painel (CS-032)
+#   resultados/estatistica/nao_encerrados_<ano>.png  maturação do último ano (CS-035)
 
 source("00_setup.R")
 
@@ -85,6 +88,46 @@ for (ag in AGENTES) for (a in ANOS_ESTUDO) {
                   width = 8, height = 5.5, dpi = 300, bg = "white")
   gerados <- c(gerados, f)
 }
+
+# Série por semana epidemiológica (CS-032): estado e cada região de saúde.
+casos <- arrow::read_parquet(file.path("dados", "processados", "sivep_processado.parquet"))
+serie <- serie_semanal(casos, municipio_regiao)
+utils::write.csv(serie, file.path("resultados", "tabelas", "serie_semanal.csv"), row.names = FALSE, fileEncoding = "UTF-8")
+campanhas <- ler_campanhas_influenza()
+pasta_est <- file.path("resultados", "estatistica")
+sem_acento <- function(x) gsub("[^a-z0-9]+", "_", chartr("áâãàéêíóôõúç", "aaaaeeiooouc", tolower(x)))
+graficos <- character(0)
+for (r in unique(serie$recorte)) {
+  f <- file.path(pasta_est, paste0("serie_semanal_", if (r == "Estado do Rio de Janeiro") "estado" else sem_acento(r), ".png"))
+  ggplot2::ggsave(f, grafico_serie_semanal(serie, r, campanhas), width = 10, height = 4.5, dpi = 150, bg = "white")
+  graficos <- c(graficos, f)
+}
+# Painel das 9 regiões para o relatório: eixo y livre (a Metropolitana I tem 38 vezes a população da menor).
+reg <- serie[serie$recorte != "Estado do Rio de Janeiro", ]
+reg$agente_rotulo <- factor(ROTULOS_AGENTE[reg$agente], levels = ROTULOS_AGENTE)
+painel_series <- ggplot2::ggplot(reg, ggplot2::aes(inicio_semana, casos, colour = agente_rotulo)) +
+  ggplot2::geom_vline(xintercept = campanhas$inicio, linetype = "dashed", colour = "grey55", linewidth = 0.3) +
+  ggplot2::geom_line(linewidth = 0.35) +
+  ggplot2::facet_wrap(~recorte, ncol = 3, scales = "free_y") +
+  ggplot2::scale_colour_manual(values = c("SARS-CoV-2" = "#b2182b", "Influenza" = "#2166ac", "VSR" = "#1b7837"), name = NULL) +
+  ggplot2::scale_x_date(date_breaks = "1 year", date_labels = "%Y") +
+  ggplot2::labs(title = "Casos de SRAG por semana epidemiológica e região de saúde",
+                subtitle = "Escala vertical própria de cada região. Tracejado: início da campanha nacional contra influenza",
+                x = NULL, y = "Casos por semana", caption = "Fontes: SIVEP-Gripe (critério do ADR-0002), Ministério da Saúde.") +
+  ggplot2::theme_minimal(base_size = 9) +
+  ggplot2::theme(legend.position = "top", plot.title = ggplot2::element_text(face = "bold"),
+                 strip.text = ggplot2::element_text(face = "bold"), panel.grid.minor = ggplot2::element_blank())
+f <- file.path(pasta_est, "serie_semanal_painel_regioes.png")
+ggplot2::ggsave(f, painel_series, width = 11, height = 8, dpi = 150, bg = "white")
+graficos <- c(graficos, f)
+
+# Maturação do último ano (CS-035).
+nao_enc_sem <- utils::read.csv(file.path("resultados", "tabelas", "nao_encerrados_semanal.csv"))
+versao_ult <- ler_fontes()$sivep$bancos[[length(ler_fontes()$sivep$bancos)]]$versao
+f <- file.path(pasta_est, sprintf("nao_encerrados_%d.png", max(ANOS_ESTUDO)))
+ggplot2::ggsave(f, grafico_nao_encerrados(nao_enc_sem, versao_ult), width = 9, height = 4.5, dpi = 150, bg = "white")
+graficos <- c(graficos, f)
+stopifnot(all(file.exists(graficos)), length(graficos) == 1 + 9 + 1 + 1)
 
 stopifnot(all(file.exists(gerados)), length(gerados) == 38)
 message(sprintf("%d mapas gravados em %s", length(gerados), pasta))

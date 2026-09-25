@@ -276,6 +276,10 @@ Testes verificam o contrato, não a implementação.
                     (confirmado/indicativo/ns), classe, instavel; + bruta e Rook (ADR-0004)
                     + regional: Moran global nas 9 regiões, descritivo, sem LISA (CS-030)
 06_visualizacoes.R ► resultados/mapas/*.png   (CS-019 + CS-030, entregue: 24 mapas + 2 painéis + 12 regionais)
+                  + resultados/estatistica/serie_semanal_*.png (CS-032: estado + 9 regiões + painel)
+                  + resultados/estatistica/nao_encerrados_2025.png (CS-035)
+                    contrato da série: 10 recortes × 3 agentes × 209 semanas, zero explícito;
+                    semana de DT_SIN_PRI, nunca SEM_PRI; estado = soma das regiões = nº de casos
 07_exportacao.R ──► resultados/tabelas/*.csv
 run.R (CS-023, entregue): 01→08 isoladas, log de tempos, --limpar refaz do zero em ~140 s
 app.R / 08_relatorio.qmd  consomem só dados/processados e resultados/
@@ -366,7 +370,7 @@ de caso) bloqueia CS-008 em diante.
 |---|---|
 | Portal de dados abertos muda URL dos recursos (já aconteceu: `opendatasus` → `dadosabertos`) | `baixar_sivep()` recebe a URL de um `config/fontes.yml`, não a tem em código; manifesto guarda a URL usada |
 | `geobr` depende de servidor externo instável | cache local em `dados/externos/municipios_rj_<ano>.rds` com hash; teste lê do cache |
-| Dado de 2025 incompleto por atraso de notificação | relatório declara a data de corte e trata 2025 como parcial; gráfico de maturação opcional |
+| Dado de 2025 incompleto por atraso de notificação | relatório declara a data de corte; CS-035 mediu: 0,6 % de não encerradas em 2025 (a menor dos 4 anos), sem subida nas últimas semanas |
 | LGPD | microdados já anonimizados pelo Ministério; o projeto só publica agregados por município; nunca comitar `dados/brutos/` |
 | Dependência de compilação no Windows (`sf`, `arrow`) | usar binários do CRAN; RTools só se um pacote exigir |
 

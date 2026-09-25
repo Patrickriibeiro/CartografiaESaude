@@ -7,6 +7,8 @@
 #   resultados/tabelas/exportacao/indicadores_regionais.csv   9 regiões de saúde × 3 × 4 (CS-030)
 #   resultados/tabelas/exportacao/moran_regional.csv          Moran global regional, descritivo (CS-030)
 #   resultados/tabelas/exportacao/residencia_notificacao.csv  92 municípios, casos por residência e por notificação (CS-031)
+#   resultados/tabelas/exportacao/serie_semanal.csv           casos por semana, estado e 9 regiões (CS-032)
+#   resultados/tabelas/exportacao/nao_encerrados.csv          fichas não encerradas por ano (CS-035)
 #   resultados/tabelas/exportacao/LEIA-ME.txt                 carimbo: data, commit, versões dos dados
 
 source("00_setup.R")
@@ -95,6 +97,14 @@ res_not <- data.frame(
   stringsAsFactors = FALSE, row.names = NULL
 )
 
+ss <- utils::read.csv(file.path("resultados", "tabelas", "serie_semanal.csv"), encoding = "UTF-8", stringsAsFactors = FALSE)
+serie <- data.frame(recorte = ss$recorte, agente = ROTULOS_AGENTE[ss$agente], ano_epidemiologico = ss$ano_epi,
+                    semana_epidemiologica = ss$semana_epi, inicio_da_semana = ss$inicio_semana, casos = ss$casos,
+                    stringsAsFactors = FALSE, row.names = NULL)
+ne <- utils::read.csv(file.path("resultados", "tabelas", "nao_encerrados.csv"))
+nao_enc <- data.frame(ano = ne$ano, fichas_de_srag = ne$fichas, nao_encerradas = ne$nao_encerradas,
+                      proporcao_pct = round(100 * ne$proporcao, 2), row.names = NULL)
+
 pasta <- file.path("resultados", "tabelas", "exportacao")
 arquivos <- c(
   salvar_resultado(indicadores, "indicadores_municipais", pasta),
@@ -104,6 +114,8 @@ arquivos <- c(
   salvar_resultado(regional, "indicadores_regionais", pasta),
   salvar_resultado(moran_reg, "moran_regional", pasta),
   salvar_resultado(res_not, "residencia_notificacao", pasta),
+  salvar_resultado(serie, "serie_semanal", pasta),
+  salvar_resultado(nao_enc, "nao_encerrados", pasta),
   escrever_carimbo(pasta, c(
     sprintf("Contagens pequenas (CS-043): %d combinações município x agente x ano têm de 1 a %d casos.",
             sum(ind$casos >= 1 & ind$casos < LIMIAR_CONTAGEM_PEQUENA), LIMIAR_CONTAGEM_PEQUENA - 1L),
@@ -117,6 +129,8 @@ stopifnot(nrow(ler_resultado(arquivos[1])) == 1104, nrow(ler_resultado(arquivos[
           nrow(ler_resultado(arquivos[3])) == 36, nrow(ler_resultado(arquivos[4])) == 12,
           nrow(ler_resultado(arquivos[5])) == 108, nrow(ler_resultado(arquivos[6])) == 12,
           nrow(ler_resultado(arquivos[7])) == 92,
+          nrow(ler_resultado(arquivos[8])) == 10 * 3 * nrow(semanas_do_estudo()),
+          nrow(ler_resultado(arquivos[9])) == length(ANOS_ESTUDO),
           "Baía da Ilha Grande" %in% ler_resultado(arquivos[5])$regiao_de_saude,
           "Niterói" %in% ler_resultado(arquivos[1])$municipio)
 message(sprintf("%d arquivos em %s", length(arquivos), pasta))

@@ -67,8 +67,8 @@ Rscript -e "shiny::runApp(launch.browser = TRUE)"
 | `08_relatorio.html` | Relatório autocontido (um arquivo; nenhum número digitado à mão) |
 | `08_apresentacao.html` | Apresentação (revealjs) do mesmo fonte |
 | `resultados/mapas/` | 12 mapas de incidência, 12 de LISA, 2 painéis e 12 mapas por região de saúde (300 dpi) |
-| `resultados/tabelas/exportacao/` | 7 CSV para Excel em português (municípios, regiões de saúde, residência × notificação) + LEIA-ME com a versão dos dados |
-| `resultados/estatistica/` | Moran global, LISA por município, vizinhança |
+| `resultados/tabelas/exportacao/` | 9 CSV para Excel em português (municípios, regiões de saúde, residência × notificação, série semanal, não encerradas) + LEIA-ME com a versão dos dados |
+| `resultados/estatistica/` | Moran global, LISA por município, vizinhança; séries por semana epidemiológica (estado e regiões) e fichas não encerradas |
 | `app.R` | Painel Shiny + leaflet |
 
 ## Documentos

@@ -416,6 +416,81 @@ outro lugar. O que mais perde casos em números absolutos é `r exportadores$nom
 taxa por residência é a medida de risco: por notificação, os polos hospitalares pareceriam focos
 de doença e os municípios sem hospital de referência pareceriam poupados.
 
+## Série por semana epidemiológica
+
+```{r series}
+ss <- utils::read.csv(file.path("resultados", "tabelas", "serie_semanal.csv"), encoding = "UTF-8", stringsAsFactors = FALSE)
+ss$inicio_semana <- as.Date(ss$inicio_semana)
+est_s <- ss[ss$recorte == "Estado do Rio de Janeiro", ]
+n_sem <- length(unique(est_s$inicio_semana))
+pico <- do.call(rbind, lapply(AGENTES, function(ag) {
+  por_ano <- lapply(anos, function(a) {
+    x <- est_s[est_s$agente == ag & est_s$ano_epi == a, ]
+    x[which.max(x$casos), c("agente", "ano_epi", "semana_epi", "inicio_semana", "casos")]
+  })
+  do.call(rbind, por_ano)
+}))
+camp <- ler_campanhas_influenza()
+pico_flu <- pico[pico$agente == "influenza", ]
+pico_flu$campanha <- camp$inicio[match(pico_flu$ano_epi, camp$ano)]
+pico_flu$semanas_apos <- as.integer((pico_flu$inicio_semana - pico_flu$campanha) / 7)
+maior_sars <- pico[pico$agente == "sarscov2", ]; maior_sars <- maior_sars[which.max(maior_sars$casos), ]
+ne <- ler("resultados", "tabelas", "nao_encerrados.csv")
+nes <- ler("resultados", "tabelas", "nao_encerrados_semanal.csv")
+fmt_data <- function(d) format(d, "%d/%m/%Y")
+antes <- pico_flu[pico_flu$semanas_apos < 0, ]
+# Maturação: últimas 8 semanas do banco × semanas anteriores, com a proporção agregada (fichas somadas).
+ult8 <- nes$semana_epi > max(nes$semana_epi) - 8
+p_ult8 <- sum(nes$nao_encerradas[ult8]) / sum(nes$fichas[ult8])
+p_resto <- sum(nes$nao_encerradas[!ult8]) / sum(nes$fichas[!ult8])
+sobe <- p_ult8 > 2 * p_resto
+ano_menor <- ne$ano[which.min(ne$proporcao)]
+```
+
+A série conta os casos pela semana epidemiológica do início dos sintomas, recalculada da data
+(a semana gravada no banco erra a última semana de `r ano_fim`), em `r n_sem` semanas de domingo a
+sábado, com zero explícito nas semanas sem caso. O maior pico do período é o de SARS-CoV-2 na
+semana `r maior_sars$semana_epi` de `r maior_sars$ano_epi`, com `r fi(maior_sars$casos)` casos.
+
+![Casos de SRAG por semana epidemiológica no estado. Tracejado: início da campanha nacional de vacinação contra influenza](resultados/estatistica/serie_semanal_estado.png){#fig-serie width=100%}
+
+```{r tbl-pico-flu}
+#| tbl-cap: "Semana de maior número de casos de influenza em cada ano e distância até o início da campanha de vacinação"
+t10 <- data.frame(Ano = pico_flu$ano_epi, `Início da campanha` = fmt_data(pico_flu$campanha),
+                  `Semana do pico` = pico_flu$semana_epi, `Início da semana do pico` = fmt_data(pico_flu$inicio_semana),
+                  Casos = fi(pico_flu$casos),
+                  `Semanas da campanha ao pico (negativo = antes)` = pico_flu$semanas_apos, check.names = FALSE)
+tab(t10)
+```
+
+`r if (nrow(antes) > 0) paste0("Em ", lista(antes$ano_epi), " o pico de influenza vem antes da campanha, na semana ", lista(antes$semana_epi), ": a série começa em alta, com uma epidemia que já vinha do ano anterior. ") else ""`A tabela é
+descritiva: a posição do pico em relação à campanha não mede o efeito da vacina, que dependeria
+da cobertura vacinal e da cepa em circulação, fora do escopo deste trabalho. As datas das campanhas
+são as nacionais; em `r ano_fim` o RJ antecipou a vacinação estadual para o fim de março.
+
+![Casos de SRAG por semana epidemiológica em cada região de saúde (escala vertical própria de cada região)](resultados/estatistica/serie_semanal_painel_regioes.png){#fig-serie-regioes width=100%}
+
+### Fichas não encerradas
+
+Ficha não encerrada é a que ainda não tem classificação final; ela não entra como caso de nenhum
+agente. A proporção é maior em `r ne$ano[which.max(ne$proporcao)]` (`r fp(max(ne$proporcao))`) e menor
+em `r ano_menor` (`r fp(min(ne$proporcao))`)`r if (ano_menor == ano_fim) ", justamente o ano do banco ainda atualizado" else ""`.
+
+```{r tbl-nao-encerrados}
+#| tbl-cap: "Fichas de SRAG de residentes do RJ sem classificação final, por ano"
+t11 <- data.frame(Ano = ne$ano, Fichas = fi(ne$fichas), `Não encerradas` = fi(ne$nao_encerradas),
+                  Proporção = fp(ne$proporcao), check.names = FALSE)
+tab(t11)
+```
+
+Por semana, no banco de `r ano_fim`, a proporção fica entre `r fp(min(nes$proporcao))` e
+`r fp(max(nes$proporcao))`; o valor mais alto é o da semana `r nes$semana_epi[which.max(nes$proporcao)]`,
+com `r fi(nes$nao_encerradas[which.max(nes$proporcao)])` de `r fi(nes$fichas[which.max(nes$proporcao)])`
+fichas. Nas últimas oito semanas a proporção agregada é `r fp(p_ult8)`, contra `r fp(p_resto)` nas
+anteriores: `r if (sobe) "a subida indica que a investigação dessas semanas ainda está em andamento" else "não há a subida sustentada que indicaria investigação em andamento"`.
+
+![Fichas não encerradas por semana epidemiológica no último ano do estudo](resultados/estatistica/nao_encerrados_2025.png){#fig-nao-encerrados width=90%}
+
 ## Protótipo de painel para a vigilância
 
 O painel interativo (`app.R`, Shiny e leaflet) permite escolher o agente, o ano e a camada
@@ -501,7 +576,9 @@ pequenas <- sum(ind_muni$casos >= 1 & ind_muni$casos < LIMIAR_CONTAGEM_PEQUENA)
   de testagem, e não de doença; é por isso que a taxa bruta, que forma agrupamentos desses
   zeros, é só sensibilidade.
 - **Banco vivo.** O banco de `r ano_fim` é atualizado semanalmente; este relatório usa a versão
-  `r versao_ult`, e uma versão nova muda os números de `r ano_fim`.
+  `r versao_ult`, e uma versão nova muda os números de `r ano_fim`. Nessa versão, só
+  `r fp(ne$proporcao[ne$ano == ano_fim])` das fichas de `r ano_fim` estão sem classificação final
+  (entre `r fp(min(ne$proporcao))` e `r fp(max(ne$proporcao))` nos `r length(anos)` anos).
 - **Dicionário de dados.** O dicionário oficial é de `r data_dicio`, anterior a parte dos
   bancos; nenhuma coluna nova apareceu entre os anos, mas o domínio de valores de cada campo não
   foi reconferido um a um.

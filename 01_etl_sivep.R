@@ -7,6 +7,8 @@
 #   dados/processados/sivep_processado.parquet  casos confirmados pela regra do ADR-0002 (CS-008)
 #   resultados/tabelas/casos_por_agente.csv, subtipo_influenza.csv, codeteccao_casos.csv
 #   dados/processados/sivep_notificados_de_fora.parquet  casos notificados no RJ de quem mora fora (CS-031)
+#   resultados/tabelas/nao_encerrados.csv                fichas com CLASSI_FIN vazio por ano (CS-035)
+#   resultados/tabelas/nao_encerrados_semanal.csv        a mesma proporção por semana do último ano (CS-035)
 
 source("00_setup.R")
 
@@ -19,6 +21,14 @@ diagnostico <- diagnosticar_sivep(sivep_rj)
 utils::write.csv(diagnostico, file.path("resultados", "tabelas", "diagnostico_sivep.csv"),
                  row.names = FALSE, fileEncoding = "UTF-8")
 print(diagnostico)
+
+# CS-035: fichas não encerradas. Tem de bater com a coluna do diagnóstico, que conta o mesmo.
+nao_enc <- resumir_nao_encerrados(sivep_rj)
+stopifnot(identical(nao_enc$nao_encerradas, diagnostico$classi_fin_vazio[match(nao_enc$ano, diagnostico$ano)]))
+nao_enc_sem <- nao_encerrados_por_semana(sivep_rj, max(ANOS_ESTUDO))
+stopifnot(sum(nao_enc_sem$fichas) == nao_enc$fichas[nao_enc$ano == max(ANOS_ESTUDO)])
+utils::write.csv(nao_enc, file.path("resultados", "tabelas", "nao_encerrados.csv"), row.names = FALSE, fileEncoding = "UTF-8")
+utils::write.csv(nao_enc_sem, file.path("resultados", "tabelas", "nao_encerrados_semanal.csv"), row.names = FALSE, fileEncoding = "UTF-8")
 
 # Evidência do ADR-0002 (CS-007): quantos casos cada regra candidata conta,
 # onde está o laboratório das fichas sem campo específico, e co-detecções.
