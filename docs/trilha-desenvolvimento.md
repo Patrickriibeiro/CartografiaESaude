@@ -264,7 +264,7 @@ Testes verificam o contrato, não a implementação.
                     contrato: por agente × ano: I, p_perm (9.999 perm, semente fixa),
                     tabela LISA 92 × 12 com Ii, p_perm, p_fdr, quadrante, nivel
                     (confirmado/indicativo/ns), classe, instavel; + bruta e Rook (ADR-0004)
-06_visualizacoes.R ► resultados/mapas/*.png
+06_visualizacoes.R ► resultados/mapas/*.png   (CS-019, entregue: 24 mapas + 2 painéis)
 07_exportacao.R ──► resultados/tabelas/*.csv
 app.R / 08_relatorio.qmd  consomem só dados/processados e resultados/
 ```
