@@ -10,10 +10,15 @@ guardado em `dados/externos/dicionario-srag-2019-a-2025.pdf` e registrado em
 - **Numeração:** "Nº ficha" é o número do campo na ficha de notificação oficial.
   Difere da versão da SES-SP usada na análise inicial; vale esta.
 
-> **Atenção:** o dicionário descreve a exportação em DBF. Os bancos do portal são
-> CSV/PARQUET e podem ter pequenas diferenças de nome. Todo campo marcado com
-> **[CONFERIR]** tem de ser checado contra o cabeçalho real do arquivo no CS-006, antes
-> de qualquer filtro.
+> **Conferido contra os bancos reais (CS-006, 2026-09-25).** Os quatro bancos PARQUET
+> (2022 a 2025) têm as mesmas **194 colunas**, com os mesmos nomes e os mesmos tipos. Os
+> 34 campos abaixo existem nos quatro. As três dúvidas marcadas antes como [CONFERIR]
+> foram resolvidas e estão indicadas como **[CONFERIDO]**.
+>
+> **Tipos no PARQUET:** 6 datas como `timestamp[ns]` sem fuso, à meia-noite UTC (ler
+> com `tz = "UTC"`; ver ADR-0001); `CLASSI_FIN`, `CRITERIO` e `NU_IDADE_N` como
+> `decimal128(3,0)`; os demais como texto. Nenhum campo de código tem valor não
+> numérico nas 99.880 fichas do RJ.
 
 ## Onde o PDF v1 erra o nome
 
@@ -31,7 +36,7 @@ guardado em `dados/externos/dicionario-srag-2019-a-2025.pdf` e registrado em
 | `DT_NOTIFIC` | 1 | Date `DD/MM/AAAA` | data ≤ data da digitação | Fallback de `DT_SIN_PRI` |
 | `SEM_NOT` | — (interno) | `Varchar2(6)` | ano + semana | Não usado |
 | `DT_SIN_PRI` | 2 | Date `DD/MM/AAAA` | ≤ data da digitação e ≤ `DT_NOTIFIC` | **Data de referência do caso** (define o ano) |
-| `SEM_PRI` | — (interno) | `Varchar2(6)` | semana epidemiológica dos 1ºs sintomas, calculada de `DT_SIN_PRI` | Série semanal; conferência de consistência com `DT_SIN_PRI` |
+| `SEM_PRI` | — (interno) | `Varchar2(6)` | semana epidemiológica dos 1ºs sintomas, calculada de `DT_SIN_PRI`. No PARQUET vem só a semana (ex.: `"01"`), sem o ano | Só conferência: o projeto recalcula a semana de `DT_SIN_PRI`, porque o banco de 2025 rotula a semana 53 como `01` (226 fichas do RJ; ADR-0001) |
 | `DT_ENCERRA` | 84 | Date | ≥ data do preenchimento; obrigatório se `CLASSI_FIN` preenchido | Mede maturação do banco |
 | `DT_DIGITA` | — | Date | data de digitação | Teto de plausibilidade das outras datas |
 
@@ -42,14 +47,14 @@ guardado em `dados/externos/dicionario-srag-2019-a-2025.pdf` e registrado em
 | `SG_UF_NOT` | 3 | `Varchar2(2)` | sigla da UF da unidade notificadora | Não usado |
 | `CO_MUN_NOT` | 4 | `Varchar2(6)` | código IBGE do município da unidade notificadora | Comparação residência × notificação (CS-031) |
 | `SG_UF` | 23 | `Varchar2(2)` | UF de residência; obrigatório se país = Brasil | Conferência: tem de ser `RJ` quando `CO_MUN_RES` começa com 33 |
-| `CO_MUN_RES` | 24 | `Varchar2(6)` | código IBGE do município de residência; obrigatório se país = Brasil | **Filtro espacial e chave de junção** (prefixo `33`, tratado como texto) |
+| `CO_MUN_RES` | 24 | `Varchar2(6)` | código IBGE do município de residência; obrigatório se país = Brasil. No PARQUET: texto, sempre 6 dígitos no RJ | **Filtro espacial e chave de junção** (prefixo `33`, tratado como texto) |
 | `CO_MU_INTE` | 51 | `Varchar2(20)` | município de internação; habilitado se `HOSPITAL = 1` | Não usado nesta fase |
 
 ## Pessoa
 
 | Campo | Nº ficha | Tipo | Domínio | Uso no projeto |
 |---|---|---|---|---|
-| `CS_SEXO` | 11 | `Varchar2(1)` | 1-Masculino, 2-Feminino, 9-Ignorado **[CONFERIR: o CSV pode trazer M/F/I]** | Descritivo |
+| `CS_SEXO` | 11 | `Varchar2(1)` | 1-Masculino, 2-Feminino, 9-Ignorado no dicionário; **[CONFERIDO] no PARQUET vem como letra: `M`, `F`, `I`** | Descritivo |
 | `NU_IDADE_N` | 13 | `Varchar2(3)` | idade, ≤ 150 | Faixas etárias (OE9) |
 | `TP_IDADE` | 13 | `Varchar2(1)` | 1-Dia, 2-Mês, 3-Ano | **Obrigatório para ler `NU_IDADE_N`**: "6" pode ser 6 dias ou 6 anos |
 
@@ -80,14 +85,14 @@ guardado em `dados/externos/dicionario-srag-2019-a-2025.pdf` e registrado em
 | `POS_PCRFLU` | 72 | `Varchar2(1)` | 1-Sim, 2-Não, 9-Ignorado | **Critério Influenza** |
 | `TP_FLU_PCR` | 72 | `Varchar2(1)` | 1-Influenza A, 2-Influenza B; habilitado se `POS_PCRFLU = 1` | Subtipo A/B |
 | `POS_PCROUT` | 72 | `Varchar2(1)` | 1-Sim, 2-Não, 9-Ignorado | Porta de entrada de `PCR_SARS2` e `PCR_VSR` |
-| `PCR_SARS2` | 72 | `Varchar2(1)` | 1-marcado; **vazio = não marcado**; habilitado se `POS_PCROUT = 1`. O PDF oficial grafa `PCR_ SARS2`, com espaço, por erro tipográfico **[CONFERIR]** | **Critério SARS-CoV-2** |
+| `PCR_SARS2` | 72 | `Varchar2(1)` | 1-marcado; **vazio = não marcado**; habilitado se `POS_PCROUT = 1`. O PDF oficial grafa `PCR_ SARS2`, com espaço; **[CONFERIDO] no PARQUET o nome é `PCR_SARS2`** | **Critério SARS-CoV-2** |
 | `PCR_VSR` | 72 | `Varchar2(1)` | 1-marcado; **vazio = não marcado**; habilitado se `POS_PCROUT = 1` | **Critério VSR** |
 
 ## Classificação e desfecho
 
 | Campo | Nº ficha | Tipo | Domínio | Uso no projeto |
 |---|---|---|---|---|
-| `CO-DETEC` | 79 | `Varchar2(1)` | 1-Sim, 2-Não, 9-Ignorado ("dois tipos de vírus ao mesmo tempo"). Hífen não é válido em nome de coluna **[CONFERIR]** | Conferência da co-detecção que o projeto calcula |
+| `CO_DETEC` | 79 | `Varchar2(1)` | 1-Sim, 2-Não, 9-Ignorado ("dois tipos de vírus ao mesmo tempo"). O dicionário grafa `CO-DETEC`; **[CONFERIDO] no PARQUET o nome é `CO_DETEC`** | Conferência da co-detecção que o projeto calcula |
 | `CLASSI_FIN` | 80 | `Varchar2(1)` | 1-SRAG por influenza, 2-SRAG por outro vírus respiratório, 3-SRAG por outro agente etiológico, 4-SRAG não especificado, 5-SRAG por covid-19. **Sem código 9.** Se os métodos divergirem, prioriza-se o RT-PCR | **Critério de caso** (ADR-0002). Vazio = caso não encerrado |
 | `CRITERIO` | 81 | `Varchar2(1)` | 1-Laboratorial, 2-Clínico epidemiológico, 3-Clínico, 4-Clínico imagem | Descritivo; ver nota abaixo |
 | `EVOLUCAO` | 82 | `Varchar2(1)` | 1-Cura, 2-Óbito, 3-Óbito por outras causas, 9-Ignorado | Não usado nesta fase |
@@ -113,6 +118,6 @@ guardado em `dados/externos/dicionario-srag-2019-a-2025.pdf` e registrado em
 
 ## Limite deste documento
 
-O dicionário é de maio de 2023. Campos acrescentados à ficha depois disso podem estar
-nos bancos de 2024 e 2025 sem constar aqui. O CS-006 compara o cabeçalho real de cada
-ano com esta lista e registra as diferenças neste documento.
+O dicionário é de maio de 2023. A conferência do CS-006 mostrou que os quatro bancos
+têm o mesmo conjunto de 194 colunas, então não houve campo novo entre 2022 e 2025. As
+160 colunas não usadas não estão documentadas aqui.

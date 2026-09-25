@@ -9,4 +9,23 @@ sivep:
     destino: dados/externos/dicionario-srag-2019-a-2025.pdf
     versao: "documento datado de 25/05/2023; publicado em 29/01/2026"
     descricao: Dicionário de dados SIVEP-Gripe, SRAG hospitalizado, 2019 a 2025
-  # bancos anuais 2022-2025: CS-005
+
+  # Bancos anuais em PARQUET (D-03). O nome do arquivo carrega a data da versão
+  # publicada: trocar de versão = editar a linha do ano aqui. O arquivo antigo e
+  # sua linha no manifesto continuam existindo; o pipeline lê só o que está aqui.
+  # 2022-2024: bancos "congelados", republicados pelo Ministério em 23/03/2026.
+  # 2025: banco vivo, atualizado semanalmente. A versão abaixo é o snapshot do
+  # projeto (D-07: data de corte = versão vigente no primeiro download).
+  bancos:
+    - ano: 2022
+      url: https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SRAG/2022/INFLUD22-23-03-2026.parquet
+      versao: "23-03-2026"
+    - ano: 2023
+      url: https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SRAG/2023/INFLUD23-23-03-2026.parquet
+      versao: "23-03-2026"
+    - ano: 2024
+      url: https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SRAG/2024/INFLUD24-23-03-2026.parquet
+      versao: "23-03-2026"
+    - ano: 2025
+      url: https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SRAG/2025/INFLUD25-14-09-2026.parquet
+      versao: "14-09-2026"

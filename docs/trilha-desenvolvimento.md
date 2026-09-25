@@ -106,7 +106,8 @@ Evidência: `apisidra.ibge.gov.br/values/t/6579/n6/3304557/v/9324/p/all` e `t/47
 ### 2.4 O banco de 2025 é "vivo" e muda toda semana
 
 O portal marca 2019–2024 como bancos congelados e 2025–2026 como bancos vivos com
-atualização semanal (última em 2026-09-14). Um pipeline "reprodutível" que baixa o
+atualização semanal (última em 2026-09-14). *Atualização (CS-005): os bancos "congelados"
+2022–2024 foram republicados em 23/03/2026, então nem eles são imutáveis; ver ADR-0001.* Um pipeline "reprodutível" que baixa o
 2025 hoje e o baixa de novo daqui a um mês produz mapas diferentes.
 
 **Consequência:** o projeto precisa de um **manifesto de proveniência**: URL, data do
@@ -228,9 +229,12 @@ Testes verificam o contrato, não a implementação.
 
 ```
 00_setup.R          cria diretórios, carrega renv, lê config (anos, snapshot)
-01_etl_sivep.R  ──► dados/processados/sivep_processado.parquet
-                    contrato: 1 linha por ficha; colunas tipadas; só CO_MUN_RES 33xxxx;
-                    coluna agente ∈ {sarscov2, influenza, vsr}; datas plausíveis
+01_etl_sivep.R  ──► dados/intermediarios/sivep_rj.parquet          (CS-006, entregue)
+                    contrato: 1 linha por ficha de SRAG de residente do RJ; 34 colunas
+                    tipadas; datas em UTC; ano_epi == ano_banco; semana_epi recalculada
+                ──► dados/processados/sivep_processado.parquet      (CS-008)
+                    contrato: só casos confirmados pelo ADR-0002; coluna
+                    agente ∈ {sarscov2, influenza, vsr}; coluna codeteccao
 02_indicadores.R ─► dados/processados/indicadores_municipais.parquet
                     contrato: 92 municípios × 3 agentes × N períodos, SEM linha faltante
                     (zero explícito); casos, populacao, incid_100k, incid_eb_100k

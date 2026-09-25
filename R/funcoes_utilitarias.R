@@ -1,4 +1,12 @@
-# Funções utilitárias do projeto: diretórios e proveniência dos dados.
+# Funções utilitárias do projeto: parâmetros, diretórios e proveniência dos dados.
+
+# Parâmetros do estudo (fonte: docs/proposta-v2.md §3.1). Ficam aqui, e não no
+# 00_setup.R, porque as funções dependem deles: quem carrega as funções (scripts
+# ou testes) recebe os parâmetros junto.
+ANOS_ESTUDO <- 2022:2025
+PREFIXO_UF_RJ <- "33"
+EPSG_SIRGAS2000 <- 4674
+SEMENTE <- 20260925
 
 #' Cria a árvore de diretórios de dados e resultados, se ainda não existir.
 #' Idempotente: rodar duas vezes não muda nada.
@@ -209,14 +217,73 @@ baixar_e_registrar <- function(url, destino, descricao, versao = NA_character_,
       return(invisible(destino))
     }
   }
-  dir.create(dirname(destino), recursive = TRUE, showWarnings = FALSE)
-  temporario <- paste0(destino, ".parcial")
-  on.exit(if (file.exists(temporario)) unlink(temporario))
-  curl::curl_download(url, temporario, mode = "wb", quiet = TRUE)
-  file.rename(temporario, destino)
+  baixar_arquivo(url, destino)
   registrar_fonte(destino, url = url, descricao = descricao, versao = versao,
                   manifesto = manifesto)
   invisible(destino)
+}
+
+#' Baixa `url` para `destino`, retomando de onde parou se cair no meio.
+#'
+#' O download vai para `<destino>.parcial` e só é renomeado no fim, então nunca
+#' existe um `destino` pela metade. Se uma tentativa falha, os bytes já baixados
+#' ficam no .parcial e a próxima tentativa (ou a próxima execução) pede ao
+#' servidor só o resto, com o cabeçalho HTTP Range.
+baixar_arquivo <- function(url, destino, tentativas = 3, espera_s = 5) {
+  dir.create(dirname(destino), recursive = TRUE, showWarnings = FALSE)
+  parcial <- paste0(destino, ".parcial")
+
+  for (t in seq_len(tentativas)) {
+    ja <- if (file.exists(parcial)) file.size(parcial) else 0
+    h <- curl::new_handle(failonerror = TRUE)
+    if (ja > 0) curl::handle_setopt(h, resume_from_large = ja)
+
+    con <- file(parcial, open = "ab")  # "a" = acrescenta ao fim; "b" = binário
+    res <- tryCatch(
+      curl::curl_fetch_stream(url, function(pedaco) writeBin(pedaco, con), handle = h),
+      error = function(e) e
+    )
+    close(con)
+
+    if (!inherits(res, "error")) {
+      # Servidor que ignora o Range responde 200 com o arquivo inteiro, que foi
+      # acrescentado depois dos bytes antigos: o resultado estaria corrompido.
+      if (ja > 0 && identical(res$status_code, 200L)) {
+        message("Servidor ignorou a retomada; recomeçando do zero: ", url)
+        unlink(parcial)
+        next
+      }
+      file.rename(parcial, destino)
+      return(invisible(destino))
+    }
+
+    message(sprintf("Tentativa %d/%d falhou (%s). %s bytes preservados para retomar.",
+                    t, tentativas, conditionMessage(res),
+                    format(if (file.exists(parcial)) file.size(parcial) else 0,
+                           big.mark = ".")))
+    if (t < tentativas) Sys.sleep(espera_s)
+  }
+  stop("Download falhou após ", tentativas, " tentativas: ", url,
+       "\nOs bytes baixados ficam em ", parcial, " e a próxima execução retoma.",
+       call. = FALSE)
+}
+
+#' Semana epidemiológica do Ministério da Saúde a partir de uma data.
+#'
+#' Semanas vão de domingo a sábado. A semana 1 é a que tem mais dias em janeiro,
+#' ou seja, a que contém o dia 4 de janeiro. Por isso alguns anos têm 53 semanas
+#' (ex.: 53/2025 = 28/12/2025 a 03/01/2026, calendário oficial da SMS-Rio).
+#' Devolve data.frame com ano_epi e semana_epi (inteiros; NA onde a data é NA).
+semana_epidemiologica <- function(data) {
+  data <- as.Date(data)
+  domingo <- data - as.POSIXlt(data)$wday           # wday: 0 = domingo
+  ano <- as.POSIXlt(domingo + 3)$year + 1900L       # a quarta-feira decide o ano
+  jan4 <- as.Date(sprintf("%04d-01-04", ano))
+  inicio_sem1 <- jan4 - as.POSIXlt(jan4)$wday
+  data.frame(
+    ano_epi = as.integer(ano),
+    semana_epi = as.integer(as.numeric(domingo - inicio_sem1) %/% 7 + 1)
+  )
 }
 
 #' Lê config/fontes.yml (URLs das fontes ficam fora do código, trilha §6).
