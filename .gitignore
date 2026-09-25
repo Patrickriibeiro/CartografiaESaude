@@ -25,3 +25,6 @@ renv/local/
 /.quarto/
 **/*.quarto_ipynb
 resultados/execucao.log
+
+# Proposta original (PDF da autora): fica só na máquina, fora do repositório (D-01, CS-026)
+/23092026_*.pdf

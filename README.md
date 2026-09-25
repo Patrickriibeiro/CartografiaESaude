@@ -1,5 +1,7 @@
 # Cartografia & Saúde — SRAG no Estado do Rio de Janeiro (2022–2025)
 
+[![testes](https://github.com/Patrickriibeiro/CartografiaESaude/actions/workflows/testes.yml/badge.svg)](https://github.com/Patrickriibeiro/CartografiaESaude/actions/workflows/testes.yml)
+
 Pipeline reprodutível em R para a análise espaço-temporal da incidência de Síndrome
 Respiratória Aguda Grave (SRAG) por SARS-CoV-2, influenza e VSR nos 92 municípios do
 Estado do Rio de Janeiro, com dados abertos do SIVEP-Gripe e do IBGE: do download ao mapa,
@@ -24,7 +26,7 @@ Testado do zero num clone limpo (ver `docs/release-history/cs-024-maquina-nova.m
 do `renv.lock`)
 
 ```bash
-git clone <endereço-do-repositório> CartografiaESaude
+git clone https://github.com/Patrickriibeiro/CartografiaESaude.git
 cd CartografiaESaude
 Rscript -e "renv::restore(prompt = FALSE)"
 ```

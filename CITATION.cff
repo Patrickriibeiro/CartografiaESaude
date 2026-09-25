@@ -9,6 +9,7 @@ authors:
   - family-names: "Oliveira"
     given-names: "Patrick Ribeiro"
 license: MIT
+repository-code: "https://github.com/Patrickriibeiro/CartografiaESaude"
 date-released: "2026-09-25"
 keywords:
   - SRAG
