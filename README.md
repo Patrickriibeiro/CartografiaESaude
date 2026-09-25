@@ -1,57 +1,100 @@
 # Cartografia & Saúde — SRAG no Estado do Rio de Janeiro (2022–2025)
 
 Pipeline reprodutível em R para a análise espaço-temporal da incidência de Síndrome
-Respiratória Aguda Grave (SRAG) por SARS-CoV-2, Influenza e VSR nos 92 municípios do
-Estado do Rio de Janeiro, com dados abertos do SIVEP-Gripe e do IBGE.
+Respiratória Aguda Grave (SRAG) por SARS-CoV-2, influenza e VSR nos 92 municípios do
+Estado do Rio de Janeiro, com dados abertos do SIVEP-Gripe e do IBGE: do download ao mapa,
+com Moran global e LISA, painel interativo e relatório.
 
 Projeto de Gabrielle Barbosa Teixeira Coelho (PPG-BCS, IOC/Fiocruz), disciplina
-Cartografia & Saúde (IOC 14090).
+Cartografia & Saúde (IOC 14090), com Patrick Ribeiro Oliveira.
 
-> **Estado:** esqueleto (CS-002). Os scripts numerados ainda param com
-> "não implementado". A ordem de implementação está em `docs/BACKLOG.md`.
+## Rodar numa máquina nova
+
+Testado do zero num clone limpo (ver `docs/release-history/cs-024-maquina-nova.md`).
+
+**1. Instale**
+
+- **R ≥ 4.6** — <https://cran.r-project.org/>. No Windows, os pacotes vêm compilados; o
+  Rtools não é necessário.
+- **Quarto ≥ 1.10** — <https://quarto.org/docs/get-started/>. Só para o relatório; o resto
+  roda sem ele.
+- **Git** — para clonar.
+
+**2. Clone e restaure os pacotes** (na primeira vez, baixa ~140 pacotes nas versões exatas
+do `renv.lock`)
+
+```bash
+git clone <endereço-do-repositório> CartografiaESaude
+cd CartografiaESaude
+Rscript -e "renv::restore(prompt = FALSE)"
+```
+
+**3. Rode os testes** (não usam rede nem os dados reais; os de integração são pulados até o
+passo 4)
+
+```bash
+Rscript -e "testthat::test_dir('tests/testthat')"
+```
+
+**4. Rode o pipeline** (na primeira vez baixa ~115 MB do Portal de Dados Abertos do SUS e
+confere cada arquivo pelo SHA-256 do manifesto)
+
+```bash
+Rscript run.R                  # tudo, inclusive o relatório
+Rscript run.R --sem-relatorio  # sem Quarto
+Rscript run.R --limpar         # apaga o que é derivado e refaz do zero
+```
+
+Tempo medido: ~100 s com os dados já baixados; o tempo de cada etapa fica em
+`resultados/execucao.log`.
+
+**5. Abra o painel**
+
+```bash
+Rscript -e "shiny::runApp(launch.browser = TRUE)"
+```
+
+## O que sai
+
+| Onde | O quê |
+|---|---|
+| `08_relatorio.html` | Relatório autocontido (um arquivo; nenhum número digitado à mão) |
+| `08_apresentacao.html` | Apresentação (revealjs) do mesmo fonte |
+| `resultados/mapas/` | 12 mapas de incidência, 12 de LISA e 2 painéis (300 dpi) |
+| `resultados/tabelas/exportacao/` | 4 CSV para Excel em português + LEIA-ME com a versão dos dados |
+| `resultados/estatistica/` | Moran global, LISA por município, vizinhança |
+| `app.R` | Painel Shiny + leaflet |
 
 ## Documentos
 
 | Arquivo | O que é |
 |---|---|
-| `23092026_ Seminário…pdf` | Proposta original (v1), documento de referência |
-| `docs/proposta-v2.md` | Revisão da proposta com correções factuais, aguardando aceite da autora |
-| `docs/trilha-desenvolvimento.md` | Arquitetura técnica, contratos entre etapas, fases |
-| `docs/BACKLOG.md` | Fonte única de feito/não feito (itens `CS-0NN`) |
-| `docs/decisoes/` | ADRs: decisões registradas e o motivo |
-
-## Pré-requisitos
-
-- R ≥ 4.6 (verificado com 4.6.1)
-- Quarto ≥ 1.10 (verificado com 1.10.18), para o relatório
-- Rtools só se algum pacote precisar ser compilado; com os binários do CRAN não foi necessário
-
-## Como rodar
-
-```r
-# 1. Restaurar exatamente as versões de pacotes do renv.lock
-renv::restore()
-
-# 2. Rodar os testes
-testthat::test_dir("tests/testthat")
-
-# 3. Rodar o pipeline inteiro (quando implementado)
-source("run.R")
-```
+| `docs/proposta-v2.md` | Proposta revisada, com as decisões da autora |
+| `docs/decisoes/ADR-*.md` | Cada decisão metodológica, com a evidência e as alternativas |
+| `docs/trilha-desenvolvimento.md` | Arquitetura, contratos entre etapas e fases |
+| `docs/BACKLOG.md` | O que foi feito (com commit) e o que falta |
+| `docs/dicionario-sivep.md` | Os 37 campos do SIVEP-Gripe usados, conferidos contra os bancos |
+| `dados/MANIFESTO.md` | Cada arquivo externo com URL, data, tamanho e SHA-256 |
 
 ## Estrutura
 
 ```
-00_setup.R … 07_exportacao.R   etapas do pipeline, em ordem
-run.R                          executa todas as etapas
-app.R                          painel Shiny + leaflet
+00_setup.R … 07_exportacao.R   etapas do pipeline, em ordem (run.R executa todas)
 08_relatorio.qmd               relatório e apresentação (Quarto)
-R/funcoes_*.R                  funções usadas pelas etapas
-dados/brutos/                  downloads originais (fora do git)
-dados/processados/             tabelas limpas (.parquet, .rds)
-resultados/                    tabelas, mapas, estatística, objetos
-tests/testthat/                testes automatizados
+app.R                          painel Shiny + leaflet
+R/funcoes_*.R                  funções usadas pelas etapas, com testes
+config/fontes.yml              endereços das fontes (fora do código)
+dados/brutos/                  bancos do SIVEP baixados (fora do git; conferidos pelo manifesto)
+dados/externos/                dicionário, malha e população do IBGE (no git)
+dados/processados/             tabelas intermediárias (fora do git; regeneráveis)
+resultados/                    tabelas, estatística, mapas
+tests/testthat/                testes automatizados e base sintética FABRICADA
 ```
 
-Dados brutos não são versionados: são microdados de saúde e são grandes. Cada arquivo
-baixado é registrado com URL, data e hash SHA-256 em `dados/MANIFESTO.md` (CS-003).
+Os microdados de saúde não são versionados: são grandes e, embora anonimizados pelo
+Ministério da Saúde, o projeto só publica agregados por município.
+
+## Licença
+
+Código sob a licença MIT (`LICENSE`); relatório, mapas e tabelas sob CC-BY 4.0
+(`LICENSE-CONTEUDO.md`). Para citar, veja `CITATION.cff`.
