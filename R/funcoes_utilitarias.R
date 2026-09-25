@@ -292,5 +292,54 @@ ler_fontes <- function(arquivo = file.path("config", "fontes.yml")) {
   yaml::read_yaml(arquivo)
 }
 
-# A implementar:
-# salvar_resultado() — CS-020
+# ---------------------------------------------------------------------------
+# Exportação para planilha (CS-020)
+# ---------------------------------------------------------------------------
+
+#' Grava uma tabela para o Excel em português: UTF-8 com BOM (sem ele o Excel
+#' lê os acentos como Latin-1 e "Niterói" vira "NiterÃ³i"), ";" como separador
+#' e "," como decimal (o padrão do Excel com idioma pt-BR).
+salvar_resultado <- function(df, nome, pasta = file.path("resultados", "tabelas", "exportacao")) {
+  dir.create(pasta, recursive = TRUE, showWarnings = FALSE)
+  caminho <- file.path(pasta, paste0(nome, ".csv"))
+  con <- file(caminho, open = "wb")
+  on.exit(close(con))
+  writeBin(as.raw(c(0xEF, 0xBB, 0xBF)), con)  # BOM do UTF-8
+  texto <- utils::capture.output(
+    utils::write.table(df, sep = ";", dec = ",", row.names = FALSE, na = "", qmethod = "double",
+                       fileEncoding = "")
+  )
+  writeLines(enc2utf8(texto), con, sep = "\r\n", useBytes = TRUE)  # CRLF: o que o Excel espera
+  invisible(caminho)
+}
+
+#' Lê de volta um CSV gravado por salvar_resultado() (para testes e conferência).
+ler_resultado <- function(caminho) {
+  utils::read.table(caminho, sep = ";", dec = ",", header = TRUE, quote = "\"",
+                    fileEncoding = "UTF-8-BOM", stringsAsFactors = FALSE, na.strings = "",
+                    colClasses = "character")
+}
+
+#' "Carimbo" da exportação: quando, de que versão dos dados e com que regras.
+#' Vai num LEIA-ME ao lado dos CSV, para não poluir as planilhas.
+escrever_carimbo <- function(pasta, linhas_extra = character(0)) {
+  commit <- tryCatch(system2("git", c("rev-parse", "--short", "HEAD"), stdout = TRUE, stderr = FALSE),
+                     error = function(e) NA_character_, warning = function(w) NA_character_)
+  m <- ler_manifesto()
+  bancos <- m[grepl("^dados/brutos/INFLUD", m$arquivo), c("arquivo", "versao")]
+  texto <- c(
+    "Tabelas exportadas pelo pipeline Cartografia & Saúde (SRAG-RJ 2022-2025).",
+    paste("Gerado em:", format(Sys.time(), "%Y-%m-%d %H:%M:%S %Z")),
+    paste("Commit do código:", if (length(commit) == 1 && !is.na(commit)) commit else "desconhecido"),
+    paste("Critério de caso:", REGRA_CASO, "(ADR-0002)"),
+    "Bancos SIVEP-Gripe (versão):",
+    paste0("  ", bancos$arquivo, " (", bancos$versao, ")"),
+    "Formato: UTF-8 com BOM, separador ';', decimal ','.",
+    linhas_extra
+  )
+  caminho <- file.path(pasta, "LEIA-ME.txt")
+  con <- file(caminho, open = "wb"); on.exit(close(con))
+  writeBin(as.raw(c(0xEF, 0xBB, 0xBF)), con)
+  writeLines(enc2utf8(texto), con, sep = "\r\n", useBytes = TRUE)
+  invisible(caminho)
+}
