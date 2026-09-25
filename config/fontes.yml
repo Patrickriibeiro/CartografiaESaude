@@ -29,3 +29,42 @@ sivep:
     - ano: 2025
       url: https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SRAG/2025/INFLUD25-14-09-2026.parquet
       versao: "14-09-2026"
+
+ibge:
+  # População residente por município (API SIDRA). Resposta JSON guardada como
+  # veio, registrada no manifesto; o parse é feito localmente.
+  populacao:
+    - ano: 2022
+      tabela: 4714
+      descricao: "Censo 2022, população residente (data de referência 01/08/2022)"
+      url: https://apisidra.ibge.gov.br/values/t/4714/n6/in%20n3%2033/v/93/p/2022
+      destino: dados/externos/sidra_4714_censo_2022_rj.json
+      data_referencia: "2022-08-01"
+    - ano: 2024
+      tabela: 6579
+      descricao: "Estimativa da população residente, 1º de julho de 2024"
+      url: https://apisidra.ibge.gov.br/values/t/6579/n6/in%20n3%2033/v/9324/p/2024
+      destino: dados/externos/sidra_6579_estimativa_2024_rj.json
+      data_referencia: "2024-07-01"
+    - ano: 2025
+      tabela: 6579
+      descricao: "Estimativa da população residente, 1º de julho de 2025"
+      url: https://apisidra.ibge.gov.br/values/t/6579/n6/in%20n3%2033/v/9324/p/2025
+      destino: dados/externos/sidra_6579_estimativa_2025_rj.json
+      data_referencia: "2025-07-01"
+    # Estimativa pré-Censo, usada só para medir a descontinuidade (ADR-0003).
+    - ano: 2021
+      tabela: 6579
+      descricao: "Estimativa da população residente, 1º de julho de 2021 (pré-Censo; só diagnóstico)"
+      url: https://apisidra.ibge.gov.br/values/t/6579/n6/in%20n3%2033/v/9324/p/2021
+      destino: dados/externos/sidra_6579_estimativa_2021_rj.json
+      data_referencia: "2021-07-01"
+
+  # Malha municipal oficial do IBGE, resolução completa (ADR-0006: não a
+  # simplificada do geobr, que perde 8 pares de vizinhos no RJ).
+  malha_municipal:
+    url: https://geoftp.ibge.gov.br/organizacao_do_territorio/malhas_territoriais/malhas_municipais/municipio_2022/UFs/RJ/RJ_Municipios_2022.zip
+    destino: dados/externos/RJ_Municipios_2022.zip
+    camada: RJ_Municipios_2022.shp
+    versao: "Malha Municipal 2022 (IBGE), publicada em 28/03/2023"
+    descricao: Malha municipal do RJ, IBGE 2022, SIRGAS 2000, resolução completa

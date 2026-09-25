@@ -1,6 +1,8 @@
 # Dados brutos e intermediários nunca entram no git (trilha §3.3, invariante 1; LGPD)
 dados/brutos/*
 dados/intermediarios/*
+# Processados são regeneráveis pelo pipeline; sivep_* teria fichas individuais
+dados/processados/*
 !dados/**/.gitkeep
 
 # Saídas regeneráveis

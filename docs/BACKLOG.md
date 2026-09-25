@@ -21,7 +21,7 @@ Prefixos: `CS` = tarefa · `D` = decisão que só o dono/mestranda fecha · `ADR
 | D-02 | O `23092026` no nome do arquivo é data da apresentação (já passou) ou prazo de entrega? Existe prazo real para o produto final? | — | ordem da F5/F6 |
 | D-03 | Baixar CSV ou PARQUET do portal? PARQUET é menor e lê por coluna; CSV é o formato "clássico" que a banca conhece | PARQUET, com CSV como fallback | **Decidida 2026-09-25: PARQUET** (ADR-0001) |
 | D-04 | Critério de caso: estrito (`CLASSI_FIN` + laboratório) como o PDF escreve, ou laboratorial puro? Co-detecção conta em cada vírus? | Estrito, co-detecção conta em cada agente e é reportada | CS-007, CS-008 |
-| D-05 | Denominador 2023 (IBGE não publicou estimativa): repetir Censo 2022, interpolar 2022–2024 ou outra? | Interpolar linearmente | CS-011 |
+| D-05 | Denominador 2023 (IBGE não publicou estimativa): repetir Censo 2022, interpolar 2022–2024 ou outra? | Interpolar linearmente. **Atualizada 2026-09-25 (ADR-0003):** o Censo 2022 fica 3,1–8,4 % abaixo da estimativa de 2024 em todos os 92 municípios; há 4 opções no ADR. Implementada a interpolação como provisória | CS-012 (comparação entre anos) |
 | D-06 | "Por bairro" na seção 4.2 do PDF: erro de digitação ou intenção futura? | Tratar como município; registrar em ADR-0005 | CS-022 |
 | D-07 | Data de corte do snapshot do banco 2025 (vivo, semanal). Uma vez fixada, o manifesto congela | Fixar na primeira execução real do CS-005 | **Decidida 2026-09-25: versão 14-09-2026** (ADR-0001) |
 | D-08 | Agregação quadrimestral: entra como série temporal no relatório ou só a anual vai para LISA? | Anual no LISA; quadrimestral só em gráfico de linha | CS-012, CS-019 |
@@ -51,7 +51,6 @@ Prefixos: `CS` = tarefa · `D` = decisão que só o dono/mestranda fecha · `ADR
 
 | ID | Título | Evidência | Modelo · Esforço | Aceite |
 |---|---|---|---|---|
-| CS-011 | **Denominadores populacionais + ADR-0003** — `sidrar` tabela 4714 (Censo 2022) e 6579 (2024, 2025); 2023 conforme D-05; salvar `dados/externos/populacao_rj.parquet` com `cod6`, `ano`, `populacao`, `fonte` | API SIDRA: 6579 não tem 2022 nem 2023 (verificado 2026-09-25) | **Fable · medium** | 92 × 4 linhas; nenhum `NA`; soma 2022 bate com o Censo do estado (16.055.174) |
 | CS-012 | **`calcular_casos()`, `calcular_incidencia()`, `completar_municipios()`** — grade completa 92 × 3 × 4 (anual) e 92 × 3 × 12 (quadrimestral) com zero explícito; join por `cod6`; `incid_100k = casos/populacao*1e5` | trilha §3.3 invariantes 3 e 4; medido no CS-006: só 90 municípios têm ficha em 2023 e 91 em 2024, então a grade completa é necessária já nos dados brutos | Opus · medium | `nrow == 1104` (anual); 0 `NA`; município sem caso presente com 0; teste: remover um município do input e ver a grade completar |
 | CS-013 | **Suavização empírica de Bayes** — `spdep::EBest(casos, populacao)` por agente × ano; coluna `incid_eb_100k`; comparação bruta × EB no relatório | trilha §2.8; D-09 | **Fable · medium** | coluna preenchida 92 × 12; gráfico dispersão bruta × EB; nota metodológica no relatório |
 
@@ -59,14 +58,12 @@ Prefixos: `CS` = tarefa · `D` = decisão que só o dono/mestranda fecha · `ADR
 
 | ID | Título | Evidência | Modelo · Esforço | Aceite |
 |---|---|---|---|---|
-| CS-014 | **`03_cartografia.R`** — `geobr::read_municipality(code_muni = 33, year = 2022)`, `st_transform(4674)`, `cod6 = substr(code_muni,1,6)`, cache com hash em `dados/externos/`, `st_make_valid` se necessário | trilha §2.2 (6 vs 7 dígitos), §6 (geobr instável) | Opus · medium | 92 feições; `st_crs()$epsg == 4674`; `all(st_is_valid)`; `inner_join(indicadores) → 92` |
-| CS-015 | **Testes da malha** — 92 códigos distintos, todos com prefixo 33, nenhum duplicado, área total ≈ 43,7 mil km² (±2 %) | IBGE: área do RJ 43.750 km² | Opus · low | 4 testes verdes |
 
 ### F4 — Estatística espacial
 
 | ID | Título | Evidência | Modelo · Esforço | Aceite |
 |---|---|---|---|---|
-| CS-016 | **`04_pesos_espaciais.R`** — `poly2nb(queen=TRUE)` → `nb2listw(style="W", zero.policy=FALSE)`; salvar `pesos_queen.rds`; teste `n.comp.nb(nb)$nc == 1`; tabela de nº de vizinhos por município | trilha §2.10 | Opus · medium | 1 componente; mín. vizinhos ≥ 1; histograma de vizinhos em `resultados/estatistica/` |
+| CS-016 | **`04_pesos_espaciais.R`** — sobre `dados/processados/municipios_rj.rds` (malha IBGE completa, ADR-0006; verificação cruzada: **456 ligações**) — `poly2nb(queen=TRUE)` → `nb2listw(style="W", zero.policy=FALSE)`; salvar `pesos_queen.rds`; teste `n.comp.nb(nb)$nc == 1`; tabela de nº de vizinhos por município | trilha §2.10 | Opus · medium | 1 componente; mín. vizinhos ≥ 1; histograma de vizinhos em `resultados/estatistica/` |
 | CS-017 | **ADR-0004 + `05_moran_lisa.R`** — Moran global via `moran.mc(nsim=999)` com `set.seed`; LISA via `localmoran_perm(nsim=999)`; p bruto e `p.adjust(method="BH")`; classificação em 5 classes (HH, LL, HL, LH, ns) com α=0,05; variável: `incid_eb_100k` (D-09) | trilha §2.9; PDF §3.4 | **Fable · high** | 12 combinações agente × ano com I, p_mc; tabela LISA 92 × 12; ADR aceito; contagem de HH antes e depois do FDR reportada |
 | CS-018 | **Testes estatísticos com padrão conhecido** — grade sintética 10×10: tabuleiro de xadrez → I < 0 significativo; gradiente → I > 0 significativo; aleatório → p > 0,05 na maioria de 20 seeds | boa prática; `spdep` vignette | Opus · medium | 3 testes verdes; rodam em < 10 s |
 
@@ -93,7 +90,7 @@ Prefixos: `CS` = tarefa · `D` = decisão que só o dono/mestranda fecha · `ADR
 
 | ID | Título | Evidência | Modelo · Esforço | Aceite |
 |---|---|---|---|---|
-| CS-030 | **Escala de região de saúde** — `geobr::read_health_region()` filtrada para o RJ (9 regiões); agregação de casos e população por região; mapas e Moran/LISA regionais (n = 9 é pequeno para LISA; reportar só descritivo e Moran global com ressalva) | proposta v2 §3.4; SES-RJ, 9 regiões | Opus · medium | 9 feições; tabela 9 × 3 × 4; 12 mapas regionais |
+| CS-030 | **Escala de região de saúde** — `geobr::read_health_region()` filtrada para o RJ (9 regiões) **só como tabela município → região; a geometria regional sai de dissolver a malha IBGE (ADR-0006)**; agregação de casos e população por região; mapas e Moran/LISA regionais (n = 9 é pequeno para LISA; reportar só descritivo e Moran global com ressalva) | proposta v2 §3.4; SES-RJ, 9 regiões | Opus · medium | 9 feições; tabela 9 × 3 × 4; 12 mapas regionais |
 | CS-031 | **Residência × notificação** — recalcular indicadores por `CO_MUN_NOT` e tabular a diferença por município (mede fluxo intermunicipal de internação, Cavalcante 2021) | proposta v2 §3.3 | Opus · low | tabela 92 linhas com casos_res, casos_not, razão; top-10 importadores |
 | CS-032 | **Série por semana epidemiológica** — casos por `semana_epi` (calculada de `DT_SIN_PRI`; NÃO o `SEM_PRI`, que rotula a semana 53/2025 como 01) × agente para o estado e por região; gráfico de linhas com as datas das campanhas de Influenza como marcas | proposta v2 §4.2, §5.1; D-08 | Opus · low | 1 gráfico estadual + 9 regionais; semanas do Ministério (domingo a sábado) |
 | CS-033 | **Padronização por idade (OE9, opcional)** — SIDRA 9514 por faixa etária; método direto com padrão RJ 2022; `incid_pad_100k` para VSR e Influenza | proposta v2 §3.4; API 9514 verificada (134 linhas por município) | **Fable · medium** | coluna preenchida; gráfico bruta × padronizada; nota metodológica |
@@ -105,6 +102,13 @@ Prefixos: `CS` = tarefa · `D` = decisão que só o dono/mestranda fecha · `ADR
 | ID | Título | Evidência | Modelo · Esforço | Aceite |
 |---|---|---|---|---|
 | CS-036 | **"Ano" do estudo é o ano epidemiológico** — cada banco anual do SIVEP é um ano epidemiológico (o de 2024 começa em 31/12/2023; o de 2025 termina em 03/01/2026, semana 53). A proposta v2 §3.1 fala em "01/01/2022"; ajustar o texto, o relatório e o denominador (população de 1º de julho do ano civil de mesmo número, diferença de no máximo 3 dias) | ADR-0001, "Fatos descobertos"; `preparar_sivep()` recusa ficha fora do ano do banco | Opus · low | proposta v2 §3.1 e §3.3 corrigidas; nota no relatório; ADR-0003 cita a convenção |
+
+### Achados do CS-011 e do CS-014
+
+| ID | Título | Evidência | Modelo · Esforço | Aceite |
+|---|---|---|---|---|
+| CS-037 | **Atualizar a proposta v2 com as decisões de dados** — §3.2 e §3.5: malha do IBGE, não `geobr` (ADR-0006); §3.4: denominador conforme a D-05 fechada (ADR-0003); §3.10: acrescentar o degrau Censo × estimativa como limitação | ADR-0003, ADR-0006 | Opus · low | 3 seções da v2 corrigidas; cada mudança cita o ADR |
+| CS-038 | **Citar o método de ajuste de cobertura do IBGE** — localizar a nota metodológica das Estimativas 2024 que explica por que ficam acima do Censo 2022, e citá-la no ADR-0003 antes de fechar a D-05 | ADR-0003 achado 2 (não verificado na fonte primária) | Opus · low | nota do IBGE citada com URL e página |
 
 ### Fora do código (para a mestranda)
 
@@ -120,8 +124,9 @@ Prefixos: `CS` = tarefa · `D` = decisão que só o dono/mestranda fecha · `ADR
 |---|---|---|
 | ADR-0001 | Extração do SIVEP-Gripe por download direto do portal (não `microdatasus`) | CS-005 · **escrito e aceito** (decide D-03 e D-07) |
 | ADR-0002 | Critério de caso por agente e tratamento de co-detecção | CS-007 |
-| ADR-0003 | Denominador populacional por ano, incluindo 2023 | CS-011 |
+| ADR-0003 | Denominador populacional por ano, incluindo 2023 | CS-011 · **escrito, proposto** (aguarda D-05) |
 | ADR-0004 | LISA: permutação, correção FDR, variável (bruta × EB), α | CS-017 |
+| ADR-0006 | Malha oficial do IBGE em resolução completa, não o `geobr` simplificado | CS-014 · **escrito e aceito** |
 | ADR-0005 | Escopo: município (não bairro); scripts numerados (não `targets`); quadrimestre só descritivo | CS-002 · **escrito**, itens 1–2 aceitos |
 
 ---
@@ -136,6 +141,9 @@ Prefixos: `CS` = tarefa · `D` = decisão que só o dono/mestranda fecha · `ADR
 | CS-004 | **Dicionário oficial no repositório** — PDF oficial (28 p., SHA-256 `6b92d438…`) registrado no manifesto; `docs/dicionario-sivep.md` com 34 campos, domínio de cada um e 4 marcados [CONFERIR] | 2026-09-25 | idem |
 | CS-005 | **Download do SIVEP sem `microdatasus`** — `baixar_sivep()` + `baixar_arquivo()` com retomada; 4 bancos PARQUET (113,9 MB) no manifesto; 2ª chamada usa o cache em 0,4 s | 2026-09-25 | `docs/release-history/cs-005-cs-006-etl-sivep.md` · ADR-0001 · commit `0f38200` |
 | CS-006 | **`preparar_sivep()`** — 99.880 fichas de residentes do RJ, 34 colunas tipadas, datas lidas em UTC, semana epidemiológica recalculada; 4 dúvidas do dicionário conferidas; diagnóstico por ano em `resultados/tabelas/` | 2026-09-25 | idem |
+| CS-011 | **Denominadores populacionais** — SIDRA 4714 (Censo 2022) e 6579 (2024, 2025) no manifesto; 2023 interpolado nas datas de referência reais (peso 0,4771); 92 × 4 sem NA; soma 2022 = 16.055.174. ADR-0003 **proposto**: degrau Censo × estimativa devolvido à D-05 | 2026-09-25 | `docs/release-history/cs-011-cs-014-populacao-e-malha.md` · commit PENDENTE |
+| CS-014 | **Malha municipal** — IBGE oficial em resolução completa (ADR-0006), não o `geobr` simplificado, que perdia 8 pares de vizinhos; 92 feições válidas, EPSG 4674; casa 92/92 com população e SIVEP por `cod6` | 2026-09-25 | idem · ADR-0006 |
+| CS-015 | **Testes da malha** — 92 códigos únicos com prefixo 33, área 43.750,4 km² (dentro de 2 % da oficial). Fechado junto com o CS-014, com aviso ao dono, porque os critérios já eram exercidos pelo mesmo teste | 2026-09-25 | idem |
 
 ## Descartados
 

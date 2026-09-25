@@ -1,2 +1,5 @@
 * text=auto eol=lf
 *.pdf binary
+# Arquivos externos são registrados no manifesto pelo SHA-256: o git não pode
+# mexer nas quebras de linha, senão o clone recebe bytes diferentes (CS-011).
+dados/externos/** binary
