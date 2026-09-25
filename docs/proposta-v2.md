@@ -161,7 +161,13 @@ Período: primeiros sintomas entre 02/01/2022 (início da semana epidemiológica
 e 03/01/2026 (sábado que fecha a semana 53 de 2025), no snapshot de 2025 de 14/09/2026 (ADR-0001),
 agregado por ano epidemiológico e, para descrição temporal, por semana epidemiológica
 recalculada de `DT_SIN_PRI` (o `SEM_PRI` do banco rotula a semana 53/2025 como 01; D-08).
-Série semanal entregue no CS-032: 209 semanas, estado e 9 regiões. Agentes: SARS-CoV-2,
+Série semanal entregue no CS-032: 209 semanas, estado e 9 regiões.
+
+**"Ano" é o ano epidemiológico (CS-036).** Cada banco anual do SIVEP reúne as fichas cujo
+início de sintomas cai nas semanas epidemiológicas daquele ano, de domingo a sábado: 2022 vai
+de 02/01/2022 a 31/12/2022, 2023 de 01/01/2023 a 30/12/2023, 2024 de 31/12/2023 a
+28/12/2024 e 2025 de 29/12/2024 a 03/01/2026. Consequência: 2025 tem **53 semanas** (371
+dias), 7 dias a mais que os outros anos; o relatório mostra quanto a semana 53 pesa. Agentes: SARS-CoV-2,
 Influenza (A e B, analisadas em conjunto e separadas quando o n permitir) e VSR.
 
 > Estudo ecológico: a unidade de observação é o grupo, não o indivíduo. Conclusões
@@ -199,9 +205,12 @@ e não por notificação (`CO_MUN_NOT`), segue a prática da vigilância para in
 diferença entre as duas é quantificada no relatório porque mede o fluxo intermunicipal
 de internações (Cavalcante et al., 2021).
 
-**Seleção temporal.** Data de primeiros sintomas (`DT_SIN_PRI`); na ausência, data de
-notificação (`DT_NOTIFIC`), com a proporção de substituições reportada. Datas fora de
-[2022-01-01, data do snapshot] são tratadas como inválidas e contadas, não corrigidas.
+**Seleção temporal (CS-036).** A data é a de primeiros sintomas (`DT_SIN_PRI`), presente
+em todas as fichas dos quatro bancos; o pipeline para se faltar alguma, em vez de
+substituí-la pela data de notificação. Cada ficha entra no ano do banco em que está, e o
+pipeline confere que o ano epidemiológico calculado de `DT_SIN_PRI` é esse mesmo ano: 0
+divergências nos quatro bancos. Não há corte em 01/01/2022: essa data é da semana 52 de
+2021.
 
 **Critério de caso por agente (decidido pela autora em 2026-09-25; ADR-0002).** A
 leitura literal da v1 (classificação final **e** campo do vírus marcado) foi testada nas

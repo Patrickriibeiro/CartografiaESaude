@@ -10,6 +10,15 @@
 A incidência é `casos / população × 100 000`. O estudo cobre os anos
 epidemiológicos 2022 a 2025 (CS-036). O IBGE oferece, para os municípios do RJ:
 
+> **Convenção de datas (CS-036, 2026-09-25).** O numerador é o ano **epidemiológico**
+> (2024 começa em 31/12/2023; 2025 tem 53 semanas e termina em 03/01/2026); o denominador
+> é a população de 1º de julho do ano **civil** de mesmo número. O dia do meio de cada ano
+> epidemiológico fica a no máximo 2 dias de 1º de julho (−2, −1, +1, −1 em 2022–2025;
+> `limites_ano_epi()`, testado). A exceção é 2022, cujo denominador oficial é o Censo, de
+> 01/08/2022: 29 dias depois do meio do ano, desprezível diante do degrau de 7,3 % entre
+> Censo e estimativa descrito abaixo. A semana 53 de 2025 não é descontada: a taxa de 2025
+> cobre 371 dias, contra 364 dos outros anos, e o relatório informa quantos casos ela soma.
+
 | Ano | Fonte | Data de referência | RJ |
 |---|---|---|---|
 | 2021 | Estimativa (SIDRA 6579), pré-Censo | 01/07/2021 | 17.463.349 |

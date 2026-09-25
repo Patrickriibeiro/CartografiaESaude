@@ -80,3 +80,13 @@ test_that("os gráficos montam", {
                    proporcao = c(0, 0.05, 0.2))
   expect_s3_class(ggplot2::ggplot_build(grafico_nao_encerrados(ne, "teste")), "ggplot_built")
 })
+
+test_that("ano epidemiológico: limites, 53 semanas em 2025 e meio do ano a no máximo 2 dias de 1º de julho", {
+  l <- limites_ano_epi(2022:2025)
+  expect_equal(l$inicio, as.Date(c("2022-01-02", "2023-01-01", "2023-12-31", "2024-12-29")))
+  expect_equal(l$fim, as.Date(c("2022-12-31", "2023-12-30", "2024-12-28", "2026-01-03")))
+  expect_equal(l$semanas, c(52L, 52L, 52L, 53L))
+  expect_equal(l$dias, 7L * l$semanas)
+  expect_equal(weekdays(l$inicio), rep(weekdays(as.Date("2022-01-02")), 4))   # sempre domingo
+  expect_lte(max(abs(as.numeric(as.Date(paste0(l$ano, "-07-01")) - l$meio))), 2)
+})

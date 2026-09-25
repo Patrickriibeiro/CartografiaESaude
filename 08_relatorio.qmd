@@ -145,8 +145,24 @@ for (ag in AGENTES) t1[[rot(ag)]] <- fi(largo[match(diag$ano, largo$ano), paste0
 tab(t1)
 ```
 
+```{r ano-epi}
+lim <- limites_ano_epi(anos)
+lim53 <- lim[lim$semanas == 53, ]
+se53 <- utils::read.csv(file.path("resultados", "tabelas", "serie_semanal.csv"), encoding = "UTF-8")
+se53 <- se53[se53$recorte == "Estado do Rio de Janeiro" & se53$ano_epi %in% lim53$ano, ]
+casos53 <- sum(se53$casos[se53$semana_epi == 53])
+casos_ano53 <- sum(se53$casos)
+desvio_jul <- max(abs(as.numeric(as.Date(paste0(lim$ano, "-07-01")) - lim$meio)))
+fdia <- function(d) format(d, "%d/%m/%Y")
+```
+
 O ano do estudo é o ano epidemiológico do banco: cada banco anual reúne as fichas cujo início
-de sintomas cai nas semanas epidemiológicas daquele ano (ADR-0001).
+de sintomas cai nas semanas epidemiológicas daquele ano, de domingo a sábado (ADR-0001), e não
+o ano civil. `r lista(paste0(lim$ano, " vai de ", fdia(lim$inicio), " a ", fdia(lim$fim)))`.
+`r if (nrow(lim53) > 0) paste0("O ano de ", lista(lim53$ano), " tem 53 semanas, 7 dias a mais que os outros; a semana 53 soma ", fi(casos53), " casos (", fp(casos53 / casos_ano53), " do ano), que a taxa anual inclui sem desconto. ") else ""`O
+denominador é a população de 1º de julho do ano civil de mesmo número, que fica a no máximo
+`r desvio_jul` dias do meio de cada ano epidemiológico; a exceção é o Censo de `r ano_ini`,
+com data de referência em 1º de agosto (ADR-0003).
 
 ### Incidência no estado e o denominador populacional
 

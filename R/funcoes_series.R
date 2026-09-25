@@ -150,3 +150,22 @@ grafico_nao_encerrados <- function(semanal, versao_banco) {
                    plot.caption = ggplot2::element_text(colour = "grey40", hjust = 0),
                    axis.title.y.right = ggplot2::element_text(colour = "#b2182b"))
 }
+
+# ---------------------------------------------------------------------------
+# Ano epidemiológico (CS-036)
+# ---------------------------------------------------------------------------
+
+#' Limites de cada ano epidemiológico do estudo: primeiro domingo, último
+#' sábado, número de dias e de semanas, e o dia do meio. Cada banco anual do
+#' SIVEP é um ano epidemiológico (ADR-0001), não um ano civil: 2024 começa em
+#' 31/12/2023 e 2025 tem 53 semanas, terminando em 03/01/2026.
+limites_ano_epi <- function(anos = ANOS_ESTUDO) {
+  s <- semanas_do_estudo(anos)
+  out <- do.call(rbind, lapply(split(s, s$ano_epi), function(x) {
+    ini <- min(x$inicio_semana); fim <- max(x$inicio_semana) + 6
+    data.frame(ano = x$ano_epi[1], inicio = ini, fim = fim, dias = as.integer(fim - ini) + 1L,
+               semanas = nrow(x), meio = ini + as.integer(fim - ini) %/% 2L)
+  }))
+  rownames(out) <- NULL
+  out
+}
