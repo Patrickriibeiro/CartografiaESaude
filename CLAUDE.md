@@ -10,8 +10,9 @@ decisão registrada em ADR (`docs/decisoes/ADR-00NN`, numeração sequencial). Q
 método é a **autora**; o código aplica a decisão e, se ela for provisória, diz isso.
 
 **Posição (2026-09-25):** pipeline completo (01–08), relatório Quarto, painel Shiny,
-escala regional, leitos do CNES. Repositório **privado**
-(github.com/Patrickriibeiro/CartografiaESaude): torná-lo público é decisão do dono (CS-026).
+escala regional, leitos do CNES, padronização por idade, introdução e conclusão. Repositório
+**público** desde 2026-09-25 (github.com/Patrickriibeiro/CartografiaESaude, CS-026); commits com o
+e-mail noreply do GitHub, nunca o pessoal (`git config user.email` já configurado no repositório).
 
 ---
 
@@ -128,5 +129,5 @@ Auditoria independente antes de entrega: `tests/auditoria_independente.R`.
 
 ## 8. Fora do alcance do Claude
 
-CI bloqueada por cobrança da conta do GitHub (só o dono resolve); tornar o repositório
-público; decisões de método da autora (D-11 provisória: contagens pequenas publicadas com nota).
+Configurações da conta do GitHub (cobrança, visibilidade); decisões de método da autora (D-11
+provisória: contagens pequenas publicadas com nota); Apêndice A da proposta (texto pessoal da autora).

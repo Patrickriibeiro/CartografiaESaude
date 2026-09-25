@@ -14,7 +14,8 @@ $contexto = @"
 
 PROJETO: SRAG (SARS-CoV-2, influenza, VSR) nos 92 municípios do RJ, 2022-2025, em R.
 Constituição = proposta da autora (PDF local + docs/proposta-v2.md); método é decisão DELA,
-registrada em ADR (docs/decisoes/). Repositório PRIVADO: publicar é decisão do dono.
+registrada em ADR (docs/decisoes/). Repositório PÚBLICO desde 2026-09-25: nunca commitar microdado,
+segredo ou o e-mail pessoal do dono (use o noreply do GitHub, já configurado).
 
 ANTES DE IMPLEMENTAR: recomende modelo + esforço e ESPERE o dono confirmar.
 DEPOIS: explicação didática em 7 itens, com todo jargão explicado na 1ª ocorrência.
