@@ -63,8 +63,7 @@ Prefixos: `CS` = tarefa · `D` = decisão que só o dono/mestranda fecha · `ADR
 
 | ID | Título | Evidência | Modelo · Esforço | Aceite |
 |---|---|---|---|---|
-| CS-016 | **`04_pesos_espaciais.R`** — sobre `dados/processados/municipios_rj.rds` (malha IBGE completa, ADR-0006; verificação cruzada: **456 ligações**) — `poly2nb(queen=TRUE)` → `nb2listw(style="W", zero.policy=FALSE)`; salvar `pesos_queen.rds`; teste `n.comp.nb(nb)$nc == 1`; tabela de nº de vizinhos por município | trilha §2.10 | Opus · medium | 1 componente; mín. vizinhos ≥ 1; histograma de vizinhos em `resultados/estatistica/` |
-| CS-017 | **ADR-0004 + `05_moran_lisa.R`** — Moran global via `moran.mc(nsim=999)` com `set.seed`; LISA via `localmoran_perm(nsim=999)`; p bruto e `p.adjust(method="BH")`; classificação em 5 classes (HH, LL, HL, LH, ns) com α=0,05; variável: `incid_eb_100k` (D-09) | trilha §2.9; PDF §3.4 | **Fable · high** | 12 combinações agente × ano com I, p_mc; tabela LISA 92 × 12; ADR aceito; contagem de HH antes e depois do FDR reportada |
+| CS-017 | **ADR-0004 + `05_moran_lisa.R`** — alinhar dados aos pesos pelo `region.id` (= cod6) de `pesos_queen.rds`, nunca pela posição; decidir o CS-039 no mesmo ADR — — Moran global via `moran.mc(nsim=999)` com `set.seed`; LISA via `localmoran_perm(nsim=999)`; p bruto e `p.adjust(method="BH")`; classificação em 5 classes (HH, LL, HL, LH, ns) com α=0,05; variável: `incid_eb_100k` (D-09) | trilha §2.9; PDF §3.4 | **Fable · high** | 12 combinações agente × ano com I, p_mc; tabela LISA 92 × 12; ADR aceito; contagem de HH antes e depois do FDR reportada |
 | CS-018 | **Testes estatísticos com padrão conhecido** — grade sintética 10×10: tabuleiro de xadrez → I < 0 significativo; gradiente → I > 0 significativo; aleatório → p > 0,05 na maioria de 20 seeds | boa prática; `spdep` vignette | Opus · medium | 3 testes verdes; rodam em < 10 s |
 
 ### F5 — Produtos
@@ -110,6 +109,12 @@ Prefixos: `CS` = tarefa · `D` = decisão que só o dono/mestranda fecha · `ADR
 | CS-037 | **Atualizar a proposta v2 com as decisões de dados** — §3.2 e §3.5: malha do IBGE, não `geobr` (ADR-0006); §3.4: denominador conforme a D-05 fechada (ADR-0003); §3.10: acrescentar o degrau Censo × estimativa como limitação | ADR-0003, ADR-0006 | Opus · low | 3 seções da v2 corrigidas; cada mudança cita o ADR |
 | CS-038 | **Citar o método de ajuste de cobertura do IBGE** — localizar a nota metodológica das Estimativas 2024 que explica por que ficam acima do Censo 2022, e citá-la no ADR-0003 antes de fechar a D-05 | ADR-0003 achado 2 (não verificado na fonte primária) | Opus · low | nota do IBGE citada com URL e página |
 
+### Achados do CS-016
+
+| ID | Título | Evidência | Modelo · Esforço | Aceite |
+|---|---|---|---|---|
+| CS-039 | **Efeito de borda e municípios com 1 vizinho** — Paraty (só Angra), Itatiaia (só Resende) e Armação dos Búzios (só Cabo Frio) têm 1 vizinho; com pesos W, o LISA deles é a comparação com um único município. Paraty e Itatiaia, e outros municípios de divisa, perdem vizinhos de SP, MG e ES. Decidir no ADR-0004: (a) só declarar na limitação; (b) sensibilidade com k vizinhos mais próximos (k = 4); (c) marcar a classe LISA desses 3 como "instável" no mapa | `resultados/estatistica/vizinhos_por_municipio.csv` · CS-016 | Fable · medium (entra no ADR-0004) | ADR-0004 decide; relatório §5.3 cita os 3 municípios |
+
 ### Fora do código (para a mestranda)
 
 | ID | Título | Evidência | Modelo · Esforço | Aceite |
@@ -144,6 +149,7 @@ Prefixos: `CS` = tarefa · `D` = decisão que só o dono/mestranda fecha · `ADR
 | CS-011 | **Denominadores populacionais** — SIDRA 4714 (Censo 2022) e 6579 (2024, 2025) no manifesto; 2023 interpolado nas datas de referência reais (peso 0,4771); 92 × 4 sem NA; soma 2022 = 16.055.174. ADR-0003 **proposto**: degrau Censo × estimativa devolvido à D-05 | 2026-09-25 | `docs/release-history/cs-011-cs-014-populacao-e-malha.md` · commit `0d3d91a` |
 | CS-014 | **Malha municipal** — IBGE oficial em resolução completa (ADR-0006), não o `geobr` simplificado, que perdia 8 pares de vizinhos; 92 feições válidas, EPSG 4674; casa 92/92 com população e SIVEP por `cod6` | 2026-09-25 | idem · ADR-0006 |
 | CS-015 | **Testes da malha** — 92 códigos únicos com prefixo 33, área 43.750,4 km² (dentro de 2 % da oficial). Fechado junto com o CS-014, com aviso ao dono, porque os critérios já eram exercidos pelo mesmo teste | 2026-09-25 | idem |
+| CS-016 | **Vizinhança Queen e pesos W** — 92 municípios, **456 ligações** (bate com o ADR-0006), 1 bloco, mínimo 1 vizinho, máximo 10, mediana 5; `region.id` = cod6; tabela e histograma em `resultados/estatistica/` | 2026-09-25 | `docs/release-history/cs-016-vizinhanca-queen.md` · commit PENDENTE |
 
 ## Descartados
 

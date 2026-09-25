@@ -46,9 +46,57 @@ ler_malha_municipal <- function(fontes = ler_fontes(), n_esperado = 92L) {
   malha
 }
 
+# ---------------------------------------------------------------------------
+# Vizinhança e pesos espaciais (CS-016)
+# ---------------------------------------------------------------------------
+
+#' Vizinhança por contiguidade Queen de 1ª ordem: são vizinhos os polígonos que
+#' compartilham qualquer ponto de fronteira (Rook exigiria um trecho de aresta).
+#'
+#' O código cod6 de cada município vai para o atributo region.id da vizinhança,
+#' para que dados sejam alinhados à matriz PELA CHAVE, nunca pela posição.
+#' Para com erro se houver município sem vizinho ou mais de um bloco conexo:
+#' nos dois casos o Moran fica mal definido, e o RJ não tem ilha-município.
+criar_vizinhos_queen <- function(malha, queen = TRUE) {
+  if (anyDuplicated(malha$cod6)) stop("cod6 repetido na malha", call. = FALSE)
+  nb <- spdep::poly2nb(malha, queen = queen, row.names = malha$cod6)
+
+  sem_vizinho <- malha$cod6[spdep::card(nb) == 0]
+  if (length(sem_vizinho) > 0) {
+    stop("Município(s) sem vizinho: ", paste(sem_vizinho, collapse = ", "), call. = FALSE)
+  }
+  componentes <- spdep::n.comp.nb(nb)$nc
+  if (componentes != 1) {
+    stop("A vizinhança tem ", componentes, " blocos desconectados; esperado 1", call. = FALSE)
+  }
+  nb
+}
+
+#' Pesos padronizados por linha (estilo "W"): cada município divide peso 1
+#' igualmente entre os vizinhos, então a média ponderada dos vizinhos é a média
+#' simples deles. zero.policy = FALSE: vizinho vazio é erro, não peso zero.
+criar_pesos <- function(nb) {
+  spdep::nb2listw(nb, style = "W", zero.policy = FALSE)
+}
+
+#' Número de ligações (cada par de vizinhos conta 2 vezes, uma em cada sentido,
+#' como em sum(card(nb))).
+contar_ligacoes <- function(nb) sum(spdep::card(nb))
+
+#' Tabela de vizinhos por município, para conferência e para o relatório.
+resumir_vizinhanca <- function(nb, malha) {
+  ids <- attr(nb, "region.id")
+  nomes <- malha$nome[match(ids, malha$cod6)]
+  data.frame(
+    cod6 = ids,
+    nome = nomes,
+    n_vizinhos = spdep::card(nb),
+    vizinhos = vapply(nb, function(v) paste(sort(nomes[v]), collapse = "; "), character(1)),
+    stringsAsFactors = FALSE
+  )
+}
+
 # A implementar:
-# criar_vizinhos_queen() — CS-016
-# criar_pesos()          — CS-016
 # calcular_moran()       — CS-017
 # calcular_lisa()        — CS-017
 # classificar_lisa()     — CS-017

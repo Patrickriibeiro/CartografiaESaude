@@ -242,8 +242,9 @@ Testes verificam o contrato, não a implementação.
                     (zero explícito); casos, populacao, incid_100k, incid_eb_100k
 03_cartografia.R ─► dados/processados/municipios_rj.rds             (CS-014, entregue; malha IBGE, ADR-0006)
                     contrato: sf com 92 feições válidas, EPSG:4674, coluna cod6
-04_pesos_espaciais.R ► resultados/objetos/pesos_queen.rds
-                    contrato: listw estilo W; n.comp.nb == 1; nenhum vizinho vazio
+04_pesos_espaciais.R ► resultados/objetos/pesos_queen.rds (+ vizinhos_queen.rds)   (CS-016, entregue)
+                    contrato: listw estilo W; n.comp.nb == 1; nenhum vizinho vazio; 456 ligações;
+                    region.id = cod6 (alinhar por chave, nunca por posição)
 05_moran_lisa.R ──► resultados/estatistica/moran_lisa.rds
                     contrato: por agente × ano: I, p_mc (999 perm, seed fixa),
                     tabela LISA com Ii, p_perm, p_fdr, quadrante, classe
