@@ -146,7 +146,7 @@ Cada objetivo declara o produto e o critério pelo qual se verifica que foi cump
 | OE6 | Disponibilizar painel interativo (Shiny + leaflet) com filtros por agente e ano exibindo taxa bruta, taxa suavizada e classe LISA por município | `app.R` | 12 combinações filtram sem erro; popup com 6 campos |
 | OE7 | Gerar relatório e apresentação a partir do mesmo código-fonte (Quarto), com todos os números lidos dos objetos do pipeline | `08_relatorio.qmd` | `quarto render` sem erro; zero números digitados à mão no fonte |
 | OE8 | Publicar código, dados processados e documentação em repositório público com ambiente congelado (`renv`) e testes automatizados | repositório GitHub | Terceiro reexecuta do zero seguindo o README; testes verdes em integração contínua |
-| OE9 *(opcional, D-10)* | Calcular taxas padronizadas por idade (método direto, Censo 2022 por faixa etária) para VSR e Influenza | coluna `incid_pad_100k` | Comparação bruta × padronizada no relatório |
+| OE9 *(opcional, D-10; entregue no CS-033)* | Calcular taxas padronizadas por idade (método direto, 11 faixas, Censo 2022 por faixa etária, padrão RJ 2022) para os três agentes | coluna `incid_pad_100k` | Comparação bruta × padronizada no relatório: correlação de postos ≥ 0,99; razão mediana 0,93–1,01 |
 | OE10 *(opcional, D-10; entregue no CS-034)* | Descrever a relação entre taxa por residência e oferta de leitos (CNES) por município e região de saúde | `spearman_leitos.csv`, `leitos_regionais.csv`, gráfico | Coeficiente de correlação de Spearman por ano, com IC por bootstrap, sem inferência causal |
 
 ---
@@ -281,6 +281,9 @@ medido em `docs/nota-metodologica-suavizacao.md` (Marshall, 1991).
 **Padronização por idade (OE9, opcional).** Método direto, faixas etárias do Censo 2022
 (tabela 9514), população-padrão = RJ 2022. Justificativa: VSR e Influenza têm perfis
 etários opostos e os municípios do RJ diferem muito em estrutura etária.
+*Entregue no CS-033 (2026-09-25):* 11 faixas (<1, 1-4, 5-9, 10-19, ..., 70-79, 80+); a estrutura
+etária de 2022 é aplicada à população de cada ano (o IBGE não tem estrutura municipal para
+2023–2025); calculada para os três agentes; `docs/nota-metodologica-padronizacao.md`.
 
 **Escala regional.** Os mesmos indicadores agregados por região de saúde (soma de casos
 e de população das unidades), com mapa próprio. É a escala em que a SES-RJ e as

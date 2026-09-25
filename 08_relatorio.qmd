@@ -204,6 +204,78 @@ t3 <- data.frame(Agente = rot(suav$agente), Ano = suav$ano,
 tab(t3)
 ```
 
+### Padronização por idade
+
+```{r padronizacao}
+# read.csv direto: o auxiliar ler() passa tudo a file.path(), e colClasses viraria parte do caminho.
+padr <- utils::read.csv(file.path("resultados", "tabelas", "padronizacao_idade.csv"), encoding = "UTF-8", stringsAsFactors = FALSE,
+                        colClasses = c(mun_razao_min = "character", mun_razao_max = "character"))
+padr <- padr[order(match(padr$agente, AGENTES), padr$ano), ]
+perfil <- ler("resultados", "tabelas", "perfil_etario.csv")
+peso <- ler("resultados", "tabelas", "populacao_padrao.csv")
+n_faixas <- nrow(peso)
+prop_faixa <- function(ag, faixas) {
+  x <- perfil[perfil$agente == ag, ]
+  sum(x$casos[x$faixa %in% faixas]) / sum(x$casos)
+}
+p_vsr_bebes <- prop_faixa("vsr", "<1"); p_vsr_menor5 <- prop_faixa("vsr", c("<1", "1-4"))
+p_sars_60 <- prop_faixa("sarscov2", c("60-69", "70-79", "80+"))
+p_flu_menor5 <- prop_faixa("influenza", c("<1", "1-4")); p_flu_60 <- prop_faixa("influenza", c("60-69", "70-79", "80+"))
+extremo_min <- padr[which.min(padr$razao_min), ]; extremo_max <- padr[which.max(padr$razao_max), ]
+indm <- as.data.frame(arrow::read_parquet(file.path("dados", "processados", "indicadores_municipais.parquet")))
+indm <- indm[indm$casos > 0, ]; indm$razao <- indm$incid_pad_100k / indm$incid_100k
+lim_razao <- 0.2; lim_casos <- 10L   # limiares do texto, declarados aqui
+fora <- abs(indm$razao - 1) > lim_razao
+p_fora_poucos <- mean(indm$casos[fora] < lim_casos); n_fora <- sum(fora)
+casos_ext <- function(e, col) indm$casos[indm$cod6 == e[[col]] & indm$agente == e$agente & indm$ano == e$ano]
+# Proporção de municípios cuja parcela de menores de 1 ano supera a da população-padrão.
+pi9514 <- ler_populacao_idade(ler_fontes()$ibge$populacao_idade$destino)
+tot_m <- tapply(pi9514$populacao, pi9514$cod6, sum)
+p_mais_bebes <- mean(pi9514$populacao[pi9514$faixa == "<1"] / tot_m[pi9514$cod6[pi9514$faixa == "<1"]] > peso$peso[peso$faixa == "<1"])
+vsr_abaixo <- all(padr$razao_mediana[padr$agente == "vsr"] < 1)
+n_casos <- function(n) paste(fi(n), if (n == 1) "caso" else "casos")
+```
+
+A taxa padronizada por idade pergunta qual seria a taxa do município se ele tivesse a estrutura
+etária do estado. Pelo método direto, a taxa de cada uma das `r n_faixas` faixas etárias do
+município é ponderada pela participação da faixa na população-padrão, o Estado do Rio de
+Janeiro no Censo 2022. Como o IBGE só publica a estrutura etária municipal no Censo, a proporção
+de cada faixa em 2022 é aplicada à população de cada ano; a soma das faixas é a população do ano,
+e a taxa bruta recalculada das faixas é idêntica à taxa bruta do estudo (contrato do pipeline).
+
+O perfil etário justifica o exercício: `r fp(p_vsr_bebes, 0)` dos casos de VSR são de menores de
+um ano e `r fp(p_vsr_menor5, 0)` de menores de cinco; `r fp(p_sars_60, 0)` dos de SARS-CoV-2 têm sessenta
+anos ou mais; a influenza fica nos dois extremos (`r fp(p_flu_menor5, 0)` abaixo de cinco anos e
+`r fp(p_flu_60, 0)` a partir dos sessenta). Menores de um ano são `r fp(peso$peso[peso$faixa == "<1"], 1)` da
+população-padrão.
+
+```{r tbl-padronizacao}
+#| tbl-cap: "Taxa bruta × taxa padronizada por idade, por município: correlação de postos e razão padronizada / bruta (municípios com caso)"
+t14 <- data.frame(Agente = rot(padr$agente), Ano = padr$ano, `Spearman bruta × padronizada` = fd(padr$spearman_bruta_pad, 3),
+                  `Razão mediana` = fd(padr$razao_mediana, 2),
+                  `Razão mínima (município)` = paste0(fd(padr$razao_min, 2), " (", nomes[padr$mun_razao_min], ")"),
+                  `Razão máxima (município)` = paste0(fd(padr$razao_max, 2), " (", nomes[padr$mun_razao_max], ")"),
+                  check.names = FALSE)
+tab(t14)
+```
+
+A estrutura etária explica pouco do padrão entre municípios: a correlação de postos entre a taxa
+bruta e a padronizada fica entre `r fd(min(padr$spearman_bruta_pad), 3)` e
+`r fd(max(padr$spearman_bruta_pad), 3)`, e a razão mediana entre
+`r fd(min(padr$razao_mediana), 2)` e `r fd(max(padr$razao_mediana), 2)`.
+`r if (vsr_abaixo) "No VSR a mediana fica abaixo da unidade em todos os anos" else "No VSR a mediana varia em torno da unidade"`:
+`r fp(p_mais_bebes, 0)` dos municípios têm, em proporção, mais menores de um ano que a população-padrão,
+cuja estrutura é dominada pela capital. Em municípios isolados a correção é grande, de
+`r fd(extremo_min$razao_min, 2)` (`r nomes[extremo_min$mun_razao_min]`, `r rot(extremo_min$agente)` em
+`r extremo_min$ano`, `r n_casos(casos_ext(extremo_min, "mun_razao_min"))`) a `r fd(extremo_max$razao_max, 2)`
+(`r nomes[extremo_max$mun_razao_max]`, `r rot(extremo_max$agente)` em `r extremo_max$ano`,
+`r n_casos(casos_ext(extremo_max, "mun_razao_max"))`); das `r n_fora` combinações município × agente × ano
+em que a razão sai da faixa de `r fd(1 - lim_razao, 1)` a `r fd(1 + lim_razao, 1)`, `r fp(p_fora_poucos, 0)` têm menos de `r lim_casos` casos. A
+padronização corrige a idade, não a testagem nem o acesso; por isso ela é descritiva e a
+análise espacial segue sobre a taxa suavizada.
+
+![Taxa bruta e taxa padronizada por idade, por município, agente e ano](resultados/estatistica/padronizacao_bruta_vs_padronizada.png){#fig-padronizacao width=100%}
+
 ### Subtipos de influenza
 
 ```{r subtipo}
@@ -710,8 +782,10 @@ pequenas <- sum(ind_muni$casos >= 1 & ind_muni$casos < LIMIAR_CONTAGEM_PEQUENA)
   média dos vizinhos; a alternativa local usaria a mesma vizinhança que o LISA testa.
 - **Malha do painel.** O painel desenha a malha simplificada em `r tol_painel` m para ficar leve
   no navegador; toda a análise usou a malha oficial completa.
-- **Padronização por idade não entregue.** Ficou para uma fase seguinte; a comparação entre
-  municípios de estrutura etária diferente é bruta.
+- **Estrutura etária de 2022 em todos os anos.** A padronização por idade usa a proporção de
+  cada faixa no Censo 2022 para `r ano_ini` a `r ano_fim`; mudança na estrutura etária de um
+  município nesses anos não é captada. O efeito da padronização foi pequeno na ordem dos
+  municípios (correlação de postos ≥ `r fd(min(padr$spearman_bruta_pad), 2)`).
 - **Escala regional só descritiva.** Com `r n_reg` regiões, o Moran global tem pouco poder e o
   LISA não foi calculado; a taxa regional é bruta, sem suavização, e mistura municípios de taxas
   muito diferentes.

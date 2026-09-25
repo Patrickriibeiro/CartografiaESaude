@@ -9,6 +9,7 @@
 #   resultados/estatistica/serie_semanal_*.png       1 gráfico do estado + 9 regionais + painel (CS-032)
 #   resultados/estatistica/nao_encerrados_<ano>.png  maturação do último ano (CS-035)
 #   resultados/estatistica/leitos_x_incidencia.png   taxa de SRAG × leitos por 100 mil, por ano (CS-034)
+#   resultados/estatistica/padronizacao_bruta_vs_padronizada.png  dispersão por município (CS-033)
 
 source("00_setup.R")
 
@@ -134,7 +135,11 @@ sp <- utils::read.csv(file.path("resultados", "estatistica", "spearman_leitos.cs
 f <- file.path(pasta_est, "leitos_x_incidencia.png")
 ggplot2::ggsave(f, grafico_leitos(ind, leitos, sp), width = 11, height = 6, dpi = 150, bg = "white")
 graficos <- c(graficos, f)
-stopifnot(all(file.exists(graficos)), length(graficos) == 1 + 9 + 1 + 1 + 1)
+# Bruta × padronizada por idade (CS-033).
+f <- file.path(pasta_est, "padronizacao_bruta_vs_padronizada.png")
+ggplot2::ggsave(f, grafico_padronizacao(ind), width = 11, height = 8, dpi = 150, bg = "white")
+graficos <- c(graficos, f)
+stopifnot(all(file.exists(graficos)), length(graficos) == 1 + 9 + 1 + 1 + 1 + 1)
 
 stopifnot(all(file.exists(gerados)), length(gerados) == 38)
 message(sprintf("%d mapas gravados em %s", length(gerados), pasta))

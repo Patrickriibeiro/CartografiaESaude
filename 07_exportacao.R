@@ -31,6 +31,7 @@ indicadores <- data.frame(
   taxa_bruta_100mil = round(ind$incid_100k, 2),
   taxa_bruta_pop2024_100mil = round(ind$incid_100k_pop2024, 2),
   taxa_suavizada_100mil = round(ind$incid_eb_100k, 2),
+  taxa_padronizada_idade_100mil = round(ind$incid_pad_100k, 2),
   stringsAsFactors = FALSE, row.names = NULL
 )
 indicadores <- indicadores[order(indicadores$agente, indicadores$ano, indicadores$municipio), ]

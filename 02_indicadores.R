@@ -9,6 +9,11 @@
 #   resultados/tabelas/indicadores_municipais.csv        a mesma grade anual, para leitura
 #   resultados/tabelas/suavizacao_bayes_empirico.csv     resumo da suavização (CS-013)
 #   resultados/estatistica/ebayes_bruta_vs_suavizada.png dispersão bruta × suavizada (CS-013)
+#   dados/externos/sidra_9514_censo_2022_idade_rj.json  Censo 2022 por idade, no manifesto (CS-033)
+#   dados/processados/casos_por_faixa_etaria.parquet    92 × 3 × 4 × 11 faixas (CS-033)
+#   resultados/tabelas/perfil_etario.csv                casos e taxa por faixa no estado (CS-033)
+#   resultados/tabelas/padronizacao_idade.csv           resumo bruta × padronizada (CS-033)
+#   resultados/tabelas/populacao_padrao.csv             pesos da população-padrão RJ 2022 (CS-033)
 #   dados/processados/residencia_notificacao.parquet     casos por residência e por notificação, 92 × 3 × 4 (CS-031)
 #   resultados/tabelas/residencia_notificacao.csv        uma linha por município, com razão e saldo (CS-031)
 
@@ -31,6 +36,27 @@ anual <- calcular_incidencia(
   populacao
 )
 anual <- suavizar_bayes_empirico(anual)   # CS-013, D-09: o LISA usa incid_eb_100k
+
+# ---- padronização por idade, método direto (CS-033, OE9) ----
+obter_populacao_idade()
+pop_idade <- ler_populacao_idade(ler_fontes()$ibge$populacao_idade$destino)
+pop_faixas <- montar_populacao_faixas(pop_idade, populacao)
+casos_faixa <- calcular_casos_faixa(casos, municipios)
+padrao <- populacao_padrao(pop_idade)
+pad <- padronizar_direto(casos_faixa, pop_faixas, padrao)
+chave <- function(d) paste(d$cod6, d$agente, d$ano)
+anual$incid_pad_100k <- pad$incid_pad_100k[match(chave(anual), chave(pad))]
+# Contrato: a taxa bruta recalculada das 11 faixas é a taxa bruta do estudo, linha a linha.
+if (anyNA(anual$incid_pad_100k) ||
+    !isTRUE(all.equal(anual$incid_100k, pad$incid_faixas_100k[match(chave(anual), chave(pad))]))) {
+  stop("Padronização inconsistente com a taxa bruta", call. = FALSE)
+}
+arrow::write_parquet(casos_faixa, file.path("dados", "processados", "casos_por_faixa_etaria.parquet"))
+utils::write.csv(resumir_perfil_etario(casos_faixa, pop_faixas), file.path("resultados", "tabelas", "perfil_etario.csv"),
+                 row.names = FALSE, fileEncoding = "UTF-8")
+utils::write.csv(padrao, file.path("resultados", "tabelas", "populacao_padrao.csv"), row.names = FALSE, fileEncoding = "UTF-8")
+pad_resumo <- resumir_padronizacao(anual)
+utils::write.csv(pad_resumo, file.path("resultados", "tabelas", "padronizacao_idade.csv"), row.names = FALSE, fileEncoding = "UTF-8")
 quadrimestral <- calcular_incidencia(
   completar_municipios(calcular_casos(casos, por_quadrimestre = TRUE), municipios,
                        quadrimestres = 1:3),
@@ -41,7 +67,7 @@ quadrimestral <- calcular_incidencia(
 esperado_anual <- length(municipios) * length(AGENTES) * length(ANOS_ESTUDO)
 if (nrow(anual) != esperado_anual) stop("Grade anual com ", nrow(anual), " linhas; esperado ", esperado_anual)
 if (nrow(quadrimestral) != esperado_anual * 3) stop("Grade quadrimestral incompleta")
-if (anyNA(anual[, c("casos", "incid_100k", "incid_100k_pop2024")])) stop("NA na grade anual")
+if (anyNA(anual[, c("casos", "incid_100k", "incid_100k_pop2024", "incid_pad_100k")])) stop("NA na grade anual")
 if (sum(anual$casos) != nrow(casos) || sum(quadrimestral$casos) != nrow(casos)) {
   stop("A soma da grade difere do número de casos classificados", call. = FALSE)
 }
@@ -77,6 +103,9 @@ ggplot2::ggsave(file.path("resultados", "estatistica", "ebayes_bruta_vs_suavizad
 utils::write.csv(estado, file.path("resultados", "tabelas", "incidencia_estado.csv"),
                  row.names = FALSE, fileEncoding = "UTF-8")
 
+message(sprintf("Padronização por idade: Spearman bruta × padronizada de %.2f a %.2f; razão mediana de %.2f a %.2f",
+                min(pad_resumo$spearman_bruta_pad), max(pad_resumo$spearman_bruta_pad),
+                min(pad_resumo$razao_mediana), max(pad_resumo$razao_mediana)))
 message(sprintf("Grade anual: %d linhas, %d casos, %d combinações com zero caso",
                 nrow(anual), sum(anual$casos), sum(anual$casos == 0)))
 print(estado, row.names = FALSE, digits = 4)
