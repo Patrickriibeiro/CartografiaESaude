@@ -129,5 +129,5 @@ Auditoria independente antes de entrega: `tests/auditoria_independente.R`.
 
 ## 8. Fora do alcance do Claude
 
-Configurações da conta do GitHub (cobrança, visibilidade); decisões de método da autora (D-11
+Configurações da conta do GitHub (cobrança, visibilidade; a CI roda grátis porque o repositório é público); decisões de método da autora (D-11
 provisória: contagens pequenas publicadas com nota); Apêndice A da proposta (texto pessoal da autora).

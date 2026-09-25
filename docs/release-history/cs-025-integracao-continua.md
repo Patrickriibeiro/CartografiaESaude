@@ -48,3 +48,18 @@ nenhum passo**. Anotação do GitHub: *"The job was not started because recent a
 have failed or your spending limit needs to be increased."* Não é defeito do workflow nem dos
 testes; é a cobrança do GitHub Actions na conta `Patrickriibeiro`, que só o dono ajusta. O
 aceite continua pendente.
+
+## 1ª execução verde (acréscimo de 2026-09-25, depois do CS-026)
+
+O bloqueio era de cobrança em repositório privado. Com o repositório público (CS-026), a
+execução disparada pelo push do commit `21c3e1a` rodou:
+
+| Critério de aceite | Resultado |
+|---|---|
+| 1ª execução verde | run 36200764263, `success` |
+| < 10 min | 1 min 55 s (23:22:35 → 23:24:30 UTC) |
+| 6 testes pulados | 6 pulados (os que precisam dos dados reais, fora da CI de propósito) |
+| Suíte | 553 expectativas, 163 testes, 21 arquivos |
+
+Aviso do GitHub, sem efeito hoje: `actions/checkout@v4` usa Node.js 20, que está sendo
+descontinuado; o runner já o executa em Node.js 24.
