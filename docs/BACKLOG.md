@@ -128,7 +128,7 @@ Prefixos: `CS` = tarefa · `D` = decisão que só o dono/mestranda fecha · `ADR
 |---|---|---|---|
 | CS-001 | **Ambiente R** — R 4.6.1, Quarto 1.10.18; 9/9 pacotes carregam; Rtools dispensado (nenhum pacote compilou) | 2026-09-25 | `docs/release-history/cs-001-cs-002-fundacao.md` · commit `b66ae13` |
 | CS-002 | **Esqueleto do repositório** — árvore do PDF, `renv.lock` com 140 pacotes, 5/5 expectativas, `git init` | 2026-09-25 | idem · ADR-0005 |
-| CS-003 | **Manifesto de proveniência** — `registrar_fonte()`, `verificar_manifesto()`, `baixar_e_registrar()`; tabela Markdown escrita e relida por código; 12 testes, incluindo arquivo alterado em 1 byte | 2026-09-25 | `docs/release-history/cs-003-cs-004-proveniencia-e-dicionario.md` · commit PENDENTE |
+| CS-003 | **Manifesto de proveniência** — `registrar_fonte()`, `verificar_manifesto()`, `baixar_e_registrar()`; tabela Markdown escrita e relida por código; 12 testes, incluindo arquivo alterado em 1 byte | 2026-09-25 | `docs/release-history/cs-003-cs-004-proveniencia-e-dicionario.md` · commit `5f09f23` |
 | CS-004 | **Dicionário oficial no repositório** — PDF oficial (28 p., SHA-256 `6b92d438…`) registrado no manifesto; `docs/dicionario-sivep.md` com 34 campos, domínio de cada um e 4 marcados [CONFERIR] | 2026-09-25 | idem |
 
 ## Descartados
