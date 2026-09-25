@@ -31,6 +31,7 @@ parasitologia (IOC 14090).
 | 10 | Padronização por idade como objetivo opcional | VSR concentra-se em < 2 anos e Influenza em idosos; estruturas etárias diferem entre municípios |
 | 11 | Leitos do CNES como covariável de contexto | Taxa por residência reflete também onde há hospital; discutir sem dado é especulação |
 | 12 | Aspectos éticos e limitações explicitados | Exigidos em qualquer projeto de pós-graduação com dado de saúde |
+| 13 | *(2026-09-25, CS-037)* §3.2, §3.3, §3.4, §3.5 e §3.10 atualizadas com os achados da implementação: critério de caso (ADR-0002), denominador (ADR-0003), malha do IBGE (ADR-0006) | Os dados reais contradisseram três suposições da versão anterior desta proposta |
 
 ---
 
@@ -140,7 +141,7 @@ Cada objetivo declara o produto e o critério pelo qual se verifica que foi cump
 | OE1 | Automatizar a obtenção, a filtragem e a curadoria das fichas de SRAG do RJ (2022–2025) a partir do Portal de Dados Abertos do SUS, com registro de proveniência | `sivep_processado.parquet` + `dados/MANIFESTO.md` | 4 bancos anuais baixados, com URL, data e hash SHA-256; 100 % dos registros com `CO_MUN_RES` iniciado em 33; contagem por agente × ano tabulada |
 | OE2 | Definir e aplicar critério explícito de caso confirmado por agente (RT-PCR ou antígeno) e regra de co-detecção | Decisão registrada (ADR-0002) + coluna `agente` | Tabela comparando quantos casos cada regra alternativa incluiria |
 | OE3 | Calcular incidência acumulada por 100 mil habitantes por município, agente e ano, com denominador do IBGE definido ano a ano, e a versão suavizada por Bayes empírico | `indicadores_municipais.parquet` | Grade completa 92 × 3 × 4 sem valor faltante; município sem caso registrado com zero |
-| OE4 | Padronizar cartograficamente a malha municipal e a de regiões de saúde (IBGE via `geobr`) em SIRGAS 2000 (EPSG:4674) e integrá-las aos indicadores pela chave IBGE | `municipios_rj.rds`, `regioes_saude_rj.rds` | 92 feições válidas; junção com indicadores retorna 92 linhas; 9 regiões |
+| OE4 | Padronizar cartograficamente a malha municipal oficial do IBGE e a de regiões de saúde (ADR-0006) em SIRGAS 2000 (EPSG:4674) e integrá-las aos indicadores pela chave IBGE | `municipios_rj.rds`, `regioes_saude_rj.rds` | 92 feições válidas; junção com indicadores retorna 92 linhas; 9 regiões |
 | OE5 | Testar dependência espacial global (Moran I, Monte Carlo) e mapear agrupamentos locais (LISA) por agente e ano, com correção para testes múltiplos | `moran_lisa.rds` + 12 mapas LISA | 12 valores de I com p-valor; tabela LISA 92 × 12 com classe e p corrigido |
 | OE6 | Disponibilizar painel interativo (Shiny + leaflet) com filtros por agente e ano exibindo taxa bruta, taxa suavizada e classe LISA por município | `app.R` | 12 combinações filtram sem erro; popup com 6 campos |
 | OE7 | Gerar relatório e apresentação a partir do mesmo código-fonte (Quarto), com todos os números lidos dos objetos do pipeline | `08_relatorio.qmd` | `quarto render` sem erro; zero números digitados à mão no fonte |
@@ -171,12 +172,13 @@ Todas públicas, gratuitas e de acesso aberto.
 
 | Fonte | O que fornece | Acesso | Observação |
 |---|---|---|---|
-| SIVEP-Gripe, bancos anuais 2022–2025 | Fichas individuais de SRAG hospitalizada e óbitos | Portal de Dados Abertos do SUS, conjunto "SRAG 2019 a 2026", formatos CSV e PARQUET | Bancos 2019–2024 congelados; 2025–2026 atualizados semanalmente. Download por HTTP com registro de proveniência |
+| SIVEP-Gripe, bancos anuais 2022–2025 | Fichas individuais de SRAG notificada (hospitalizados e óbitos) | Portal de Dados Abertos do SUS, conjunto "SRAG 2019 a 2026", formatos CSV e PARQUET | Bancos 2019–2024 congelados; 2025–2026 atualizados semanalmente. Download por HTTP com registro de proveniência |
 | Dicionário de dados SIVEP-Gripe 2019–2025 | Nome, tipo e domínio de cada campo | Mesmo conjunto, recurso "Dicionário de Dados" | Fonte de verdade para nomes de campos; substitui os nomes usados na v1 |
-| IBGE, Censo 2022 (SIDRA tabela 4714) | População residente por município, 2022 | API SIDRA | Denominador de 2022 |
+| IBGE, Censo 2022 (SIDRA tabela 4714) | População residente por município, 2022 (contagem, sem ajuste de cobertura) | API SIDRA | Denominador de 2022 (ver §3.4 e ADR-0003) |
 | IBGE, Estimativas populacionais (SIDRA tabela 6579) | População estimada, 1º de julho | API SIDRA | Denominadores de 2024 e 2025; **não há 2023** |
 | IBGE, Censo 2022 por idade (SIDRA tabela 9514) | População por faixa etária e município | API SIDRA | Só para OE9 (padronização) |
-| IBGE, malhas territoriais 2022 | Polígonos municipais e de regiões de saúde | pacote `geobr` (`read_municipality`, `read_health_region`) | Convertidas para EPSG:4674; cache local com hash |
+| IBGE, Malha Municipal 2022 | Polígonos municipais do RJ, resolução completa | `geoftp.ibge.gov.br` (arquivo `RJ_Municipios_2022.zip`) | Já em EPSG:4674; registrada no manifesto com hash. **Não** a malha simplificada do `geobr`, que perde 8 pares de vizinhos (ADR-0006) |
+| Regiões de saúde (tabela município → região) | Qual das 9 regiões contém cada município | pacote `geobr` (`read_health_region`), só como atributo | A geometria regional sai de dissolver a malha do IBGE (ADR-0006) |
 | CNES, leitos (CNES-LT) | Leitos por estabelecimento e município, mês a mês | pacote `microdatasus` (`information_system = "CNES-LT"`) | Só para OE10. Aqui o `microdatasus` **é** a ferramenta correta |
 | Boletins InfoGripe (Fiocruz) | Composição viral e tendência nacional/estadual por semana | Agência Fiocruz / GitHub `infogripe` | Contexto e validação externa da tendência estadual, não entra no cálculo |
 
@@ -199,25 +201,38 @@ de internações (Cavalcante et al., 2021).
 notificação (`DT_NOTIFIC`), com a proporção de substituições reportada. Datas fora de
 [2022-01-01, data do snapshot] são tratadas como inválidas e contadas, não corrigidas.
 
-**Critério de caso por agente [REVISAR: D-04, vira ADR-0002].** A regra de partida é a
-que a v1 descreve, agora com os campos reais:
+**Critério de caso por agente [REVISAR: D-04 pendente; recomendação do ADR-0002].** A
+leitura literal da v1 (classificação final **e** campo do vírus marcado) foi testada nas
+99.880 fichas do RJ e descartada: o campo "qual vírus" fica em branco em fichas com
+resultado positivo, em proporção que cai de 27 % (2022) para 5 % (2025) entre as
+encerradas como COVID, o que fabricaria uma queda artificial no período. A regra
+recomendada ancora o caso na declaração da vigilância:
 
-| Agente | Regra proposta |
+| Agente | Regra recomendada (R2 "vigilância", ADR-0002) |
 |---|---|
-| SARS-CoV-2 | `CLASSI_FIN == 5` **e** (`PCR_SARS2 == 1` **ou** `AN_SARS2 == 1`) |
-| Influenza | `CLASSI_FIN == 1` **e** (`POS_PCRFLU == 1` **ou** `POS_AN_FLU == 1`); subtipo A/B por `TP_FLU_PCR` ou `TP_FLU_AN` |
-| VSR | `CLASSI_FIN == 2` **e** (`PCR_VSR == 1` **ou** `AN_VSR == 1`) |
+| SARS-CoV-2 | `CLASSI_FIN == 5` **e** (`CRITERIO == 1` laboratorial **ou** `PCR_SARS2 == 1` **ou** `AN_SARS2 == 1`) |
+| Influenza | `CLASSI_FIN == 1` **e** (`CRITERIO == 1` **ou** `POS_PCRFLU == 1` **ou** `POS_AN_FLU == 1`); subtipo A/B por `TP_FLU_PCR` ou `TP_FLU_AN` |
+| VSR | `CLASSI_FIN == 2` **e** (`PCR_VSR == 1` **ou** `AN_VSR == 1`) — o código 2 cobre qualquer "outro vírus", então só o campo do VSR o identifica |
+
+A regra exclui os encerramentos clínicos e por imagem, que deixaram de valer para COVID
+em 31/10/2022 (1.509 fichas em 2022; 3, 5 e 0 nos anos seguintes). O relatório traz,
+como sensibilidade, a regra literal (limite inferior) e a só-classificação (limite
+superior). Toda ficha do banco conta, sem filtrar o campo de internação (1,0 % marcadas
+"não internado"); por isso o texto fala em **SRAG notificada**.
 
 Onde `CLASSI_FIN` é a classificação final da vigilância (1 influenza; 2 outro vírus
 respiratório; 3 outro agente etiológico; 4 não especificado; 5 COVID-19) e os campos
 `PCR_*`/`AN_*` são os resultados por RT-PCR e por teste de antígeno. Ficha com
 `CLASSI_FIN` vazio é caso **não encerrado**, não negativo; a proporção de não encerrados
-por ano é reportada, porque cresce no ano corrente e é a principal fonte de subestimação
-de 2025.
+por ano é reportada. No snapshot de 14/09/2026 ela **não** cresce no ano corrente:
+1.028, 481, 760 e 138 fichas em 2022–2025 (ADR-0002 §3.4).
 
-**Co-detecção.** Uma ficha pode ser positiva para mais de um agente. A regra proposta é
-contar o caso em cada agente detectado (a taxa é "SRAG por agente", não "SRAG total") e
-reportar o número de co-detecções por ano.
+**Co-detecção [REVISAR: D-04].** Uma ficha pode ter mais de um dos três vírus
+detectado, mas isso é raro: 305 das 99.880 fichas (0,3 %). Como cada ficha tem uma só
+classificação final, a regra recomendada atribui cada caso a **um** agente, o da
+classificação; as co-detecções são reportadas em tabela por agente e ano, e não contadas
+duas vezes. O campo oficial `CO_DETEC` não é usado: marca co-detecção com qualquer vírus
+e está vazio em 65 % das fichas.
 
 **Validação.** Funções de validação verificam presença das colunas, pertencimento dos
 92 códigos ao RJ, plausibilidade de datas e consistência entre `SEM_PRI` e `DT_SIN_PRI`.
@@ -229,10 +244,17 @@ fabricada, o que permite testar sem baixar dados reais.
 **Incidência acumulada bruta** por município, agente e ano:
 `casos / população × 100 000`.
 
-**Denominador ano a ano [REVISAR: D-05, vira ADR-0003]:** 2022, Censo (tabela 4714);
-2024 e 2025, estimativas (tabela 6579); 2023, interpolação linear entre 2022 e 2024,
-porque o IBGE não publicou estimativa municipal naquele ano. A regra e a fonte de cada
-ano constam de uma coluna `fonte_populacao` da tabela de indicadores.
+**Denominador ano a ano [REVISAR: D-05 pendente; ADR-0003].** O IBGE não publicou
+estimativa municipal em 2023, e as estimativas de 2024 e 2025 partem do Censo 2022
+**ajustado** pela Pesquisa de Pós-Enumeração, com ajuste maior nos municípios grandes
+(IBGE, Estimativas da População 2024, Nota metodológica n. 01, p. 6–7). Por isso a
+estimativa de 2024 fica de 3,1 % (Cambuci) a 8,4 % (Rio de Janeiro) acima da contagem do
+Censo, em todos os 92 municípios. Usar o Censo como denominador de 2022 infla a taxa
+daquele ano na mesma proporção. A implementação provisória usa o Censo em 2022, as
+estimativas em 2024–2025 e interpola 2023 nas datas de referência reais (peso 0,4771);
+o ADR-0003 lista quatro alternativas, e a recomendada é um denominador único para as
+comparações entre anos. A fonte de cada ano consta de uma coluna `fonte` da tabela de
+população.
 
 **Grade completa.** A tabela final tem exatamente 92 × 3 × 4 linhas; município sem caso
 registrado aparece com zero, nunca desaparece (uma junção que descarta o zero
@@ -253,11 +275,14 @@ Comissões Intergestores Regionais decidem.
 
 ### 3.5 Processamento cartográfico e padronização geodésica
 
-Malhas municipais e de regiões de saúde de 2022 obtidas pelo `geobr`, convertidas para
-SIRGAS 2000 (EPSG:4674), validadas (`st_is_valid`) e armazenadas em cache local com hash
-para não depender do servidor a cada execução. A junção atributiva com os indicadores
-usa a chave `cod6 = substr(code_muni, 1, 6)`, porque o `geobr` entrega 7 dígitos (o
-último é verificador) e o SIVEP registra 6. Teste automatizado exige 92 feições após a
+Malha Municipal 2022 do IBGE para o RJ, em resolução completa, baixada do servidor
+oficial, registrada no manifesto com hash e lida direto do arquivo compactado; já vem em
+SIRGAS 2000 (EPSG:4674) e as 92 geometrias são válidas. A malha simplificada do `geobr`,
+prevista na v1, foi descartada: comparada à oficial, ela perde 8 pares de municípios
+vizinhos (440 contra 456 ligações de contiguidade), o que mudaria o Moran e o LISA sem
+erro aparente (ADR-0006). A geometria das regiões de saúde sai de dissolver essa malha.
+A junção atributiva com os indicadores usa a chave `cod6 = substr(CD_MUN, 1, 6)`, porque
+o IBGE registra 7 dígitos (o último é verificador) e o SIVEP registra 6. Teste automatizado exige 92 feições após a
 junção; a junção direta com 7 dígitos retornaria zero linhas sem acusar erro.
 
 ### 3.6 Estatística espacial (AEDE e LISA)
@@ -313,12 +338,20 @@ incluir, em especial covariáveis ambientais (temperatura, umidade) para o VSR.
 
 ### 3.10 Limitações antecipadas no desenho
 
-1. **O SIVEP mede doença grave, não infecção.** Taxas de SRAG hospitalizada dependem de
+1. **O SIVEP mede doença grave, não infecção.** Taxas de SRAG notificada dependem de
    acesso a leito e de testagem; um município com hospital de referência pode aparecer
    "quente" por captar casos graves da vizinhança (mitigado ao usar residência) ou por
    testar mais (não mitigável; discutido com CNES, OE10).
-2. **Maturação do banco.** Casos de 2025 ainda não encerrados subestimam o ano; o
-   relatório declara a data de corte e apresenta a proporção de fichas sem `CLASSI_FIN`.
+2. **Maturação do banco e testagem.** O relatório declara a data de corte do banco de
+   2025 (14/09/2026). Neste snapshot, 2025 tem a menor proporção de fichas não encerradas
+   (0,6 %), então a maturação não é a limitação principal; a cobertura de testagem com
+   resultado sobe de 87,5 % (2022) para 91,7 % (2025) e pode, sozinha, produzir aumento
+   de casos confirmados.
+6. **Degrau do denominador.** O Censo 2022 é uma contagem sem ajuste de cobertura; as
+   estimativas de 2024–2025 são ajustadas (3,1–8,4 % acima, por município). Sem tratamento,
+   a taxa de 2022 fica inflada em relação aos anos seguintes (ADR-0003).
+7. **Efeito de borda.** Municípios de divisa não têm os vizinhos de SP, MG e ES na
+   matriz; Paraty, Itatiaia e Armação dos Búzios têm um único vizinho (CS-039).
 3. **Pequenos números e MAUP.** Tratados com suavização; o problema da unidade de área
    modificável (o resultado depende do recorte) é inerente ao desenho e declarado.
 4. **Ecológico.** Nenhuma inferência individual.
@@ -416,6 +449,14 @@ https://portaldeboaspraticas.iff.fiocruz.br/biblioteca/sazonalidade-do-virus-sin
 IBGE. Sistema IBGE de Recuperação Automática (SIDRA). Tabela 4714 (Censo 2022,
 população residente); tabela 6579 (estimativas populacionais); tabela 9514 (Censo 2022
 por idade). https://sidra.ibge.gov.br
+
+IBGE. Estimativas da População 2024: estimativas da população residente para os
+Municípios e para as Unidades da Federação brasileiros, com data de referência em 1º de
+julho de 2024. Nota metodológica n. 01. Rio de Janeiro: IBGE; 2024. Disponível em:
+https://biblioteca.ibge.gov.br/visualizacao/livros/liv102112.pdf
+
+IBGE. Malha Municipal 2022, Rio de Janeiro. Disponível em:
+https://geoftp.ibge.gov.br/organizacao_do_territorio/malhas_territoriais/malhas_municipais/municipio_2022/UFs/RJ/
 
 Pebesma E. Simple Features for R: standardized support for spatial vector data. *The R
 Journal*. 2018;10(1):439-446.

@@ -25,10 +25,16 @@ epidemiológicos 2022 a 2025 (CS-036). O IBGE oferece, para os municípios do RJ
 2. **O Censo 2022 fica abaixo das estimativas dos dois lados.** A estimativa de 2024 é
    maior que o Censo em **todos os 92 municípios**: no mínimo 3,1 % (Cambuci), na
    mediana 5,7 %, no máximo 8,4 % (Rio de Janeiro); no estado, 7,3 %. Isso não é
-   crescimento populacional de dois anos; é consistente com a correção de cobertura
-   que as estimativas pós-Censo incorporam e a contagem censitária não tem. A fonte
-   primária que documenta o método de ajuste do IBGE **não foi consultada** nesta
-   demanda e deve ser citada antes de a decisão ser fechada.
+   crescimento populacional de dois anos: é a correção de cobertura que as estimativas
+   pós-Censo incorporam e a contagem censitária não tem. **Fonte primária (CS-038):** IBGE,
+   *Estimativas da População 2024, Nota metodológica n. 01*, p. 6–7
+   (https://biblioteca.ibge.gov.br/visualizacao/livros/liv102112.pdf). As populações
+   municipais do Censo 2022 "foram ajustadas, de modo que a soma das populações dos
+   municípios coincida" com as Projeções da População, Revisão 2024; o ajuste de cada UF
+   é distribuído entre os municípios pela Taxa de Erro Líquido de Enumeração da Pesquisa
+   de Pós-Enumeração (PPE) 2022, em 9 classes de tamanho, e é **maior nos municípios
+   grandes**. Isso explica o padrão medido: Rio de Janeiro (maior município) com o maior
+   ajuste, Cambuci (pequeno) com o menor.
 3. **Consequência:** com o Censo como denominador de 2022, a incidência de 2022 fica
    3–8 % mais alta do que ficaria na escala das estimativas, e a de 2023 interpolada
    herda metade desse degrau. Para comparar municípios **dentro** de um ano o efeito é
@@ -42,6 +48,12 @@ epidemiológicos 2022 a 2025 (CS-036). O IBGE oferece, para os municípios do RJ
   (01/07/2024), avaliada em 01/07/2023. Peso 334/700 = 0,4771, não 0,5.
 - O método é um parâmetro (`montar_populacao(metodo_ausente = ...)`): trocar é uma
   linha em `02_indicadores.R`.
+
+**Consequência da fonte para as alternativas:** a população "Censo 2022 ajustada" que
+o IBGE usa internamente (data de 1º de julho de 2022) é o denominador de 2022 coerente
+com as estimativas, mas **não é publicada por município** na nota. A opção C abaixo
+aproxima esse ajuste com um fator único estadual; o ajuste real varia por classe de
+tamanho, então a opção C subcorrige municípios grandes e sobrecorrige pequenos.
 
 ## Alternativas para a autora decidir (D-05)
 

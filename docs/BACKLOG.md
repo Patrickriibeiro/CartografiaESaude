@@ -105,8 +105,6 @@ Prefixos: `CS` = tarefa · `D` = decisão que só o dono/mestranda fecha · `ADR
 
 | ID | Título | Evidência | Modelo · Esforço | Aceite |
 |---|---|---|---|---|
-| CS-037 | **Atualizar a proposta v2 com as decisões de dados** — §3.2 e §3.5: malha do IBGE, não `geobr` (ADR-0006); §3.4: denominador conforme a D-05 fechada (ADR-0003); §3.10: acrescentar o degrau Censo × estimativa como limitação; **§3.3: tabela do critério de caso com a regra aceita na D-04 e atribuição única (ADR-0002); "SRAG hospitalizada" → "SRAG notificada"; §3.10 item 2: a maturação NÃO é a limitação principal (2025 tem o menor nº de fichas abertas)** | ADR-0002, ADR-0003, ADR-0006 | Opus · low | 5 seções da v2 corrigidas; cada mudança cita o ADR |
-| CS-038 | **Citar o método de ajuste de cobertura do IBGE** — localizar a nota metodológica das Estimativas 2024 que explica por que ficam acima do Censo 2022, e citá-la no ADR-0003 antes de fechar a D-05 | ADR-0003 achado 2 (não verificado na fonte primária) | Opus · low | nota do IBGE citada com URL e página |
 
 ### Achados do CS-016
 
@@ -156,6 +154,8 @@ Prefixos: `CS` = tarefa · `D` = decisão que só o dono/mestranda fecha · `ADR
 | CS-015 | **Testes da malha** — 92 códigos únicos com prefixo 33, área 43.750,4 km² (dentro de 2 % da oficial). Fechado junto com o CS-014, com aviso ao dono, porque os critérios já eram exercidos pelo mesmo teste | 2026-09-25 | idem |
 | CS-016 | **Vizinhança Queen e pesos W** — 92 municípios, **456 ligações** (bate com o ADR-0006), 1 bloco, mínimo 1 vizinho, máximo 10, mediana 5; `region.id` = cod6; tabela e histograma em `resultados/estatistica/` | 2026-09-25 | `docs/release-history/cs-016-vizinhanca-queen.md` · commit `72970cf` |
 | CS-007 | **ADR-0002, critério de caso** — 5 regras candidatas em código (`REGRAS_CASO`, 6 testes), tabela 5 regras × 3 agentes × 4 anos sobre 99.880 fichas, decomposição das fichas sem checkbox, co-detecção; ADR **proposto** com recomendação R2 e 3 perguntas à autora (D-04) | 2026-09-25 | `docs/release-history/cs-007-criterio-de-caso.md` · ADR-0002 · commit `df1606a` |
+| CS-037 | **Proposta v2 atualizada com as decisões de dados** — §2.2 OE4, §3.2, §3.3 (critério de caso e co-detecção), §3.4 (denominador), §3.5 (malha), §3.10 (limitações 2, 6, 7) e referências; D-04 e D-05 continuam pendentes e o texto traz a **recomendação** marcada [REVISAR]. Não inclui o CS-036 (ano epidemiológico em §3.1) | 2026-09-25 | `docs/release-history/cs-037-cs-038-proposta-e-ibge.md` · commit PENDENTE |
+| CS-038 | **Método de ajuste do IBGE citado** — Nota metodológica n. 01 das Estimativas 2024, p. 6–7: Censo 2022 ajustado pela PPE, maior ajuste em municípios grandes; citado no ADR-0003 e na proposta v2 | 2026-09-25 | idem |
 
 ## Descartados
 
