@@ -264,7 +264,8 @@ distorce o Moran).
 **Suavização empírica de Bayes** (`spdep::EBest`): taxa que encolhe os municípios de
 população pequena em direção à média estadual, proporcionalmente à sua incerteza. O
 relatório apresenta bruta e suavizada lado a lado; o LISA roda sobre a suavizada, e a
-bruta entra como sensibilidade (decidido pela autora, D-09).
+bruta entra como sensibilidade (decidido pela autora, D-09). Método, fórmula e efeito
+medido em `docs/nota-metodologica-suavizacao.md` (Marshall, 1991).
 
 **Padronização por idade (OE9, opcional).** Método direto, faixas etárias do Censo 2022
 (tabela 9514), população-padrão = RJ 2022. Justificativa: VSR e Influenza têm perfis
@@ -459,6 +460,9 @@ https://biblioteca.ibge.gov.br/visualizacao/livros/liv102112.pdf
 
 IBGE. Malha Municipal 2022, Rio de Janeiro. Disponível em:
 https://geoftp.ibge.gov.br/organizacao_do_territorio/malhas_territoriais/malhas_municipais/municipio_2022/UFs/RJ/
+
+Marshall RJ. Mapping disease and mortality rates using empirical Bayes estimators.
+*Journal of the Royal Statistical Society, Series C*. 1991;40(2):283-294.
 
 Pebesma E. Simple Features for R: standardized support for spatial vector data. *The R
 Journal*. 2018;10(1):439-446.

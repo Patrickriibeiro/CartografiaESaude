@@ -205,3 +205,60 @@ resumir_incidencia_estado <- function(ind) {
   por$incid_100k_pop2024 <- por$casos / por$populacao_unica * 1e5
   por[order(por$agente, por$ano), ]
 }
+
+# ---------------------------------------------------------------------------
+# Suavização empírica de Bayes (CS-013, D-09)
+# ---------------------------------------------------------------------------
+
+#' Taxa suavizada por Bayes empírico global (Marshall, 1991), por agente × ano.
+#'
+#' Cada município tem a taxa "puxada" para a média do estado com força
+#' proporcional à incerteza: município pequeno é puxado muito, grande quase nada.
+#'   b   = soma(casos) / soma(população)            média do estado
+#'   s2  = variância das taxas, ponderada pela população
+#'   a   = s2 - b / (população média)               variância "real" entre municípios
+#'   eb  = b + a (taxa - b) / (a + b / população)
+#' Usa a população oficial do ano (a mesma do mapa e do LISA; ADR-0003).
+#' Agente × ano sem nenhum caso no estado fica com taxa suavizada 0: o spdep
+#' devolveria NaN (0/0).
+#' Acrescenta incid_eb_100k e guarda os parâmetros a e b por agente × ano.
+suavizar_bayes_empirico <- function(ind) {
+  ind$incid_eb_100k <- NA_real_
+  parametros <- list()
+  for (ag in unique(ind$agente)) for (a in unique(ind$ano)) {
+    i <- which(ind$agente == ag & ind$ano == a)
+    if (sum(ind$casos[i]) == 0) {
+      ind$incid_eb_100k[i] <- 0
+      par <- list(a = NA_real_, b = 0)
+    } else {
+      eb <- spdep::EBest(ind$casos[i], ind$populacao[i], family = "poisson")
+      ind$incid_eb_100k[i] <- eb$estmm * 1e5
+      par <- attr(eb, "parameters")
+    }
+    parametros[[length(parametros) + 1]] <- data.frame(
+      agente = ag, ano = a, media_estado_100k = par$b * 1e5, variancia_a = par$a,
+      encolhimento_total = isTRUE(par$a == 0), stringsAsFactors = FALSE)
+  }
+  if (anyNA(ind$incid_eb_100k)) stop("Taxa suavizada com NA", call. = FALSE)
+  attr(ind, "parametros_eb") <- do.call(rbind, parametros)
+  ind
+}
+
+#' Resumo da suavização por agente × ano, para a nota metodológica: quanto os
+#' extremos encolhem e se a ordem dos municípios muda.
+resumir_suavizacao <- function(ind) {
+  par <- attr(ind, "parametros_eb")
+  out <- do.call(rbind, lapply(split(ind, list(ind$agente, ind$ano), drop = TRUE), function(x) {
+    data.frame(
+      agente = x$agente[1], ano = x$ano[1],
+      municipios_sem_caso = sum(x$casos == 0),
+      bruta_max_100k = max(x$incid_100k), eb_max_100k = max(x$incid_eb_100k),
+      bruta_min_100k = min(x$incid_100k), eb_min_100k = min(x$incid_eb_100k),
+      spearman_bruta_eb = suppressWarnings(stats::cor(x$incid_100k, x$incid_eb_100k, method = "spearman")),
+      mudanca_mediana_pct = stats::median(ifelse(x$incid_100k > 0,
+        100 * abs(x$incid_eb_100k - x$incid_100k) / x$incid_100k, NA), na.rm = TRUE),
+      stringsAsFactors = FALSE)
+  }))
+  out <- merge(out, par, by = c("agente", "ano"))
+  out[order(out$agente, out$ano), ]
+}
