@@ -4,6 +4,8 @@
 #   resultados/tabelas/exportacao/lisa_municipios.csv         classe LISA por município, agente e ano
 #   resultados/tabelas/exportacao/moran_global.csv            I e p, três rodadas (ADR-0004)
 #   resultados/tabelas/exportacao/incidencia_estado.csv       série do estado, dois denominadores
+#   resultados/tabelas/exportacao/indicadores_regionais.csv   9 regiões de saúde × 3 × 4 (CS-030)
+#   resultados/tabelas/exportacao/moran_regional.csv          Moran global regional, descritivo (CS-030)
 #   resultados/tabelas/exportacao/LEIA-ME.txt                 carimbo: data, commit, versões dos dados
 
 source("00_setup.R")
@@ -60,12 +62,31 @@ estado <- data.frame(
   stringsAsFactors = FALSE, row.names = NULL
 )
 
+r <- as.data.frame(arrow::read_parquet(file.path("dados", "processados", "indicadores_regionais.parquet")))
+regional <- data.frame(
+  codigo_regiao = r$cod_regiao, regiao_de_saude = r$regiao, municipios = r$n_municipios,
+  agente = ROTULOS_AGENTE[r$agente], ano = r$ano, casos = r$casos, populacao = r$populacao,
+  taxa_bruta_100mil = round(r$incid_100k, 2), taxa_bruta_pop2024_100mil = round(r$incid_100k_pop2024, 2),
+  stringsAsFactors = FALSE, row.names = NULL
+)
+regional <- regional[order(regional$agente, regional$ano, regional$regiao_de_saude), ]
+
+gr <- ml$regional
+moran_reg <- data.frame(
+  agente = ROTULOS_AGENTE[gr$agente], ano = gr$ano, regioes = gr$n, variavel = "taxa bruta",
+  I_de_Moran = round(gr$I, 4), I_esperado_sem_padrao = round(gr$esperado_I, 4),
+  p_permutacao = signif(gr$p_perm, 3), permutacoes = gr$nsim,
+  stringsAsFactors = FALSE, row.names = NULL
+)
+
 pasta <- file.path("resultados", "tabelas", "exportacao")
 arquivos <- c(
   salvar_resultado(indicadores, "indicadores_municipais", pasta),
   salvar_resultado(lisa, "lisa_municipios", pasta),
   salvar_resultado(moran, "moran_global", pasta),
   salvar_resultado(estado, "incidencia_estado", pasta),
+  salvar_resultado(regional, "indicadores_regionais", pasta),
+  salvar_resultado(moran_reg, "moran_regional", pasta),
   escrever_carimbo(pasta, c(
     sprintf("Contagens pequenas (CS-043): %d combinações município x agente x ano têm de 1 a %d casos.",
             sum(ind$casos >= 1 & ind$casos < LIMIAR_CONTAGEM_PEQUENA), LIMIAR_CONTAGEM_PEQUENA - 1L),
@@ -77,5 +98,7 @@ arquivos <- c(
 # Conferência: cada CSV relido tem as mesmas linhas e os acentos intactos.
 stopifnot(nrow(ler_resultado(arquivos[1])) == 1104, nrow(ler_resultado(arquivos[2])) == 1104,
           nrow(ler_resultado(arquivos[3])) == 36, nrow(ler_resultado(arquivos[4])) == 12,
+          nrow(ler_resultado(arquivos[5])) == 108, nrow(ler_resultado(arquivos[6])) == 12,
+          "Baía da Ilha Grande" %in% ler_resultado(arquivos[5])$regiao_de_saude,
           "Niterói" %in% ler_resultado(arquivos[1])$municipio)
 message(sprintf("%d arquivos em %s", length(arquivos), pasta))

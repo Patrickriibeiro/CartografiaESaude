@@ -41,6 +41,7 @@ Rscript -e "testthat::test_dir('tests/testthat')"
 ```
 
 **4. Rode o pipeline** (na primeira vez baixa ~115 MB do Portal de Dados Abertos do SUS e
+~21 MB da tabela de regiões de saúde do geobr, e
 confere cada arquivo pelo SHA-256 do manifesto)
 
 ```bash
@@ -49,7 +50,7 @@ Rscript run.R --sem-relatorio  # sem Quarto
 Rscript run.R --limpar         # apaga o que é derivado e refaz do zero
 ```
 
-Tempo medido: ~100 s com os dados já baixados; o tempo de cada etapa fica em
+Tempo medido: ~140 s com os dados já baixados; o tempo de cada etapa fica em
 `resultados/execucao.log`. Para conferir os resultados por um caminho independente do
 pipeline (sem o `spdep` nem as funções de `R/`), rode `Rscript tests/auditoria_independente.R`.
 
@@ -65,8 +66,8 @@ Rscript -e "shiny::runApp(launch.browser = TRUE)"
 |---|---|
 | `08_relatorio.html` | Relatório autocontido (um arquivo; nenhum número digitado à mão) |
 | `08_apresentacao.html` | Apresentação (revealjs) do mesmo fonte |
-| `resultados/mapas/` | 12 mapas de incidência, 12 de LISA e 2 painéis (300 dpi) |
-| `resultados/tabelas/exportacao/` | 4 CSV para Excel em português + LEIA-ME com a versão dos dados |
+| `resultados/mapas/` | 12 mapas de incidência, 12 de LISA, 2 painéis e 12 mapas por região de saúde (300 dpi) |
+| `resultados/tabelas/exportacao/` | 6 CSV para Excel em português (municípios e regiões de saúde) + LEIA-ME com a versão dos dados |
 | `resultados/estatistica/` | Moran global, LISA por município, vizinhança |
 | `app.R` | Painel Shiny + leaflet |
 
@@ -89,7 +90,7 @@ Rscript -e "shiny::runApp(launch.browser = TRUE)"
 app.R                          painel Shiny + leaflet
 R/funcoes_*.R                  funções usadas pelas etapas, com testes
 config/fontes.yml              endereços das fontes (fora do código)
-dados/brutos/                  bancos do SIVEP baixados (fora do git; conferidos pelo manifesto)
+dados/brutos/                  bancos do SIVEP e regiões de saúde baixados (fora do git; conferidos pelo manifesto)
 dados/externos/                dicionário, malha e população do IBGE (no git)
 dados/processados/             tabelas intermediárias (fora do git; regeneráveis)
 resultados/                    tabelas, estatística, mapas

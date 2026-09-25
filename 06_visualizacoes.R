@@ -4,6 +4,7 @@
 #   resultados/mapas/lisa_<agente>_<ano>.png         12 mapas, 300 dpi
 #   resultados/mapas/painel_incidencia.png           3 agentes × 4 anos (para o relatório)
 #   resultados/mapas/painel_lisa.png                 3 agentes × 4 anos (para o relatório)
+#   resultados/mapas/regional_<agente>_<ano>.png     12 mapas por região de saúde (CS-030)
 
 source("00_setup.R")
 
@@ -71,5 +72,19 @@ for (k in seq_along(paineis)) print(paineis[[k]], vp = grid::viewport(layout.pos
 invisible(dev.off())
 gerados <- c(gerados, f)
 
-stopifnot(all(file.exists(gerados)), length(gerados) == 26)
+# Escala regional (CS-030): taxa bruta regional, nome e valor escritos em cada região.
+regioes_rj <- readRDS(file.path("dados", "processados", "regioes_saude_rj.rds"))
+ind_reg <- as.data.frame(arrow::read_parquet(file.path("dados", "processados", "indicadores_regionais.parquet")))
+pop2022 <- as.data.frame(arrow::read_parquet(file.path("dados", "processados", "populacao_rj.parquet")))
+pop2022 <- pop2022[pop2022$ano == 2022, ]
+municipio_regiao <- as.data.frame(arrow::read_parquet(file.path("dados", "processados", "municipio_regiao.parquet")))
+pontos <- pontos_rotulo_regioes(malha, municipio_regiao, pop2022)
+for (ag in AGENTES) for (a in ANOS_ESTUDO) {
+  f <- file.path(pasta, sprintf("regional_%s_%d.png", ag, a))
+  ggplot2::ggsave(f, mapa_regional(regioes_rj, ind_reg, ag, a, malha = malha, pontos = pontos),
+                  width = 8, height = 5.5, dpi = 300, bg = "white")
+  gerados <- c(gerados, f)
+}
+
+stopifnot(all(file.exists(gerados)), length(gerados) == 38)
 message(sprintf("%d mapas gravados em %s", length(gerados), pasta))

@@ -295,6 +295,80 @@ muitos municípios sem caso, que formam "agrupamentos de zeros" na taxa bruta; a
 classe LISA entre as duas variáveis por mapa ficou entre `r fp(min(conc$concordancia), 0)` e
 `r fp(max(conc$concordancia), 0)`.
 
+## Escala de região de saúde
+
+```{r regioes}
+rs <- readRDS(file.path("dados", "processados", "regioes_saude_rj.rds"))
+ir <- as.data.frame(arrow::read_parquet(file.path("dados", "processados", "indicadores_regionais.parquet")))
+mr <- ml$regional
+pesos_reg <- readRDS(file.path("resultados", "objetos", "pesos_regionais.rds"))
+n_reg <- nrow(rs)
+pares_reg <- contar_ligacoes(pesos_reg$neighbours) / 2
+pares_possiveis <- n_reg * (n_reg - 1) / 2
+id_reg <- attr(pesos_reg$neighbours, "region.id")
+cod_m1 <- rs$cod_regiao[rs$regiao == "Metropolitana I"]; cod_m2 <- rs$cod_regiao[rs$regiao == "Metropolitana II"]
+m1_m2_vizinhas <- which(id_reg == cod_m2) %in% pesos_reg$neighbours[[which(id_reg == cod_m1)]]
+abaixo <- sum(mr$I < mr$esperado_I)
+sig_reg <- sum(mr$p_perm < alfa)
+topo <- do.call(rbind, lapply(AGENTES, function(ag) {
+  x <- ir[ir$agente == ag & ir$ano == ano_fim, ]
+  x[which.max(x$incid_100k), c("agente", "regiao", "incid_100k")]
+}))
+v24 <- ir[ir$agente == "vsr" & ir$ano == 2024, ]
+v24 <- v24[order(-v24$incid_100k), ]
+mreg <- as.data.frame(arrow::read_parquet(file.path("dados", "processados", "municipio_regiao.parquet")))
+conf_v24 <- conf[conf$agente == "vsr" & conf$ano == 2024 & conf$quadrante == "HH", ]
+reg_conf <- unique(mreg$regiao[match(conf_v24$cod6, mreg$cod6)])
+frase_conf <- if (length(reg_conf) == 1 && reg_conf == v24$regiao[1]) {
+  paste0(", justamente a que contém os agrupamentos Alto-Alto confirmados (", lista(conf_v24$nome), ")")
+} else {
+  paste0("; os agrupamentos Alto-Alto confirmados estão em ", lista(reg_conf))
+}
+```
+
+Os `r n_mun` municípios foram agrupados nas `r n_reg` regiões de saúde do estado, com
+`r min(rs$n_municipios)` a `r max(rs$n_municipios)` municípios cada. A tabela município → região
+vem do Ministério da Saúde, redistribuída pelo pacote geobr [@pereira2019geobr], e foi conferida
+contra as páginas de cada região no TabNet da Secretaria de Estado de Saúde. O contorno regional
+é a malha municipal do IBGE dissolvida, e a taxa de cada região é a soma dos casos dividida pela
+soma da população, não a média das taxas municipais.
+
+```{r tbl-regioes}
+#| tbl-cap: "Incidência de SRAG por região de saúde no último ano do estudo (casos por 100 mil hab., população oficial do ano)"
+ult <- ir[ir$ano == ano_fim, ]
+t7 <- data.frame(Região = rs$regiao, Municípios = rs$n_municipios, check.names = FALSE)
+for (ag in AGENTES) {
+  x <- ult[ult$agente == ag, ]
+  t7[[rot(ag)]] <- fd(x$incid_100k[match(rs$cod_regiao, x$cod_regiao)])
+}
+tab(t7)
+```
+
+Em `r ano_fim`, a região de maior taxa foi
+`r lista(paste0(topo$regiao, c(sarscov2 = " no ", influenza = " na ", vsr = " no ")[topo$agente], rot(topo$agente), " (", fd(topo$incid_100k), " por 100 mil)"))`.
+No VSR de 2024, o ano dos agrupamentos municipais confirmados, a região com maior taxa foi
+`r v24$regiao[1]` (`r fd(v24$incid_100k[1])` por 100 mil)`r frase_conf`.
+
+```{r tbl-moran-regional}
+#| tbl-cap: "I de Moran global entre as regiões de saúde (taxa bruta, vizinhança Queen); resultado descritivo"
+t8 <- mr[order(match(mr$agente, AGENTES), mr$ano), ]
+t8 <- data.frame(Agente = rot(t8$agente), Ano = t8$ano, `I de Moran` = fd(t8$I, 3),
+                 `I esperado sem padrão` = fd(t8$esperado_I, 3), `p (permutação)` = fpv(t8$p_perm),
+                 check.names = FALSE)
+tab(t8)
+```
+
+Entre as regiões, a vizinhança Queen tem `r pares_reg` dos `r pares_possiveis` pares possíveis.
+`r if (!m1_m2_vizinhas) "As regiões Metropolitana I e Metropolitana II não são vizinhas nessa malha: a Baía de Guanabara e o município de Guapimirim, da região Serrana, as separam, e o mesmo vale entre os municípios delas." else ""`
+O I de Moran regional ficou abaixo do valor esperado sem padrão em `r abaixo` dos
+`r nrow(mr)` mapas, e foi significativo para autocorrelação positiva em `r sig_reg`. Com
+`r n_reg` unidades o teste tem pouco poder, e o LISA não foi calculado: a correção por múltiplos
+testes do ADR-0004 anularia quase qualquer sinal. O resultado mostra que os agrupamentos
+municipais não se repetem como agrupamentos de regiões; a agregação mistura municípios de taxa
+alta e baixa, efeito conhecido como problema da unidade de área modificável [@openshaw1984].
+
+![Incidência de SRAG por VSR por região de saúde, 2024](resultados/mapas/regional_vsr_2024.png){#fig-regional width=85%}
+
 ## Protótipo de painel para a vigilância
 
 O painel interativo (`app.R`, Shiny e leaflet) permite escolher o agente, o ano e a camada
@@ -392,8 +466,11 @@ pequenas <- sum(ind_muni$casos >= 1 & ind_muni$casos < LIMIAR_CONTAGEM_PEQUENA)
   média dos vizinhos; a alternativa local usaria a mesma vizinhança que o LISA testa.
 - **Malha do painel.** O painel desenha a malha simplificada em `r tol_painel` m para ficar leve
   no navegador; toda a análise usou a malha oficial completa.
-- **Escalas não entregues.** A região de saúde e a padronização por idade ficaram para uma
-  fase seguinte; a comparação entre municípios de estrutura etária diferente é bruta.
+- **Padronização por idade não entregue.** Ficou para uma fase seguinte; a comparação entre
+  municípios de estrutura etária diferente é bruta.
+- **Escala regional só descritiva.** Com `r n_reg` regiões, o Moran global tem pouco poder e o
+  LISA não foi calculado; a taxa regional é bruta, sem suavização, e mistura municípios de taxas
+  muito diferentes.
 - **Contagens pequenas.** As tabelas publicadas têm `r fi(pequenas)` combinações de município,
   agente e ano com menos de `r LIMIAR_CONTAGEM_PEQUENA` casos. Não há supressão: o
   microdado de origem já é público e anonimizado pelo Ministério, e o projeto só agrega. Quem

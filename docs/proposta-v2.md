@@ -274,6 +274,9 @@ etários opostos e os municípios do RJ diferem muito em estrutura etária.
 **Escala regional.** Os mesmos indicadores agregados por região de saúde (soma de casos
 e de população das unidades), com mapa próprio. É a escala em que a SES-RJ e as
 Comissões Intergestores Regionais decidem.
+*Entregue no CS-030 (2026-09-25):* tabela município → região do geobr 2025, conferida
+contra a SES-RJ; geometria dissolvida da malha IBGE; 12 mapas regionais; Moran global
+regional só descritivo (n = 9), sem LISA.
 
 ### 3.5 Processamento cartográfico e padronização geodésica
 

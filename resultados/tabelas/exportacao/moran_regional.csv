@@ -1,0 +1,13 @@
+﻿"agente";"ano";"regioes";"variavel";"I_de_Moran";"I_esperado_sem_padrao";"p_permutacao";"permutacoes"
+"Influenza";2022;9;"taxa bruta";-0,3945;-0,125;0,888;9999
+"Influenza";2023;9;"taxa bruta";-0,4269;-0,125;0,935;9999
+"Influenza";2024;9;"taxa bruta";-0,3249;-0,125;0,821;9999
+"Influenza";2025;9;"taxa bruta";-0,2364;-0,125;0,682;9999
+"SARS-CoV-2";2022;9;"taxa bruta";-0,4178;-0,125;0,949;9999
+"SARS-CoV-2";2023;9;"taxa bruta";-0,5203;-0,125;0,998;9999
+"SARS-CoV-2";2024;9;"taxa bruta";-0,5134;-0,125;0,996;9999
+"SARS-CoV-2";2025;9;"taxa bruta";-0,3698;-0,125;0,889;9999
+"VSR";2022;9;"taxa bruta";-0,1422;-0,125;0,488;9999
+"VSR";2023;9;"taxa bruta";-0,2584;-0,125;0,763;9999
+"VSR";2024;9;"taxa bruta";0,0386;-0,125;0,208;9999
+"VSR";2025;9;"taxa bruta";-0,1614;-0,125;0,524;9999

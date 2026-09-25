@@ -4,6 +4,7 @@
 #   resultados/objetos/pesos_queen.rds               objeto listw, estilo W
 #   resultados/estatistica/vizinhos_por_municipio.csv
 #   resultados/estatistica/histograma_vizinhos.png
+#   resultados/objetos/pesos_regionais.rds          listw das 9 regiões de saúde (CS-030)
 
 source("00_setup.R")
 
@@ -43,3 +44,21 @@ ggplot2::ggsave(file.path("resultados", "estatistica", "histograma_vizinhos.png"
 message(sprintf("Vizinhança Queen: %d municípios, %d ligações, vizinhos por município de %d a %d (mediana %g)",
                 length(vizinhos), ligacoes, min(tabela$n_vizinhos), max(tabela$n_vizinhos),
                 stats::median(tabela$n_vizinhos)))
+
+# ---- regiões de saúde (CS-030) ----
+regioes_rj <- readRDS(file.path("dados", "processados", "regioes_saude_rj.rds"))
+municipio_regiao <- as.data.frame(arrow::read_parquet(file.path("dados", "processados", "municipio_regiao.parquet")))
+vizinhos_reg <- criar_vizinhos_regionais(regioes_rj)
+
+# Prova cruzada da dissolução: duas regiões são vizinhas se, e só se, algum
+# município de uma toca algum da outra na vizinhança municipal acima.
+implicados <- pares_regionais_implicados(vizinhos, municipio_regiao)
+dissolvidos <- pares_de_vizinhanca(vizinhos_reg)
+if (!identical(implicados, dissolvidos)) {
+  stop("Vizinhança das regiões dissolvidas difere da implicada pelos municípios: ",
+       paste(setdiff(union(implicados, dissolvidos), intersect(implicados, dissolvidos)), collapse = ", "),
+       call. = FALSE)
+}
+saveRDS(criar_pesos(vizinhos_reg), file.path("resultados", "objetos", "pesos_regionais.rds"))
+message(sprintf("Vizinhança regional: %d regiões, %d pares (%d ligações), iguais aos implicados pelos municípios",
+                length(vizinhos_reg), length(dissolvidos), contar_ligacoes(vizinhos_reg)))

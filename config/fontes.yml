@@ -68,3 +68,13 @@ ibge:
     camada: RJ_Municipios_2022.shp
     versao: "Malha Municipal 2022 (IBGE), publicada em 28/03/2023"
     descricao: Malha municipal do RJ, IBGE 2022, SIRGAS 2000, resolução completa
+
+# Regiões de saúde (CS-030). Só a tabela município -> região é usada; a geometria
+# regional sai de dissolver a malha do IBGE acima (ADR-0006). O arquivo cobre o
+# Brasil inteiro (21 MB), por isso fica em dados/brutos, fora do git.
+# A composição do RJ é a mesma nas edições 2013, 2023, 2024 e 2025 do geobr.
+regioes_saude:
+  url: https://github.com/ipea/geobr_prep_data/releases/download/v2.0.0/healthregions_2025_simplified.parquet
+  destino: dados/brutos/geobr_healthregions_2025_simplified.parquet
+  versao: "geobr_prep_data v2.0.0, regiões de saúde 2025"
+  descricao: Regiões de saúde do Brasil (Ministério da Saúde, via geobr/IPEA), tabela município -> região

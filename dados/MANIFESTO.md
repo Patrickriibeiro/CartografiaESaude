@@ -5,6 +5,7 @@ Gerado por `registrar_fonte()` (R/funcoes_utilitarias.R). Não editar à mão:
 
 | arquivo | url | baixado_em | bytes | sha256 | versao | descricao |
 |---|---|---|---|---|---|---|
+| dados/brutos/geobr_healthregions_2025_simplified.parquet | https://github.com/ipea/geobr_prep_data/releases/download/v2.0.0/healthregions_2025_simplified.parquet | 2026-09-25T18:24:39Z | 21098789 | 612ef18c1d7ab5e0b0f1d2514619e18373ac9cd62e0782afe5951ad18b074a11 | geobr_prep_data v2.0.0, regiões de saúde 2025 | Regiões de saúde do Brasil (Ministério da Saúde, via geobr/IPEA), tabela município -> região |
 | dados/brutos/INFLUD22-23-03-2026.parquet | https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SRAG/2022/INFLUD22-23-03-2026.parquet | 2026-09-25T16:11:39Z | 43750567 | 93aab4d4ef3ad87250d0179935156329f02a3b6947341654c06c1be26e67b9f1 | 23-03-2026 | SIVEP-Gripe, SRAG hospitalizado, banco 2022 (PARQUET) |
 | dados/brutos/INFLUD23-23-03-2026.parquet | https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SRAG/2023/INFLUD23-23-03-2026.parquet | 2026-09-25T16:11:39Z | 22121151 | 3adfca92884f4b213caaf81b1adf83e18416b19842c273a7e20c4ba9c9440070 | 23-03-2026 | SIVEP-Gripe, SRAG hospitalizado, banco 2023 (PARQUET) |
 | dados/brutos/INFLUD24-23-03-2026.parquet | https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SRAG/2024/INFLUD24-23-03-2026.parquet | 2026-09-25T16:11:40Z | 21222050 | 015135a33779ce28e2a0c43a83c06b7e76c11144ec47463a54687f8ca5e23f5a | 23-03-2026 | SIVEP-Gripe, SRAG hospitalizado, banco 2024 (PARQUET) |

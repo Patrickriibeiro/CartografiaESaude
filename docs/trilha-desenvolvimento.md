@@ -259,16 +259,20 @@ Testes verificam o contrato, não a implementação.
                     (zero explícito); casos, populacao, incid_100k, incid_eb_100k
 03_cartografia.R ─► dados/processados/municipios_rj.rds             (CS-014, entregue; malha IBGE, ADR-0006)
                     contrato: sf com 92 feições válidas, EPSG:4674, coluna cod6
+                  + regioes_saude_rj.rds, indicadores_regionais.parquet   (CS-030, entregue)
+                    contrato: 9 regiões (malha IBGE dissolvida), 108 linhas, soma de casos = municipal
 04_pesos_espaciais.R ► resultados/objetos/pesos_queen.rds (+ vizinhos_queen.rds)   (CS-016, entregue)
                     contrato: listw estilo W; n.comp.nb == 1; nenhum vizinho vazio; 456 ligações;
                     region.id = cod6 (alinhar por chave, nunca por posição)
+                  + pesos_regionais.rds: 14 pares = os implicados pelos municípios (CS-030)
 05_moran_lisa.R ──► resultados/estatistica/moran_lisa.rds          (CS-017, entregue)
                     contrato: por agente × ano: I, p_perm (9.999 perm, semente fixa),
                     tabela LISA 92 × 12 com Ii, p_perm, p_fdr, quadrante, nivel
                     (confirmado/indicativo/ns), classe, instavel; + bruta e Rook (ADR-0004)
-06_visualizacoes.R ► resultados/mapas/*.png   (CS-019, entregue: 24 mapas + 2 painéis)
+                    + regional: Moran global nas 9 regiões, descritivo, sem LISA (CS-030)
+06_visualizacoes.R ► resultados/mapas/*.png   (CS-019 + CS-030, entregue: 24 mapas + 2 painéis + 12 regionais)
 07_exportacao.R ──► resultados/tabelas/*.csv
-run.R (CS-023, entregue): 01→08 isoladas, log de tempos, --limpar refaz do zero em ~97 s
+run.R (CS-023, entregue): 01→08 isoladas, log de tempos, --limpar refaz do zero em ~140 s
 app.R / 08_relatorio.qmd  consomem só dados/processados e resultados/
 08_relatorio.qmd (CS-022, entregue): HTML + revealjs; nenhum número digitado (teste)
 ```
