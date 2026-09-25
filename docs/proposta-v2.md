@@ -294,14 +294,21 @@ padronizados por linha (estilo W). Verifica-se que o grafo tem um único compone
 conexo (`n.comp.nb`) e que nenhum município fica sem vizinho. Análise de sensibilidade
 com contiguidade Rook.
 
-**Moran Global.** `moran.mc` com 999 permutações e semente fixa, por agente × ano
-(12 testes). Reporta-se I, pseudo p-valor e o gráfico de dispersão de Moran.
+**Moran Global.** `moran.mc` com 9.999 permutações e semente fixa, por agente × ano
+(12 testes), hipótese alternativa de autocorrelação positiva (H1). Reporta-se I, pseudo
+p-valor e o gráfico de dispersão de Moran. Com 999 permutações o menor p possível
+(0,001) ficaria acima do limiar mais exigente da correção FDR para 92 testes (0,00054),
+e a correção seria decidida pela resolução da simulação (ADR-0004 §3).
 
-**LISA.** `localmoran_perm` (999 permutações), classificação em Alto-Alto, Baixo-Baixo,
-Alto-Baixo, Baixo-Alto e não significativo, com α = 0,05. Como são 92 testes
-simultâneos por mapa, os p-valores são corrigidos por FDR (Benjamini-Hochberg) e o
-relatório mostra o número de municípios Alto-Alto antes e depois da correção. A
-variável de entrada é a taxa suavizada; a taxa bruta entra como sensibilidade.
+**LISA.** `localmoran_perm` (9.999 permutações, p bicaudal), quadrante pelo diagrama de
+Moran (Alto-Alto, Baixo-Baixo, Alto-Baixo, Baixo-Alto). Como são 92 testes simultâneos
+por mapa, os p-valores são corrigidos por FDR (Benjamini-Hochberg, α = 0,05) e o
+resultado sai em **dois níveis**: *confirmado* (significativo após a correção) e
+*indicativo* (significativo só sem correção); o restante é não significativo. O mapa
+distingue os dois níveis; a tabela conta ambos e o esperado por acaso (4,6 por mapa). Os
+três municípios com um único vizinho (Paraty, Itatiaia, Armação dos Búzios) mantêm a
+classe, marcada como instável (ADR-0004). A variável de entrada é a taxa suavizada; a
+taxa bruta e a vizinhança Rook entram como sensibilidade.
 
 > FDR (taxa de falsas descobertas): correção que limita a proporção esperada de falsos
 > positivos entre os municípios declarados significativos. Sem ela, 92 testes a 5 %

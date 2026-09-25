@@ -96,7 +96,136 @@ resumir_vizinhanca <- function(nb, malha) {
   )
 }
 
-# A implementar:
-# calcular_moran()       — CS-017
+# ---------------------------------------------------------------------------
+# Moran global e LISA (CS-017, ADR-0004)
+# ---------------------------------------------------------------------------
+
+N_PERMUTACOES <- 9999L   # resolução de p = 1e-4, abaixo do limiar mais exigente do FDR (0,05/92)
+ALFA_LISA <- 0.05
+
+#' Reordena `df` na ordem dos pesos (region.id = cod6). Para se faltar ou
+#' sobrar município: alinhar por posição, e não pela chave, é o erro silencioso
+#' que o CS-016 previu.
+alinhar_a_pesos <- function(df, pesos, chave = "cod6") {
+  ids <- attr(pesos, "region.id")
+  if (is.null(ids)) stop("Pesos sem region.id: gere-os com criar_vizinhos_queen()", call. = FALSE)
+  if (anyDuplicated(df[[chave]])) stop("Chave repetida ao alinhar aos pesos", call. = FALSE)
+  if (!setequal(df[[chave]], ids)) {
+    stop("Municípios do dado e dos pesos não coincidem (", length(setdiff(ids, df[[chave]])),
+         " faltando, ", length(setdiff(df[[chave]], ids)), " sobrando)", call. = FALSE)
+  }
+  df[match(ids, df[[chave]]), , drop = FALSE]
+}
+
+#' Moran global I por permutação (Monte Carlo). H1 = autocorrelação positiva
+#' (alternativa "greater"), que é a hipótese H1 da proposta. Semente fixa.
+calcular_moran <- function(x, pesos, nsim = N_PERMUTACOES, semente = SEMENTE,
+                           alternativa = "greater") {
+  if (anyNA(x)) stop("NA na variável do Moran", call. = FALSE)
+  if (length(x) != length(pesos$neighbours)) stop("Tamanho da variável difere dos pesos", call. = FALSE)
+  set.seed(semente)
+  m <- spdep::moran.mc(x, pesos, nsim = nsim, alternative = alternativa, zero.policy = FALSE)
+  data.frame(I = unname(m$statistic), p_perm = m$p.value, nsim = nsim,
+             esperado_I = -1 / (length(x) - 1), alternativa = alternativa)
+}
+
+#' Quadrante do diagrama de Moran: valor e média dos vizinhos, centrados na média.
+#' HH = alto cercado de altos; LL = baixo cercado de baixos; HL e LH = discrepantes.
+quadrante_moran <- function(x, pesos) {
+  z <- x - mean(x)
+  lag <- spdep::lag.listw(pesos, z, zero.policy = FALSE)
+  q <- ifelse(z >= 0, ifelse(lag >= 0, "HH", "HL"), ifelse(lag >= 0, "LH", "LL"))
+  data.frame(z = z, lag_z = lag, quadrante = q, stringsAsFactors = FALSE)
+}
+
+#' Moran local (LISA) por permutação condicional. Devolve, por unidade: Ii,
+#' p_perm (bicaudal, da simulação), quadrante e n_vizinhos. Semente fixa via
+#' iseed, que é o mecanismo reprodutível do spdep para as permutações locais.
+calcular_lisa <- function(x, pesos, nsim = N_PERMUTACOES, semente = SEMENTE) {
+  if (anyNA(x)) stop("NA na variável do LISA", call. = FALSE)
+  lm <- spdep::localmoran_perm(x, pesos, nsim = nsim, alternative = "two.sided",
+                               zero.policy = FALSE, iseed = semente)
+  q <- quadrante_moran(x, pesos)
+  data.frame(
+    cod6 = attr(pesos, "region.id"),
+    valor = x, z = q$z, lag_z = q$lag_z,
+    Ii = unname(lm[, "Ii"]),
+    p_perm = unname(lm[, "Pr(z != E(Ii)) Sim"]),
+    quadrante = q$quadrante,
+    n_vizinhos = spdep::card(pesos$neighbours),
+    stringsAsFactors = FALSE
+  )
+}
+
+#' Classifica o LISA em dois níveis (ADR-0004):
+#'   confirmado — significativo após correção de Benjamini-Hochberg (FDR) em alfa;
+#'   indicativo — significativo só sem correção (p_perm < alfa);
+#'   ns         — não significativo.
+#' `instavel` marca municípios com um único vizinho (CS-039): a classe deles
+#' compara com um só município e é mantida, mas sinalizada.
+classificar_lisa <- function(lisa, alfa = ALFA_LISA, metodo = "BH") {
+  lisa$p_fdr <- stats::p.adjust(lisa$p_perm, method = metodo)
+  lisa$nivel <- ifelse(lisa$p_fdr < alfa, "confirmado",
+                       ifelse(lisa$p_perm < alfa, "indicativo", "ns"))
+  lisa$classe <- ifelse(lisa$nivel == "ns", "ns", lisa$quadrante)
+  lisa$instavel <- lisa$n_vizinhos == 1L
+  lisa
+}
+
+#' Roda Moran global e LISA para cada agente × ano de `ind`, sobre `variavel`.
+#' Devolve list(global = data.frame, lisa = data.frame).
+executar_moran_lisa <- function(ind, pesos, variavel = "incid_eb_100k",
+                                nsim = N_PERMUTACOES, semente = SEMENTE, alfa = ALFA_LISA,
+                                rotulo_vizinhanca = "queen") {
+  combos <- unique(ind[, c("agente", "ano")])
+  combos <- combos[order(combos$agente, combos$ano), ]
+  globais <- list(); locais <- list()
+  for (k in seq_len(nrow(combos))) {
+    ag <- combos$agente[k]; a <- combos$ano[k]
+    x <- alinhar_a_pesos(ind[ind$agente == ag & ind$ano == a, ], pesos)
+    g <- calcular_moran(x[[variavel]], pesos, nsim, semente)
+    l <- classificar_lisa(calcular_lisa(x[[variavel]], pesos, nsim, semente), alfa)
+    globais[[k]] <- cbind(agente = ag, ano = a, variavel = variavel,
+                          vizinhanca = rotulo_vizinhanca, g, stringsAsFactors = FALSE)
+    locais[[k]] <- cbind(agente = ag, ano = a, variavel = variavel, l, stringsAsFactors = FALSE)
+  }
+  list(global = do.call(rbind, globais), lisa = do.call(rbind, locais))
+}
+
+#' Contagens por agente × ano: significativos antes e depois do FDR, por
+#' classe, e quantos instáveis entre eles. É a tabela do relatório.
+resumir_lisa <- function(lisa, alfa = ALFA_LISA) {
+  do.call(rbind, lapply(split(lisa, list(lisa$agente, lisa$ano), drop = TRUE), function(x) {
+    conf <- x$nivel == "confirmado"; ind <- x$nivel == "indicativo"
+    data.frame(
+      agente = x$agente[1], ano = x$ano[1], n = nrow(x),
+      esperado_por_acaso = nrow(x) * alfa,
+      sig_sem_correcao = sum(conf | ind),
+      sig_fdr = sum(conf),
+      HH_confirmado = sum(conf & x$quadrante == "HH"), LL_confirmado = sum(conf & x$quadrante == "LL"),
+      HH_indicativo = sum(ind & x$quadrante == "HH"), LL_indicativo = sum(ind & x$quadrante == "LL"),
+      HL_LH_sig = sum((conf | ind) & x$quadrante %in% c("HL", "LH")),
+      instaveis_sig = sum((conf | ind) & x$instavel),
+      stringsAsFactors = FALSE)
+  }))
+}
+
+#' Concordância entre duas classificações LISA (ex.: suavizada × bruta), por
+#' agente × ano: proporção de municípios com a mesma classe.
+comparar_lisa <- function(lisa_a, lisa_b, rotulos = c("suavizada", "bruta")) {
+  chave <- c("agente", "ano", "cod6")
+  j <- merge(lisa_a[, c(chave, "classe")], lisa_b[, c(chave, "classe")], by = chave,
+             suffixes = paste0("_", rotulos))
+  do.call(rbind, lapply(split(j, list(j$agente, j$ano), drop = TRUE), function(x) {
+    ca <- x[[paste0("classe_", rotulos[1])]]; cb <- x[[paste0("classe_", rotulos[2])]]
+    data.frame(agente = x$agente[1], ano = x$ano[1],
+               concordancia = mean(ca == cb),
+               sig_em_ambas = sum(ca != "ns" & cb != "ns"),
+               sig_so_na_primeira = sum(ca != "ns" & cb == "ns"),
+               sig_so_na_segunda = sum(ca == "ns" & cb != "ns"),
+               stringsAsFactors = FALSE)
+  }))
+}
+
 # calcular_lisa()        — CS-017
 # classificar_lisa()     — CS-017

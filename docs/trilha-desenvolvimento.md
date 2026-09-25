@@ -260,9 +260,10 @@ Testes verificam o contrato, não a implementação.
 04_pesos_espaciais.R ► resultados/objetos/pesos_queen.rds (+ vizinhos_queen.rds)   (CS-016, entregue)
                     contrato: listw estilo W; n.comp.nb == 1; nenhum vizinho vazio; 456 ligações;
                     region.id = cod6 (alinhar por chave, nunca por posição)
-05_moran_lisa.R ──► resultados/estatistica/moran_lisa.rds
-                    contrato: por agente × ano: I, p_mc (999 perm, seed fixa),
-                    tabela LISA com Ii, p_perm, p_fdr, quadrante, classe
+05_moran_lisa.R ──► resultados/estatistica/moran_lisa.rds          (CS-017, entregue)
+                    contrato: por agente × ano: I, p_perm (9.999 perm, semente fixa),
+                    tabela LISA 92 × 12 com Ii, p_perm, p_fdr, quadrante, nivel
+                    (confirmado/indicativo/ns), classe, instavel; + bruta e Rook (ADR-0004)
 06_visualizacoes.R ► resultados/mapas/*.png
 07_exportacao.R ──► resultados/tabelas/*.csv
 app.R / 08_relatorio.qmd  consomem só dados/processados e resultados/
@@ -274,7 +275,7 @@ app.R / 08_relatorio.qmd  consomem só dados/processados e resultados/
 2. **Todo número do relatório sai de um objeto em `resultados/`**, nunca digitado à mão.
 3. **Zero explícito**: município sem caso aparece com `casos = 0`, não desaparece.
 4. **Chave de join é `cod6`** (6 dígitos, texto), em todas as tabelas, sempre.
-5. **Semente fixa** (`set.seed`) antes de qualquer permutação Monte Carlo.
+5. **Semente fixa** (`set.seed`) antes de qualquer permutação Monte Carlo; 9.999 permutações (ADR-0004 §3).
 6. **Vizinhança única**: `n.comp.nb == 1` é testado antes de qualquer Moran.
 7. **Fixture sintética é rotulada** como fabricada; nunca se parece com dado real de paciente.
 8. **Verificação com número**: "testes passando" não vale; "38/38 em 6 arquivos" vale.

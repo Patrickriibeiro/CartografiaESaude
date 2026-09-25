@@ -61,17 +61,15 @@ D-06, D-08, D-09, D-10 e a opção do CS-039). **Só a D-02 (prazo) continua abe
 
 | ID | Título | Evidência | Modelo · Esforço | Aceite |
 |---|---|---|---|---|
-| CS-017 | **ADR-0004 + `05_moran_lisa.R`** — alinhar dados aos pesos pelo `region.id` (= cod6) de `pesos_queen.rds`, nunca pela posição; decidir o CS-039 no mesmo ADR; **evidência do CS-013: a suavização reordena muito os municípios onde há poucos casos (correlação de postos bruta × suavizada de 0,40 no VSR 2022, 0,62 no VSR 2024), então LISA sobre a bruta e sobre a suavizada podem discordar justamente nesses anos** — — Moran global via `moran.mc(nsim=999)` com `set.seed`; LISA via `localmoran_perm(nsim=999)`; p bruto e `p.adjust(method="BH")`; classificação em 5 classes (HH, LL, HL, LH, ns) com α=0,05; variável: `incid_eb_100k` (D-09) | trilha §2.9; PDF §3.4 | **Fable · high** | 12 combinações agente × ano com I, p_mc; tabela LISA 92 × 12; ADR aceito; contagem de HH antes e depois do FDR reportada |
-| CS-018 | **Testes estatísticos com padrão conhecido** — grade sintética 10×10: tabuleiro de xadrez → I < 0 significativo; gradiente → I > 0 significativo; aleatório → p > 0,05 na maioria de 20 seeds | boa prática; `spdep` vignette | Opus · medium | 3 testes verdes; rodam em < 10 s |
 
 ### F5 — Produtos
 
 | ID | Título | Evidência | Modelo · Esforço | Aceite |
 |---|---|---|---|---|
-| CS-019 | **`06_visualizacoes.R`** — `mapa_incidencia()` (coropleto por agente × ano, quebras por quantil, escala viridis, legenda em pt-BR) e `mapa_lisa()` (5 classes, cores convencionais HH vermelho / LL azul), `tema_mapa()`; PNG 300 dpi | PDF tabela de funções | Opus · medium | 12 mapas de incidência + 12 LISA em `resultados/mapas/`; sem texto sobreposto (inspeção visual registrada) |
+| CS-019 | **`06_visualizacoes.R`** — `mapa_incidencia()` (coropleto por agente × ano, quebras por quantil, escala viridis, legenda em pt-BR) e `mapa_lisa()` (classes HH/LL/HL/LH em **dois níveis**: confirmado em cor cheia, indicativo em cor clara, ns em cinza; **hachura** nos 3 instáveis; ADR-0004), `tema_mapa()`; PNG 300 dpi | PDF tabela de funções | Opus · medium | 12 mapas de incidência + 12 LISA em `resultados/mapas/`; sem texto sobreposto (inspeção visual registrada) |
 | CS-020 | **`07_exportacao.R`** — CSV UTF-8 com BOM (abre no Excel) de indicadores e LISA; `salvar_resultado()` com carimbo de data | PDF | Opus · low | 3 CSV; abrem no Excel sem acento quebrado |
 | CS-021 | **`app.R` Shiny + leaflet** — sidebar com `selectInput` agente e ano, mapa coropleto com popup (município, casos, população, taxa bruta, taxa EB, classe LISA), toggle de camada LISA; carrega só `dados/processados` e `resultados/`; 3 estados (carregando / vazio / erro) | PDF §3.5 | Opus · medium | 12 combinações filtram sem erro no console; popup mostra 6 campos; inicia em < 5 s |
-| CS-022 | **`08_relatorio.qmd` + `_quarto.yml`** — HTML e revealjs do mesmo fonte; inclui `docs/nota-metodologica-suavizacao.md` (CS-013) e as tabelas do CS-040; seções 4.1–4.5 e 5.1–5.3 do PDF preenchidas com **chunks** que leem `resultados/` (nenhum número digitado); data do snapshot no cabeçalho | PDF sumário; trilha §3.3 invariante 2 | Opus · medium | `quarto render` sem erro; `grep` de números "mágicos" no `.qmd` = 0; 2 formatos gerados |
+| CS-022 | **`08_relatorio.qmd` + `_quarto.yml`** — HTML e revealjs do mesmo fonte; inclui `docs/nota-metodologica-suavizacao.md` (CS-013), as tabelas 4.1 e 4.2 do ADR-0004 e a leitura das hipóteses H1–H3 do ADR-0004 §5 e as tabelas do CS-040; seções 4.1–4.5 e 5.1–5.3 do PDF preenchidas com **chunks** que leem `resultados/` (nenhum número digitado); data do snapshot no cabeçalho | PDF sumário; trilha §3.3 invariante 2 | Opus · medium | `quarto render` sem erro; `grep` de números "mágicos" no `.qmd` = 0; 2 formatos gerados |
 | CS-023 | **`run.R`** — executa 00→07 em ordem, mede tempo por etapa, para no primeiro erro, escreve `resultados/execucao.log` | PDF "ORGANIZAÇÃO FLUXO" | Opus · low | execução do zero completa; log com 8 tempos |
 
 ### F6 — Entrega e reprodutibilidade
@@ -109,7 +107,12 @@ D-06, D-08, D-09, D-10 e a opção do CS-039). **Só a D-02 (prazo) continua abe
 
 | ID | Título | Evidência | Modelo · Esforço | Aceite |
 |---|---|---|---|---|
-| CS-039 | **Efeito de borda e municípios com 1 vizinho** — Paraty (só Angra), Itatiaia (só Resende) e Armação dos Búzios (só Cabo Frio) têm 1 vizinho; com pesos W, o LISA deles é a comparação com um único município. Paraty e Itatiaia, e outros municípios de divisa, perdem vizinhos de SP, MG e ES. **Decidido 2026-09-25 (autora): (c) marcar a classe LISA desses 3 como "instável" + (a) declarar na limitação; (b) fica para uma segunda fase.** Opções eram: (a) só declarar na limitação; (b) sensibilidade com k vizinhos mais próximos (k = 4); (c) marcar a classe LISA desses 3 como "instável" no mapa | `resultados/estatistica/vizinhos_por_municipio.csv` · CS-016 | Fable · medium (entra no ADR-0004) | ADR-0004 decide; relatório §5.3 cita os 3 municípios |
+
+### Achados do CS-017
+
+| ID | Título | Evidência | Modelo · Esforço | Aceite |
+|---|---|---|---|---|
+| CS-041 | **"Cluster de zeros" na taxa bruta** — no VSR 2022 (44 municípios sem caso) a taxa bruta dá Moran global p = 0,008 e 13 municípios LISA significativos; a suavizada dá p = 0,10 e 0. Investigar se os zeros se concentram em municípios sem unidade notificadora/laboratório (cruzar com `CO_MUN_NOT` e, se o CS-034 rodar, com o CNES); vira parágrafo da discussão (§5.1/§5.3) | ADR-0004 §4.1 · `lisa_concordancia.csv` | Opus · medium | tabela zeros × existência de notificação própria por município; parágrafo no relatório |
 
 ### Achados do CS-007
 
@@ -132,7 +135,7 @@ D-06, D-08, D-09, D-10 e a opção do CS-039). **Só a D-02 (prazo) continua abe
 | ADR-0001 | Extração do SIVEP-Gripe por download direto do portal (não `microdatasus`) | CS-005 · **escrito e aceito** (decide D-03 e D-07) |
 | ADR-0002 | Critério de caso por agente e tratamento de co-detecção | CS-007 · **aceito 2026-09-25** |
 | ADR-0003 | Denominador populacional por ano, incluindo 2023 | CS-011 · **aceito 2026-09-25** (implementação do denominador único no CS-012) |
-| ADR-0004 | LISA: permutação, correção FDR, variável (bruta × EB), α | CS-017 |
+| ADR-0004 | LISA: permutação, correção FDR, variável (bruta × EB), α | CS-017 · **escrito e aceito** (9.999 permutações; FDR-BH por mapa; dois níveis) |
 | ADR-0006 | Malha oficial do IBGE em resolução completa, não o `geobr` simplificado | CS-014 · **escrito e aceito** |
 | ADR-0005 | Escopo: município (não bairro); scripts numerados (não `targets`); quadrimestre só descritivo | CS-002 · **escrito**, itens 1–2 aceitos |
 
@@ -157,6 +160,9 @@ D-06, D-08, D-09, D-10 e a opção do CS-039). **Só a D-02 (prazo) continua abe
 | CS-010 | **Base sintética** — `tests/gerar_fixture.R` (semente fixa) gera 210 fichas FABRICADAS, 92 municípios, 19 cenários com resposta esperada escrita à mão; 32 municípios sem caso; 7 testes de classificação em 1,1 s; a data inválida segue coberta em `test-sivep-etl.R` | 2026-09-25 | idem |
 | CS-012 | **Casos e incidência** — `calcular_casos()`, `completar_municipios()`, `calcular_incidencia()`; grade anual **1.104 linhas** (92 × 3 × 4), quadrimestral 3.312; 37.562 casos preservados; 295 combinações com zero explícito; duas taxas da D-05 (`incid_100k` e `incid_100k_pop2024`); quadrimestre epidemiológico (semanas 1–17, 18–34, 35–53; adendo ao ADR-0005) | 2026-09-25 | `docs/release-history/cs-012-incidencia.md` · commit `3bba681` |
 | CS-013 | **Suavização empírica de Bayes** — `suavizar_bayes_empirico()` (Marshall 1991, Poisson, por agente × ano, população do ano); `incid_eb_100k` em 1.104/1.104 linhas; conferida contra a fórmula à mão; guarda para agente × ano sem caso (0/0); dispersão bruta × suavizada e `docs/nota-metodologica-suavizacao.md` | 2026-09-25 | `docs/release-history/cs-013-suavizacao.md` · commit `4962c0b` |
+| CS-017 | **ADR-0004 + `05_moran_lisa.R`** — Moran global (9.999 permutações, semente fixa, H1 positiva) e LISA (permutação condicional, p bicaudal, FDR-BH por mapa, dois níveis confirmado/indicativo, instáveis marcados); 12 globais × 3 rodadas (suavizada, bruta, Rook) e 92 × 12 locais em 32 s; global significativo em 6/12; só o VSR 2024 tem 5 confirmados | 2026-09-25 | `docs/release-history/cs-017-cs-018-moran-lisa.md` · ADR-0004 · commit PENDENTE |
+| CS-018 | **Testes de padrão conhecido** — tabuleiro (Rook: I < −0,9; Queen: ≈ 0), gradiente (I > 0,5), ruído em 20 sementes (≥ 15 com p > 0,05), bloco alto (HH confirmado), quadrantes à mão, embaralhar linhas não muda nada. Fechado junto com o CS-017, com aviso ao dono | 2026-09-25 | idem |
+| CS-039 | **Efeito de borda** — decidido pela autora e implementado: `instavel` marca os 3 municípios de um vizinho; só Itatiaia aparece significativo (LH indicativo, influenza 2022 e 2024) | 2026-09-25 | idem · ADR-0004 §2.6 |
 | CS-037 | **Proposta v2 atualizada com as decisões de dados** — §2.2 OE4, §3.2, §3.3 (critério de caso e co-detecção), §3.4 (denominador), §3.5 (malha), §3.10 (limitações 2, 6, 7) e referências; D-04 e D-05 continuam pendentes e o texto traz a **recomendação** marcada [REVISAR]. Não inclui o CS-036 (ano epidemiológico em §3.1) | 2026-09-25 | `docs/release-history/cs-037-cs-038-proposta-e-ibge.md` · commit `9cb75c1` |
 | CS-038 | **Método de ajuste do IBGE citado** — Nota metodológica n. 01 das Estimativas 2024, p. 6–7: Censo 2022 ajustado pela PPE, maior ajuste em municípios grandes; citado no ADR-0003 e na proposta v2 | 2026-09-25 | idem |
 
