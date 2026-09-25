@@ -66,7 +66,6 @@ D-06, D-08, D-09, D-10 e a opção do CS-039). **Só a D-02 (prazo) continua abe
 
 | ID | Título | Evidência | Modelo · Esforço | Aceite |
 |---|---|---|---|---|
-| CS-023 | **`run.R`** — executa 00→07 em ordem, mede tempo por etapa, para no primeiro erro, escreve `resultados/execucao.log` | PDF "ORGANIZAÇÃO FLUXO" | Opus · low | execução do zero completa; log com 8 tempos |
 
 ### F6 — Entrega e reprodutibilidade
 
@@ -163,6 +162,7 @@ D-06, D-08, D-09, D-10 e a opção do CS-039). **Só a D-02 (prazo) continua abe
 | CS-022 | **Relatório e apresentação** — `08_relatorio.qmd` → HTML autocontido e revealjs; seções 4.1–4.5 e 5.1–5.3 do PDF; 9 tabelas e 3 figuras, todos os números calculados (teste de números digitados, com mutação); `referencias.bib` | 2026-09-25 | `docs/release-history/cs-022-cs-040-relatorio.md` · commit `486e549` |
 | CS-040 | **Sensibilidade do critério de caso no relatório** — regra × agente × ano (literal, adotada, só classificação, detecção), tabela de co-detecção e nota dos 941 casos de 2022 com critério declarado sem resultado exportado | 2026-09-25 | idem |
 | CS-021 | **Painel Shiny + leaflet** — agente × ano × camada, popup com 6 campos, 3 estados, instáveis tracejados; `testServer` em 24 estados; carga em 2 s. Não aberto no navegador embutido (permissão negada): inspeção visual fica com o dono | 2026-09-25 | `docs/release-history/cs-021-painel.md` · commit `968fd97` |
+| CS-023 | **`run.R`** — 8 etapas isoladas, tempo por etapa em `resultados/execucao.log`, para no primeiro erro; `--limpar` refaz tudo em 97 s e os resultados versionados saem byte a byte idênticos | 2026-09-25 | `docs/release-history/cs-023-run.md` · commit PENDENTE |
 | CS-037 | **Proposta v2 atualizada com as decisões de dados** — §2.2 OE4, §3.2, §3.3 (critério de caso e co-detecção), §3.4 (denominador), §3.5 (malha), §3.10 (limitações 2, 6, 7) e referências; D-04 e D-05 continuam pendentes e o texto traz a **recomendação** marcada [REVISAR]. Não inclui o CS-036 (ano epidemiológico em §3.1) | 2026-09-25 | `docs/release-history/cs-037-cs-038-proposta-e-ibge.md` · commit `9cb75c1` |
 | CS-038 | **Método de ajuste do IBGE citado** — Nota metodológica n. 01 das Estimativas 2024, p. 6–7: Censo 2022 ajustado pela PPE, maior ajuste em municípios grandes; citado no ADR-0003 e na proposta v2 | 2026-09-25 | idem |
 

@@ -293,6 +293,83 @@ ler_fontes <- function(arquivo = file.path("config", "fontes.yml")) {
 }
 
 # ---------------------------------------------------------------------------
+# Execução do pipeline (CS-023)
+# ---------------------------------------------------------------------------
+
+# Saídas regeneráveis. Brutos e externos NÃO entram: são cache conferido pelo manifesto.
+PASTAS_DERIVADAS <- c(
+  file.path("dados", c("intermediarios", "processados")),
+  file.path("resultados", c("tabelas", "mapas", "estatistica", "objetos"))
+)
+
+#' Apaga tudo o que o pipeline gera, preservando os .gitkeep. Usado por
+#' `Rscript run.R --limpar` para provar que o pipeline refaz tudo do zero.
+limpar_derivados <- function(pastas = PASTAS_DERIVADAS) {
+  apagados <- 0L
+  for (p in pastas[dir.exists(pastas)]) {
+    alvo <- list.files(p, recursive = TRUE, full.names = TRUE, all.files = TRUE, no.. = TRUE)
+    alvo <- alvo[basename(alvo) != ".gitkeep" & !dir.exists(alvo)]
+    apagados <- apagados + sum(file.remove(alvo))
+    subpastas <- list.dirs(p, recursive = TRUE, full.names = TRUE)[-1]
+    unlink(rev(subpastas), recursive = TRUE)
+  }
+  invisible(apagados)
+}
+
+#' Roda cada etapa num ambiente próprio (uma etapa não enxerga as variáveis da
+#' outra), mede o tempo e para na primeira falha. Grava o log mesmo quando falha.
+#' `etapas` é uma lista nomeada de funções sem argumento.
+executar_etapas <- function(etapas, arquivo_log = file.path("resultados", "execucao.log")) {
+  log <- data.frame(etapa = character(0), segundos = numeric(0), status = character(0),
+                    stringsAsFactors = FALSE)
+  gravar_log <- function() {
+    dir.create(dirname(arquivo_log), recursive = TRUE, showWarnings = FALSE)
+    linhas <- c(sprintf("Execução do pipeline em %s", format(Sys.time(), "%Y-%m-%d %H:%M:%S %Z")),
+                sprintf("%-22s %9s  %s", "etapa", "segundos", "status"),
+                sprintf("%-22s %9.1f  %s", log$etapa, log$segundos, log$status),
+                sprintf("%-22s %9.1f", "TOTAL", sum(log$segundos)))
+    writeLines(linhas, arquivo_log, useBytes = TRUE)
+  }
+  for (nome in names(etapas)) {
+    message("==> ", nome)
+    t0 <- Sys.time()
+    erro <- tryCatch({ etapas[[nome]](); NULL }, error = function(e) e)
+    seg <- as.numeric(Sys.time() - t0, units = "secs")
+    log[nrow(log) + 1, ] <- list(nome, seg, if (is.null(erro)) "ok" else paste("ERRO:", conditionMessage(erro)))
+    if (!is.null(erro)) {
+      gravar_log()
+      stop("Pipeline parou em ", nome, ": ", conditionMessage(erro), call. = FALSE)
+    }
+  }
+  gravar_log()
+  invisible(log)
+}
+
+#' Etapa de script: roda o arquivo num ambiente novo, filho do global.
+etapa_script <- function(arquivo) {
+  force(arquivo)
+  function() source(arquivo, local = new.env(parent = globalenv()), encoding = "UTF-8")
+}
+
+#' Etapa do relatório: chama o Quarto apontando para este R (QUARTO_R).
+etapa_relatorio <- function(qmd = "08_relatorio.qmd") {
+  force(qmd)
+  function() {
+    quarto <- Sys.which("quarto")
+    if (!nzchar(quarto)) quarto <- "C:/Program Files/Quarto/bin/quarto.exe"
+    if (!file.exists(quarto)) stop("Quarto não encontrado; instale-o ou rode sem o relatório (--sem-relatorio)")
+    # No Windows, system2(env = ...) NÃO define variável: cola o texto antes do
+    # comando (erro encontrado no CS-023). with_envvar define só durante a chamada.
+    saida <- withr::with_envvar(
+      c(QUARTO_R = normalizePath(R.home("bin"), winslash = "/")),
+      suppressWarnings(system2(quarto, c("render", qmd), stdout = TRUE, stderr = TRUE))
+    )
+    status <- attr(saida, "status")
+    if (!is.null(status) && status != 0) stop(paste(utils::tail(saida, 5), collapse = "\n"))
+  }
+}
+
+# ---------------------------------------------------------------------------
 # Exportação para planilha (CS-020)
 # ---------------------------------------------------------------------------
 

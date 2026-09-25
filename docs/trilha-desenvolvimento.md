@@ -266,6 +266,7 @@ Testes verificam o contrato, não a implementação.
                     (confirmado/indicativo/ns), classe, instavel; + bruta e Rook (ADR-0004)
 06_visualizacoes.R ► resultados/mapas/*.png   (CS-019, entregue: 24 mapas + 2 painéis)
 07_exportacao.R ──► resultados/tabelas/*.csv
+run.R (CS-023, entregue): 01→08 isoladas, log de tempos, --limpar refaz do zero em ~97 s
 app.R / 08_relatorio.qmd  consomem só dados/processados e resultados/
 08_relatorio.qmd (CS-022, entregue): HTML + revealjs; nenhum número digitado (teste)
 ```
