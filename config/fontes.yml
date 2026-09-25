@@ -1,0 +1,12 @@
+# Fontes externas do projeto. URLs ficam aqui, não no código (trilha §6):
+# o portal já mudou de endereço uma vez (opendatasus → dadosabertos).
+# Todo arquivo baixado destas URLs é registrado em dados/MANIFESTO.md.
+
+sivep:
+  conjunto: https://dadosabertos.saude.gov.br/dataset/srag-2019-a-2026
+  dicionario:
+    url: https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SRAG/dicionario-de-dados-2019-a-2025.pdf
+    destino: dados/externos/dicionario-srag-2019-a-2025.pdf
+    versao: "documento datado de 25/05/2023; publicado em 29/01/2026"
+    descricao: Dicionário de dados SIVEP-Gripe, SRAG hospitalizado, 2019 a 2025
+  # bancos anuais 2022-2025: CS-005

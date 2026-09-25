@@ -71,6 +71,10 @@ Evidência: https://rfsaldanha.github.io/microdatasus/reference/fetch_datasus.ht
 Conferido no dicionário de dados do SIVEP-Gripe (versão SES-SP do dicionário do
 Ministério, 37 páginas):
 
+*Atualização 2026-09-25 (CS-004): a fonte de verdade passou a ser o dicionário oficial
+do Ministério (28 páginas, registrado no manifesto); a tabela completa de campos está
+em `docs/dicionario-sivep.md`. As conclusões abaixo se mantêm.*
+
 | No PDF | No dicionário | Observação |
 |---|---|---|
 | `CO_MUNIC_RES` | `CO_MUN_RES` | `Varchar2(6)` — **6 dígitos**, não 7 |
@@ -128,6 +132,11 @@ SARS-CoV-2 + VSR conta duas vezes. Isso é **correto** se o indicador é "incid�
 SRAG por agente" (cada vírus tem sua própria taxa) e **errado** se for "incidência de
 SRAG total". O ADR-0002 (critério de caso) precisa dizer qual dos dois o projeto usa e
 o relatório precisa informar quantas co-detecções houve.
+
+**Atualização 2026-09-25 (CS-004):** o dicionário oficial tem um campo próprio de
+co-detecção, `CO-DETEC` (campo 79, 1-Sim/2-Não/9-Ignorado). O projeto continua
+calculando a co-detecção a partir dos campos laboratoriais, que é o que a regra de caso
+usa, e passa a usar o `CO-DETEC` como conferência. Detalhes em `docs/dicionario-sivep.md`.
 
 ### 2.7 Semântica de `CLASSI_FIN` vs resultado laboratorial
 

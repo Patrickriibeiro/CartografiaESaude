@@ -2,8 +2,8 @@
 # Carregado por todos os scripts numerados. Não baixa dados nem calcula nada.
 
 # Carrega as funções do projeto (R/funcoes_*.R)
-for (arquivo in list.files("R", pattern = "^funcoes_.*\.R$", full.names = TRUE)) {
-  source(arquivo, encoding = "UTF-8")
+for (arquivo in list.files("R", pattern = "^funcoes_.*\\.R$", full.names = TRUE)) {
+  source(arquivo, encoding = "UTF-8", local = TRUE)  # no ambiente de quem chamou
 }
 
 criar_diretorios()

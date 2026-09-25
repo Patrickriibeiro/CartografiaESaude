@@ -1,4 +1,4 @@
-# Funções utilitárias do projeto.
+# Funções utilitárias do projeto: diretórios e proveniência dos dados.
 
 #' Cria a árvore de diretórios de dados e resultados, se ainda não existir.
 #' Idempotente: rodar duas vezes não muda nada.
@@ -11,7 +11,218 @@ criar_diretorios <- function() {
   invisible(pastas)
 }
 
+# ---------------------------------------------------------------------------
+# Manifesto de proveniência (CS-003)
+#
+# Todo arquivo que vem de fora do projeto é registrado em dados/MANIFESTO.md com
+# URL, data do download, tamanho e SHA-256. O manifesto é uma tabela Markdown
+# escrita E relida por estas funções: legível por gente no GitHub e verificável
+# por código. Não editar à mão.
+# ---------------------------------------------------------------------------
+
+MANIFESTO_PADRAO <- file.path("dados", "MANIFESTO.md")
+COLUNAS_MANIFESTO <- c("arquivo", "url", "baixado_em", "bytes", "sha256",
+                       "versao", "descricao")
+VAZIO_MANIFESTO <- "—"
+
+#' SHA-256 do conteúdo de um arquivo (64 caracteres hexadecimais).
+sha256_arquivo <- function(caminho) {
+  digest::digest(file = caminho, algo = "sha256")
+}
+
+#' Caminho relativo à pasta de trabalho, com barras "/" em qualquer sistema.
+#' O manifesto só aceita arquivos dentro do projeto.
+caminho_relativo <- function(caminho) {
+  abs <- normalizePath(caminho, winslash = "/", mustWork = TRUE)
+  raiz <- normalizePath(getwd(), winslash = "/", mustWork = TRUE)
+  prefixo <- paste0(raiz, "/")
+  if (!startsWith(tolower(abs), tolower(prefixo))) {
+    stop("Arquivo fora do projeto, não pode entrar no manifesto: ", abs, call. = FALSE)
+  }
+  substring(abs, nchar(prefixo) + 1)
+}
+
+manifesto_vazio <- function() {
+  as.data.frame(
+    setNames(replicate(length(COLUNAS_MANIFESTO), character(0), simplify = FALSE),
+             COLUNAS_MANIFESTO),
+    stringsAsFactors = FALSE
+  )
+}
+
+#' Lê o manifesto como data.frame de texto. Arquivo inexistente = manifesto vazio.
+ler_manifesto <- function(manifesto = MANIFESTO_PADRAO) {
+  if (!file.exists(manifesto)) return(manifesto_vazio())
+  linhas <- readLines(manifesto, encoding = "UTF-8", warn = FALSE)
+  tabela <- grep("^\\|", linhas, value = TRUE)
+  if (length(tabela) < 2) return(manifesto_vazio())
+
+  celulas <- lapply(tabela, function(l) {
+    miolo <- sub("^\\|(.*)\\|\\s*$", "\\1", l)
+    trimws(strsplit(miolo, "|", fixed = TRUE)[[1]])
+  })
+  if (!identical(celulas[[1]], COLUNAS_MANIFESTO)) {
+    stop("Cabeçalho inesperado em ", manifesto, ": ",
+         paste(celulas[[1]], collapse = ", "), call. = FALSE)
+  }
+  corpo <- celulas[-(1:2)]  # descarta cabeçalho e linha separadora
+  if (length(corpo) == 0) return(manifesto_vazio())
+  if (any(lengths(corpo) != length(COLUNAS_MANIFESTO))) {
+    stop("Linha malformada em ", manifesto, call. = FALSE)
+  }
+  df <- as.data.frame(do.call(rbind, corpo), stringsAsFactors = FALSE)
+  names(df) <- COLUNAS_MANIFESTO
+  df[] <- lapply(df, function(x) ifelse(x == VAZIO_MANIFESTO, NA_character_, x))
+  df
+}
+
+#' Escreve o manifesto, ordenado por arquivo para o diff do git ficar estável.
+escrever_manifesto <- function(df, manifesto = MANIFESTO_PADRAO) {
+  valores <- unlist(df, use.names = FALSE)
+  if (any(grepl("[|\n]", valores[!is.na(valores)]))) {
+    stop("Campo com '|' ou quebra de linha não cabe na tabela do manifesto", call. = FALSE)
+  }
+  df <- df[order(df$arquivo), COLUNAS_MANIFESTO, drop = FALSE]
+  celula <- function(x) ifelse(is.na(x) | x == "", VAZIO_MANIFESTO, x)
+  corpo <- if (nrow(df) == 0) character(0) else
+    vapply(seq_len(nrow(df)), function(i) {
+      paste0("| ", paste(celula(unlist(df[i, ])), collapse = " | "), " |")
+    }, character(1))
+
+  texto <- c(
+    "# Manifesto de proveniência dos dados",
+    "",
+    "Gerado por `registrar_fonte()` (R/funcoes_utilitarias.R). Não editar à mão:",
+    "`verificar_manifesto()` relê esta tabela e recalcula o SHA-256 de cada arquivo.",
+    "",
+    paste0("| ", paste(COLUNAS_MANIFESTO, collapse = " | "), " |"),
+    paste0("|", strrep("---|", length(COLUNAS_MANIFESTO))),
+    corpo
+  )
+  dir.create(dirname(manifesto), recursive = TRUE, showWarnings = FALSE)
+  con <- file(manifesto, open = "wb")  # "wb" evita CRLF no Windows
+  on.exit(close(con))
+  writeLines(enc2utf8(texto), con, sep = "\n", useBytes = TRUE)
+  invisible(df)
+}
+
+#' Registra (ou confirma) um arquivo externo no manifesto.
+#'
+#' - Arquivo novo: acrescenta uma linha.
+#' - Mesmo arquivo, mesmo hash: não faz nada (idempotente).
+#' - Mesmo arquivo, hash diferente: ERRO, a menos que substituir = TRUE.
+#'   É o caso do banco vivo de 2025: rebaixar muda o conteúdo, e isso precisa
+#'   ser uma decisão explícita, não um acidente.
+registrar_fonte <- function(caminho, url, descricao, versao = NA_character_,
+                            baixado_em = Sys.time(), substituir = FALSE,
+                            manifesto = MANIFESTO_PADRAO) {
+  if (!file.exists(caminho)) stop("Arquivo não encontrado: ", caminho, call. = FALSE)
+  arquivo <- caminho_relativo(caminho)
+  hash <- sha256_arquivo(caminho)
+  m <- ler_manifesto(manifesto)
+
+  i <- which(m$arquivo == arquivo)
+  if (length(i) == 1) {
+    if (identical(m$sha256[i], hash)) {
+      message("Já registrado com o mesmo SHA-256: ", arquivo)
+      return(invisible(m[i, ]))
+    }
+    if (!substituir) {
+      stop("O conteúdo de ", arquivo, " mudou desde o registro.\n",
+           "  manifesto: ", m$sha256[i], "\n  arquivo:   ", hash, "\n",
+           "Se o novo download é intencional, use substituir = TRUE.", call. = FALSE)
+    }
+    m <- m[-i, , drop = FALSE]
+  }
+
+  nova <- data.frame(
+    arquivo = arquivo,
+    url = url,
+    baixado_em = format(baixado_em, "%Y-%m-%dT%H:%M:%SZ", tz = "UTC"),
+    bytes = format(file.size(caminho), scientific = FALSE),
+    sha256 = hash,
+    versao = versao,
+    descricao = descricao,
+    stringsAsFactors = FALSE
+  )
+  escrever_manifesto(rbind(m, nova), manifesto)
+  invisible(nova)
+}
+
+#' Confere arquivos contra o manifesto. Para no primeiro problema.
+#'
+#' Sem `arquivos`: confere todas as linhas do manifesto E exige que todo
+#' arquivo de dados/brutos/ esteja registrado. É a trava do invariante
+#' "sem manifesto, nada em dados/brutos/ é lido".
+#' Com `arquivos`: confere só esses (uso típico: antes de ler um bruto).
+verificar_manifesto <- function(arquivos = NULL, manifesto = MANIFESTO_PADRAO,
+                                pasta_brutos = file.path("dados", "brutos")) {
+  m <- ler_manifesto(manifesto)
+
+  if (is.null(arquivos)) {
+    brutos <- list.files(pasta_brutos, recursive = TRUE, full.names = TRUE)
+    brutos <- brutos[basename(brutos) != ".gitkeep"]
+    fora <- setdiff(vapply(brutos, caminho_relativo, character(1)), m$arquivo)
+    if (length(fora) > 0) {
+      stop("Arquivos em ", pasta_brutos, " sem registro no manifesto: ",
+           paste(fora, collapse = ", "), call. = FALSE)
+    }
+    alvo <- m$arquivo
+  } else {
+    alvo <- vapply(arquivos, function(a) {
+      if (!file.exists(a)) stop("Arquivo não encontrado: ", a, call. = FALSE)
+      caminho_relativo(a)
+    }, character(1), USE.NAMES = FALSE)
+  }
+
+  for (a in alvo) {
+    i <- which(m$arquivo == a)
+    if (length(i) == 0) {
+      stop("Arquivo sem registro no manifesto: ", a,
+           ". Registre com registrar_fonte() antes de ler.", call. = FALSE)
+    }
+    if (!file.exists(a)) {
+      stop("Arquivo do manifesto ausente no disco: ", a,
+           ". Baixe de novo (", m$url[i], ").", call. = FALSE)
+    }
+    hash <- sha256_arquivo(a)
+    if (!identical(hash, m$sha256[i])) {
+      stop("SHA-256 divergente em ", a, "\n  manifesto: ", m$sha256[i],
+           "\n  arquivo:   ", hash, call. = FALSE)
+    }
+  }
+  invisible(alvo)
+}
+
+#' Baixa um arquivo e registra no manifesto, reaproveitando o que já existe.
+#'
+#' Se o destino já existe e confere com o manifesto, não baixa de novo (cache
+#' por hash). Se existe mas diverge, para: alguém alterou o arquivo ou o
+#' manifesto, e isso precisa ser investigado, não sobrescrito.
+baixar_e_registrar <- function(url, destino, descricao, versao = NA_character_,
+                               manifesto = MANIFESTO_PADRAO) {
+  if (file.exists(destino)) {
+    m <- ler_manifesto(manifesto)
+    if (caminho_relativo(destino) %in% m$arquivo) {
+      verificar_manifesto(destino, manifesto = manifesto)
+      message("Em cache e conferido: ", destino)
+      return(invisible(destino))
+    }
+  }
+  dir.create(dirname(destino), recursive = TRUE, showWarnings = FALSE)
+  temporario <- paste0(destino, ".parcial")
+  on.exit(if (file.exists(temporario)) unlink(temporario))
+  curl::curl_download(url, temporario, mode = "wb", quiet = TRUE)
+  file.rename(temporario, destino)
+  registrar_fonte(destino, url = url, descricao = descricao, versao = versao,
+                  manifesto = manifesto)
+  invisible(destino)
+}
+
+#' Lê config/fontes.yml (URLs das fontes ficam fora do código, trilha §6).
+ler_fontes <- function(arquivo = file.path("config", "fontes.yml")) {
+  yaml::read_yaml(arquivo)
+}
+
 # A implementar:
-# salvar_resultado()   — CS-020
-# registrar_fonte()    — CS-003 (manifesto de proveniência com SHA-256)
-# verificar_manifesto()— CS-003
+# salvar_resultado() — CS-020
