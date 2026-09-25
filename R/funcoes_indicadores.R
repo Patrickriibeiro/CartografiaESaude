@@ -341,3 +341,55 @@ resumir_residencia_notificacao <- function(rn, nomes = NULL) {
   if (!is.null(nomes)) r$nome <- unname(nomes[r$cod6])
   r[order(-r$saldo, r$cod6), ]
 }
+
+# ---------------------------------------------------------------------------
+# Agrupamento de zeros na taxa bruta (CS-041)
+# ---------------------------------------------------------------------------
+
+#' Por agente × ano, descreve os municípios sem nenhum caso:
+#'   zeros                    municípios com zero caso;
+#'   zeros_esperados          quantos zeros o ACASO produziria se todo município
+#'                            tivesse a taxa do estado: soma de exp(-esperado), a
+#'                            probabilidade de Poisson de zero caso, com
+#'                            esperado = população × taxa do estado;
+#'   zeros_sem_notificacao    zeros que não notificaram nenhuma ficha de SRAG de
+#'                            residente do RJ no ano (sem "notificação própria");
+#'   outros_sem_notificacao   o mesmo entre os municípios com caso;
+#'   zeros_sem_leito / outros_sem_leito   sem leito SUS (CNES, julho);
+#'   pop_mediana_zeros / pop_mediana_outros;
+#'   com `fichas` (cod6, ano, fichas, testadas: fichas de SRAG de RESIDENTES e
+#'   quantas têm resultado de RT-PCR ou antígeno): fichas_zeros, zeros_sem_ficha,
+#'   pct_testadas_zeros e pct_testadas_outros. Um zero com muitas fichas e pouca
+#'   testagem é SRAG sem confirmação do vírus, não ausência de doença.
+#' `notificantes`: data.frame cod6, ano dos municípios com ao menos uma ficha notificada.
+diagnosticar_zeros <- function(ind, notificantes, leitos = NULL, fichas = NULL) {
+  out <- lapply(split(ind, list(ind$agente, ind$ano), drop = TRUE), function(x) {
+    taxa_estado <- sum(x$casos) / sum(x$populacao)
+    esperado <- x$populacao * taxa_estado
+    notifica <- x$cod6 %in% notificantes$cod6[notificantes$ano == x$ano[1]]
+    z <- x$casos == 0
+    r <- data.frame(agente = x$agente[1], ano = x$ano[1], municipios = nrow(x), zeros = sum(z),
+                    zeros_esperados = sum(exp(-esperado)),
+                    zeros_sem_notificacao = sum(z & !notifica), outros_sem_notificacao = sum(!z & !notifica),
+                    pop_mediana_zeros = if (any(z)) stats::median(x$populacao[z]) else NA_real_,
+                    pop_mediana_outros = stats::median(x$populacao[!z]), stringsAsFactors = FALSE)
+    if (!is.null(leitos)) {
+      l <- leitos[leitos$ano == x$ano[1], ]
+      sem_leito <- x$cod6 %in% l$cod6[l$leitos_sus == 0]
+      r$zeros_sem_leito <- sum(z & sem_leito); r$outros_sem_leito <- sum(!z & sem_leito)
+    }
+    if (!is.null(fichas)) {
+      f <- fichas[fichas$ano == x$ano[1], ]
+      fi <- f$fichas[match(x$cod6, f$cod6)]; fi[is.na(fi)] <- 0
+      te <- f$testadas[match(x$cod6, f$cod6)]; te[is.na(te)] <- 0
+      r$fichas_zeros <- sum(fi[z]); r$zeros_sem_ficha <- sum(z & fi == 0)
+      r$pct_testadas_zeros <- if (sum(fi[z]) > 0) sum(te[z]) / sum(fi[z]) else NA_real_
+      r$pct_testadas_outros <- sum(te[!z]) / sum(fi[!z])
+    }
+    r
+  })
+  out <- do.call(rbind, out)
+  out <- out[order(match(out$agente, AGENTES), out$ano), ]
+  rownames(out) <- NULL
+  out
+}

@@ -311,6 +311,57 @@ muitos municípios sem caso, que formam "agrupamentos de zeros" na taxa bruta; a
 classe LISA entre as duas variáveis por mapa ficou entre `r fp(min(conc$concordancia), 0)` e
 `r fp(max(conc$concordancia), 0)`.
 
+### Agrupamento de zeros na taxa bruta
+
+```{r zeros}
+zd <- utils::read.csv(file.path("resultados", "estatistica", "zeros_diagnostico.csv"), encoding = "UTF-8", stringsAsFactors = FALSE)
+zd <- zd[order(match(zd$agente, AGENTES), zd$ano), ]
+lb <- ml$bruta$lisa
+cz <- as.data.frame(arrow::read_parquet(file.path("dados", "processados", "indicadores_municipais.parquet")))
+lb$casos <- cz$casos[match(paste(lb$agente, lb$ano, lb$cod6), paste(cz$agente, cz$ano, cz$cod6))]
+sig_b <- lb[lb$nivel != "ns", ]
+g_b <- ml$bruta$global; g_s <- ml$principal$global
+chave_z <- zd[which.max(zd$zeros / pmax(zd$zeros_esperados, 1e-9) * (zd$zeros >= 10)), ]
+ex <- zd[zd$agente == "vsr" & zd$ano == ano_ini, ]
+sb <- sig_b[sig_b$agente == "vsr" & sig_b$ano == ano_ini, ]
+gb <- g_b[g_b$agente == "vsr" & g_b$ano == ano_ini, ]; gs <- g_s[g_s$agente == "vsr" & g_s$ano == ano_ini, ]
+dif_t <- zd$pct_testadas_outros - zd$pct_testadas_zeros
+mx <- zd[which.max(dif_t), ]
+```
+
+No VSR de `r ano_ini`, `r ex$zeros` municípios não tiveram nenhum caso. Na taxa bruta, o Moran
+global deu p = `r fpv(gb$p_perm)` e o LISA marcou `r nrow(sb)` municípios, `r sum(sb$casos == 0)`
+deles sem caso e `r sum(sb$quadrante == "LL")` no quadrante Baixo-Baixo, nenhum confirmado após a
+correção; na taxa suavizada, p = `r fpv(gs$p_perm)`. A pergunta é se esses zeros são ausência de
+doença.
+
+```{r tbl-zeros}
+#| tbl-cap: "Municípios sem caso, por agente e ano: observados, esperados pelo acaso com a taxa do estado, notificação própria e testagem das fichas de SRAG dos seus residentes"
+t13 <- data.frame(Agente = rot(zd$agente), Ano = zd$ano, `Sem caso` = zd$zeros,
+                  `Esperados pelo acaso` = fd(zd$zeros_esperados, 1),
+                  `Sem notificação própria` = zd$zeros_sem_notificacao,
+                  `Fichas de SRAG dos residentes` = fi(zd$fichas_zeros),
+                  `Testadas (sem caso)` = fp(zd$pct_testadas_zeros, 0), `Testadas (demais)` = fp(zd$pct_testadas_outros, 0),
+                  check.names = FALSE)
+tab(t13)
+```
+
+Se todos os municípios tivessem a taxa do estado, o acaso produziria zeros só nos menores: a
+coluna "esperados" soma, município a município, a probabilidade de Poisson de nenhum caso.
+Os zeros observados superam os esperados em `r sum(zd$zeros > zd$zeros_esperados)` dos
+`r nrow(zd)` mapas; no VSR de `r ano_ini`, `r ex$zeros` contra `r fd(ex$zeros_esperados, 1)`.
+Tampouco são municípios sem SRAG: os residentes dos municípios sem caso de VSR em `r ano_ini`
+tiveram `r fi(ex$fichas_zeros)` fichas de SRAG, e só `r ex$zeros_sem_notificacao` desses municípios
+não notificaram nenhuma ficha no ano. Uma diferença está na testagem: `r fp(ex$pct_testadas_zeros, 0)`
+das fichas dos seus residentes têm resultado de RT-PCR ou antígeno, contra
+`r fp(ex$pct_testadas_outros, 0)` nos demais municípios; a maior diferença é a de
+`r rot(mx$agente)` em `r mx$ano` (`r fp(mx$pct_testadas_zeros, 0)` contra `r fp(mx$pct_testadas_outros, 0)`).
+Os municípios sem caso também são menores: mediana de `r fi(ex$pop_mediana_zeros)` habitantes,
+contra `r fi(ex$pop_mediana_outros)` nos demais. O padrão é compatível com um agrupamento de
+municípios pequenos com menos confirmação laboratorial, mais do que com ausência de doença; os
+dados não permitem separar as duas coisas por completo, e é por isso que a análise principal usa
+a taxa suavizada (ADR-0004).
+
 ## Escala de região de saúde
 
 ```{r regioes}
@@ -640,9 +691,10 @@ pequenas <- sum(ind_muni$casos >= 1 & ind_muni$casos < LIMIAR_CONTAGEM_PEQUENA)
   vigilância: em `r ano_ini`, `r fi(so_crit)` casos de COVID
   (`r fp(so_crit / dc_ini$classificados)` dos encerrados como COVID) entraram só por essa
   declaração, sem resultado nos campos exportados.
-- **Agrupamentos de zeros.** Zero caso num município pequeno pode ser ausência de notificação ou
-  de testagem, e não de doença; é por isso que a taxa bruta, que forma agrupamentos desses
-  zeros, é só sensibilidade.
+- **Agrupamentos de zeros.** Zero caso num município pequeno pode ser ausência de testagem, e
+  não de doença: no VSR de `r ano_ini`, os municípios sem caso tiveram `r fi(ex$fichas_zeros)` fichas
+  de SRAG e menos testagem (`r fp(ex$pct_testadas_zeros, 0)` contra `r fp(ex$pct_testadas_outros, 0)`).
+  É por isso que a taxa bruta, que forma agrupamentos desses zeros, é só sensibilidade.
 - **Banco vivo.** O banco de `r ano_fim` é atualizado semanalmente; este relatório usa a versão
   `r versao_ult`, e uma versão nova muda os números de `r ano_fim`. Nessa versão, só
   `r fp(ne$proporcao[ne$ano == ano_fim])` das fichas de `r ano_fim` estão sem classificação final

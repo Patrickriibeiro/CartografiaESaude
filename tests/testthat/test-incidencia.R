@@ -130,3 +130,23 @@ test_that("dados reais: grade 1104, soma dos casos preservada, sem NA", {
   # 2024: os dois denominadores são o mesmo
   expect_equal(ind$incid_100k[ind$ano == 2024], ind$incid_100k_pop2024[ind$ano == 2024])
 })
+
+test_that("diagnóstico de zeros: zeros esperados por Poisson e cruzamentos, com conta à mão", {
+  ind <- data.frame(cod6 = c("330010", "330020", "330030", "330040"), agente = "vsr", ano = 2022L,
+                    casos = c(0L, 0L, 10L, 10L), populacao = c(100, 1000, 10000, 8900))
+  notif <- data.frame(cod6 = c("330020", "330030", "330040"), ano = 2022L)
+  leitos <- data.frame(cod6 = ind$cod6, ano = 2022L, leitos_sus = c(0, 5, 5, 0))
+  d <- diagnosticar_zeros(ind, notif, leitos)
+  taxa <- 20 / 20000
+  expect_equal(d$zeros, 2L)
+  expect_equal(d$zeros_esperados, sum(exp(-ind$populacao * taxa)))   # 0,905 + 0,368 + ~0 + ~0
+  expect_equal(d$zeros_sem_notificacao, 1L); expect_equal(d$outros_sem_notificacao, 0L)
+  expect_equal(d$zeros_sem_leito, 1L); expect_equal(d$outros_sem_leito, 1L)
+  expect_equal(d$pop_mediana_zeros, 550); expect_equal(d$pop_mediana_outros, 9450)
+  expect_false("zeros_sem_leito" %in% names(diagnosticar_zeros(ind, notif)))
+  # Testagem: o município 330010 tem 4 fichas e 1 testada; 330020, nenhuma ficha.
+  f <- data.frame(cod6 = c("330010", "330030", "330040"), ano = 2022L, fichas = c(4L, 10L, 10L), testadas = c(1L, 9L, 9L))
+  d2 <- diagnosticar_zeros(ind, notif, leitos, f)
+  expect_equal(c(d2$fichas_zeros, d2$zeros_sem_ficha), c(4, 1L))
+  expect_equal(c(d2$pct_testadas_zeros, d2$pct_testadas_outros), c(0.25, 0.9))
+})

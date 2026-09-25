@@ -41,8 +41,8 @@
 - Os arquivos de 2022–2024 não têm código IBGE: junção por nome, com 2 grafias antigas
   (PARATI → Paraty, TRAJANO DE MORAIS → Trajano de Moraes). Em 2025, nome e `CO_IBGE`
   concordam em 100 % dos estabelecimentos — validação independente da junção por nome.
-- 7 municípios sem leito SUS e 51–52 sem leito de UTI SUS em cada ano. A correlação com a UTI
-  é, em boa parte, ter ou não ter UTI: mediana da taxa com UTI ≈ 2 vezes a sem UTI nos 4 anos.
+- 7 municípios sem leito SUS e 51–52 sem leito de UTI SUS em cada ano. A diferença entre ter e
+  não ter UTI aparece nas medianas: a da taxa com UTI de 1,7 a 2,0 vezes a sem UTI nos 4 anos.
 
 ## Erros do caminho
 

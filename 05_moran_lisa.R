@@ -7,6 +7,7 @@
 #   resultados/estatistica/lisa_concordancia.csv suavizada × bruta
 #   resultados/estatistica/moran_regional.csv    Moran global nas 9 regiões de saúde (CS-030, descritivo)
 #   resultados/estatistica/spearman_leitos.csv   taxa de SRAG × leitos por 100 mil, por ano, IC bootstrap (CS-034)
+#   resultados/estatistica/zeros_diagnostico.csv municípios sem caso × zeros esperados, notificação própria e leitos (CS-041)
 
 source("00_setup.R")
 
@@ -70,3 +71,20 @@ sp <- correlacionar_leitos(ind, leitos)
 stopifnot(nrow(sp) == 2 * length(ANOS_ESTUDO), all(sp$ic_inf <= sp$rho & sp$rho <= sp$ic_sup))
 gravar(sp, "spearman_leitos.csv")
 print(sp[, c("ano", "rotulo", "rho", "ic_inf", "ic_sup")], row.names = FALSE, digits = 3)
+
+# ---- agrupamento de zeros na taxa bruta (CS-041) ----
+# "Notificação própria" = o município notificou ao menos uma ficha de SRAG (de
+# residente do RJ, qualquer agente, qualquer classificação) no ano.
+# Testagem: ficha com resultado de RT-PCR ou antígeno (1, 2 ou 3), por município de RESIDÊNCIA.
+fichas <- as.data.frame(arrow::read_parquet(file.path("dados", "intermediarios", "sivep_rj.parquet"),
+                                            col_select = c("CO_MUN_NOT", "CO_MUN_RES", "ano_banco", "PCR_RESUL", "RES_AN")))
+notificantes <- unique(data.frame(cod6 = fichas$CO_MUN_NOT, ano = fichas$ano_banco)[!is.na(fichas$CO_MUN_NOT), ])
+fichas$testada <- as.integer(fichas$PCR_RESUL %in% 1:3 | fichas$RES_AN %in% 1:3)
+por_mun <- stats::aggregate(cbind(fichas = 1L, testadas = testada) ~ CO_MUN_RES + ano_banco, data = fichas, FUN = sum)
+names(por_mun)[1:2] <- c("cod6", "ano")
+zeros <- diagnosticar_zeros(ind, notificantes, leitos, por_mun)
+stopifnot(nrow(zeros) == 12, all(zeros$zeros == tapply(ind$casos == 0, paste(ind$agente, ind$ano), sum)[paste(zeros$agente, zeros$ano)]))
+gravar(zeros, "zeros_diagnostico.csv")
+print(zeros[, c("agente", "ano", "zeros", "zeros_esperados", "zeros_sem_notificacao", "outros_sem_notificacao",
+                "zeros_sem_leito", "pop_mediana_zeros", "pop_mediana_outros", "fichas_zeros",
+                "pct_testadas_zeros", "pct_testadas_outros")], row.names = FALSE, digits = 3)
