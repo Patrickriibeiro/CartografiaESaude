@@ -366,7 +366,9 @@ incluir, em especial covariáveis ambientais (temperatura, umidade) para o VSR.
    matriz; Paraty, Itatiaia e Armação dos Búzios têm um único vizinho, e a classe LISA
    deles aparece no mapa marcada como "instável" (decidido pela autora, CS-039).
 8. **Residência × notificação.** 8.040 (2022), 4.190, 4.117 e 5.451 (2025) fichas foram
-   notificadas fora do município de residência; o fluxo assistencial não é analisado.
+   notificadas fora do município de residência. O CS-031 mede o fluxo em casos (7.286
+   notificados em outro município do RJ; 13 municípios "importadores"), não por hospital
+   nem por distância.
 9. **Confirmação declarada.** 941 casos de COVID de 2022 entram só pela confirmação
    laboratorial declarada pela vigilância, sem resultado nos campos exportados (ADR-0002).
 10. **Agrupamentos de zeros.** Zero caso em município pequeno pode ser ausência de

@@ -104,11 +104,26 @@ para_inteiro <- function(x, nome) {
 #' - Datas: timestamp UTC -> Date (tz = "UTC").
 #' - Acrescenta ano_banco, ano_epi e semana_epi calculados de DT_SIN_PRI. O
 #'   SEM_PRI original é mantido para conferência.
-ler_banco_sivep_rj <- function(caminho, ano_banco, prefixo_uf = PREFIXO_UF_RJ) {
+#' `recorte` escolhe quais fichas (CS-031):
+#'   "residencia"          — residentes do RJ (o recorte do estudo);
+#'   "notificacao_de_fora" — notificadas no RJ, de quem NÃO mora no RJ (ou sem
+#'                           residência). É o complemento que falta para contar
+#'                           por município de notificação sem perder quem vem
+#'                           de outro estado. A condição is.na() é explícita:
+#'                           substr(NA) != "33" dá NA, e o filtro descartaria a ficha.
+ler_banco_sivep_rj <- function(caminho, ano_banco, prefixo_uf = PREFIXO_UF_RJ,
+                               recorte = c("residencia", "notificacao_de_fora")) {
+  recorte <- match.arg(recorte)
   verificar_manifesto(caminho)
 
-  d <- arrow::open_dataset(caminho) |>
-    dplyr::filter(substr(CO_MUN_RES, 1, 2) == prefixo_uf) |>
+  ds <- arrow::open_dataset(caminho)
+  ds <- if (recorte == "residencia") {
+    dplyr::filter(ds, substr(CO_MUN_RES, 1, 2) == prefixo_uf)
+  } else {
+    dplyr::filter(ds, substr(CO_MUN_NOT, 1, 2) == prefixo_uf &
+                    (is.na(CO_MUN_RES) | substr(CO_MUN_RES, 1, 2) != prefixo_uf))
+  }
+  d <- ds |>
     dplyr::select(dplyr::all_of(COLUNAS_SIVEP)) |>
     dplyr::collect() |>
     as.data.frame()
@@ -161,6 +176,24 @@ preparar_sivep <- function(anos = ANOS_ESTUDO, fontes = ler_fontes()) {
   fora <- d$ano_epi != d$ano_banco
   if (any(fora)) {
     stop(sum(fora), " fichas com ano epidemiológico diferente do ano do banco",
+         call. = FALSE)
+  }
+  d
+}
+
+#' Fichas notificadas em município do RJ por quem mora fora do RJ (CS-031).
+#' Mesmas invariantes de preparar_sivep() que valem para elas: DT_SIN_PRI
+#' presente, CO_MUN_NOT no padrão do RJ e ano epidemiológico = ano do banco.
+preparar_sivep_notificados_de_fora <- function(anos = ANOS_ESTUDO, fontes = ler_fontes()) {
+  b <- bancos_sivep(anos, fontes)
+  d <- do.call(rbind, lapply(seq_len(nrow(b)), function(i) {
+    ler_banco_sivep_rj(b$destino[i], b$ano[i], recorte = "notificacao_de_fora")
+  }))
+  if (anyNA(d$DT_SIN_PRI)) stop(sum(is.na(d$DT_SIN_PRI)), " fichas sem DT_SIN_PRI", call. = FALSE)
+  padrao <- paste0("^", PREFIXO_UF_RJ, "[0-9]{4}$")
+  if (!all(grepl(padrao, d$CO_MUN_NOT))) stop("CO_MUN_NOT fora do padrão ", padrao, call. = FALSE)
+  if (any(d$ano_epi != d$ano_banco)) {
+    stop(sum(d$ano_epi != d$ano_banco), " fichas com ano epidemiológico diferente do ano do banco",
          call. = FALSE)
   }
   d

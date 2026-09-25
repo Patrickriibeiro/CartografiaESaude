@@ -6,6 +6,7 @@
 #   resultados/tabelas/diagnostico_sivep.csv  anomalias contadas por ano (não corrigidas)
 #   dados/processados/sivep_processado.parquet  casos confirmados pela regra do ADR-0002 (CS-008)
 #   resultados/tabelas/casos_por_agente.csv, subtipo_influenza.csv, codeteccao_casos.csv
+#   dados/processados/sivep_notificados_de_fora.parquet  casos notificados no RJ de quem mora fora (CS-031)
 
 source("00_setup.R")
 
@@ -45,6 +46,12 @@ if (nrow(conferencia) != length(AGENTES) * length(ANOS_ESTUDO) ||
 }
 
 arrow::write_parquet(casos, file.path("dados", "processados", "sivep_processado.parquet"))
+
+# CS-031: o complemento para contar por município de notificação. Mesma regra de
+# caso; fica em arquivo separado para não entrar em nenhuma contagem por residência.
+casos_de_fora <- aplicar_criterios_inclusao(classificar_agente(preparar_sivep_notificados_de_fora(), REGRA_CASO))
+arrow::write_parquet(casos_de_fora, file.path("dados", "processados", "sivep_notificados_de_fora.parquet"))
+message(sprintf("CS-031: %d casos notificados no RJ de residentes de fora do RJ", nrow(casos_de_fora)))
 utils::write.csv(por_agente, file.path("resultados", "tabelas", "casos_por_agente.csv"),
                  row.names = FALSE, fileEncoding = "UTF-8")
 subtipo <- as.data.frame(table(ano = casos$ano_banco[casos$agente == "influenza"],

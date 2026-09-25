@@ -6,6 +6,7 @@
 #   resultados/tabelas/exportacao/incidencia_estado.csv       série do estado, dois denominadores
 #   resultados/tabelas/exportacao/indicadores_regionais.csv   9 regiões de saúde × 3 × 4 (CS-030)
 #   resultados/tabelas/exportacao/moran_regional.csv          Moran global regional, descritivo (CS-030)
+#   resultados/tabelas/exportacao/residencia_notificacao.csv  92 municípios, casos por residência e por notificação (CS-031)
 #   resultados/tabelas/exportacao/LEIA-ME.txt                 carimbo: data, commit, versões dos dados
 
 source("00_setup.R")
@@ -79,6 +80,21 @@ moran_reg <- data.frame(
   stringsAsFactors = FALSE, row.names = NULL
 )
 
+rn <- utils::read.csv(file.path("resultados", "tabelas", "residencia_notificacao.csv"),
+                      encoding = "UTF-8", colClasses = c(cod6 = "character"))
+res_not <- data.frame(
+  codigo_ibge = malha$cod7[match(rn$cod6, malha$cod6)], municipio = nomes[rn$cod6],
+  casos_por_residencia = rn$casos_res, casos_por_notificacao = rn$casos_not,
+  notificados_residentes_do_municipio = rn$not_mesmo_municipio,
+  notificados_de_outro_municipio_rj = rn$not_de_outro_mun_rj,
+  notificados_de_fora_do_rj = rn$not_de_fora_do_rj,
+  residentes_notificados_fora_do_rj = rn$res_not_fora_do_rj,
+  residentes_sem_municipio_de_notificacao = rn$res_sem_not,
+  razao_notificacao_residencia = round(rn$razao_not_res, 3),
+  saldo_notificacao_menos_residencia = rn$saldo,
+  stringsAsFactors = FALSE, row.names = NULL
+)
+
 pasta <- file.path("resultados", "tabelas", "exportacao")
 arquivos <- c(
   salvar_resultado(indicadores, "indicadores_municipais", pasta),
@@ -87,6 +103,7 @@ arquivos <- c(
   salvar_resultado(estado, "incidencia_estado", pasta),
   salvar_resultado(regional, "indicadores_regionais", pasta),
   salvar_resultado(moran_reg, "moran_regional", pasta),
+  salvar_resultado(res_not, "residencia_notificacao", pasta),
   escrever_carimbo(pasta, c(
     sprintf("Contagens pequenas (CS-043): %d combinações município x agente x ano têm de 1 a %d casos.",
             sum(ind$casos >= 1 & ind$casos < LIMIAR_CONTAGEM_PEQUENA), LIMIAR_CONTAGEM_PEQUENA - 1L),
@@ -99,6 +116,7 @@ arquivos <- c(
 stopifnot(nrow(ler_resultado(arquivos[1])) == 1104, nrow(ler_resultado(arquivos[2])) == 1104,
           nrow(ler_resultado(arquivos[3])) == 36, nrow(ler_resultado(arquivos[4])) == 12,
           nrow(ler_resultado(arquivos[5])) == 108, nrow(ler_resultado(arquivos[6])) == 12,
+          nrow(ler_resultado(arquivos[7])) == 92,
           "Baía da Ilha Grande" %in% ler_resultado(arquivos[5])$regiao_de_saude,
           "Niterói" %in% ler_resultado(arquivos[1])$municipio)
 message(sprintf("%d arquivos em %s", length(arquivos), pasta))

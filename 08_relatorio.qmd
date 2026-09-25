@@ -369,6 +369,53 @@ alta e baixa, efeito conhecido como problema da unidade de área modificável [@
 
 ![Incidência de SRAG por VSR por região de saúde, 2024](resultados/mapas/regional_vsr_2024.png){#fig-regional width=85%}
 
+## Residência e notificação
+
+```{r resnot}
+# cod6 como texto: lido como número, "330455" ainda casaria, mas a chave do projeto é texto (ADR-0007)
+rnm <- utils::read.csv(file.path("resultados", "tabelas", "residencia_notificacao.csv"), encoding = "UTF-8",
+                       stringsAsFactors = FALSE, colClasses = c(cod6 = "character"))
+rnm$nome <- nomes[rnm$cod6]
+tot_res <- sum(rnm$casos_res); tot_not <- sum(rnm$casos_not)
+de_fora_rj <- sum(rnm$not_de_fora_do_rj)
+saiu_rj <- sum(rnm$res_not_fora_do_rj); sem_not <- sum(rnm$res_sem_not)
+outro_mun <- sum(rnm$not_de_outro_mun_rj)
+importadores <- rnm[rnm$saldo > 0, ]; importadores <- importadores[order(-importadores$saldo), ]
+exportadores <- rnm[rnm$saldo < 0, ]
+exportadores <- exportadores[order(exportadores$saldo), ]
+top_imp <- utils::head(importadores, 10)
+quase_nada <- rnm[rnm$casos_res >= 100 & !is.na(rnm$razao_not_res), ]
+quase_nada <- quase_nada[which.min(quase_nada$razao_not_res), ]
+```
+
+As taxas deste relatório contam o caso no município onde o paciente mora. Contado no município
+que notificou, isto é, onde o paciente foi atendido, o mesmo conjunto de casos se redistribui:
+`r fi(outro_mun)` casos (`r fp(outro_mun / tot_res)`) foram notificados em outro município do
+estado, `r fi(saiu_rj)` foram notificados fora do RJ e `r fi(sem_not)` não têm município de
+notificação. No sentido inverso, `r fi(de_fora_rj)` casos de moradores de outros estados foram
+notificados no RJ, pela mesma regra de caso. Por notificação o estado soma `r fi(tot_not)` casos,
+contra `r fi(tot_res)` por residência.
+
+```{r tbl-importadores}
+#| tbl-cap: "Municípios que mais notificam casos de moradores de outros municípios (todos os agentes e anos)"
+t9 <- data.frame(Município = top_imp$nome, `Por residência` = fi(top_imp$casos_res),
+                 `Por notificação` = fi(top_imp$casos_not),
+                 `De outro município do RJ` = fi(top_imp$not_de_outro_mun_rj),
+                 `De fora do RJ` = fi(top_imp$not_de_fora_do_rj),
+                 `Razão notificação / residência` = fd(top_imp$razao_not_res, 2),
+                 Saldo = fi(top_imp$saldo), check.names = FALSE)
+tab(t9)
+```
+
+Só `r nrow(importadores)` dos `r n_mun` municípios notificam mais casos do que têm de residentes
+doentes, e `r nrow(exportadores)` notificam menos, porque parte dos seus moradores é atendida em
+outro lugar. O que mais perde casos em números absolutos é `r exportadores$nome[1]`
+(`r fi(-exportadores$saldo[1])` casos a menos por notificação), e o caso extremo em proporção é
+`r quase_nada$nome`: `r fi(quase_nada$casos_res)` casos de residentes e só
+`r fi(quase_nada$casos_not)` notificados no município. É por isso que a
+taxa por residência é a medida de risco: por notificação, os polos hospitalares pareceriam focos
+de doença e os municípios sem hospital de referência pareceriam poupados.
+
 ## Protótipo de painel para a vigilância
 
 O painel interativo (`app.R`, Shiny e leaflet) permite escolher o agente, o ano e a camada
@@ -444,8 +491,8 @@ pequenas <- sum(ind_muni$casos >= 1 & ind_muni$casos < LIMIAR_CONTAGEM_PEQUENA)
   recorte municipal.
 - **Residência × notificação.** As taxas são por município de residência, que é o correto para
   incidência. Mas `r lista(paste0(fi(fora_res), " (", diag$ano, ")"))` fichas foram notificadas
-  fora do município de residência: o fluxo assistencial entre municípios [@cavalcante2021] não
-  foi analisado aqui.
+  fora do município de residência. A seção sobre residência e notificação mede esse fluxo
+  [@cavalcante2021] em casos, não em internações por hospital nem em distância percorrida.
 - **Confirmação declarada.** O critério adotado aceita a confirmação laboratorial declarada pela
   vigilância: em `r ano_ini`, `r fi(so_crit)` casos de COVID
   (`r fp(so_crit / dc_ini$classificados)` dos encerrados como COVID) entraram só por essa

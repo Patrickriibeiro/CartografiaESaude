@@ -9,6 +9,8 @@
 #   resultados/tabelas/indicadores_municipais.csv        a mesma grade anual, para leitura
 #   resultados/tabelas/suavizacao_bayes_empirico.csv     resumo da suavização (CS-013)
 #   resultados/estatistica/ebayes_bruta_vs_suavizada.png dispersão bruta × suavizada (CS-013)
+#   dados/processados/residencia_notificacao.parquet     casos por residência e por notificação, 92 × 3 × 4 (CS-031)
+#   resultados/tabelas/residencia_notificacao.csv        uma linha por município, com razão e saldo (CS-031)
 
 source("00_setup.R")
 
@@ -80,3 +82,14 @@ message(sprintf("Grade anual: %d linhas, %d casos, %d combinações com zero cas
 print(estado, row.names = FALSE, digits = 4)
 print(suav[, c("agente", "ano", "municipios_sem_caso", "bruta_max_100k", "eb_max_100k",
                "spearman_bruta_eb", "mudanca_mediana_pct", "encolhimento_total")], row.names = FALSE, digits = 3)
+
+# ---- residência × notificação (CS-031) ----
+casos_de_fora <- arrow::read_parquet(file.path("dados", "processados", "sivep_notificados_de_fora.parquet"))
+rn <- comparar_residencia_notificacao(casos, casos_de_fora, municipios)
+stopifnot(nrow(rn) == esperado_anual, identical(rn$casos_res, anual$casos[order(anual$cod6, anual$agente, anual$ano)]))
+arrow::write_parquet(rn, file.path("dados", "processados", "residencia_notificacao.parquet"))
+rn_mun <- resumir_residencia_notificacao(rn)
+utils::write.csv(rn_mun, file.path("resultados", "tabelas", "residencia_notificacao.csv"),
+                 row.names = FALSE, fileEncoding = "UTF-8")
+message(sprintf("Residência × notificação: %d casos por residência, %d por notificação no RJ; %d municípios com saldo positivo",
+                sum(rn$casos_res), sum(rn$casos_not), sum(rn_mun$saldo > 0)))

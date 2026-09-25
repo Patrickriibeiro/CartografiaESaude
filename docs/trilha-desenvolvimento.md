@@ -248,6 +248,9 @@ Testes verificam o contrato, não a implementação.
                 ──► dados/processados/sivep_processado.parquet      (CS-008, entregue: 37.562 casos)
                     contrato: só casos confirmados pelo ADR-0002; coluna
                     agente ∈ {sarscov2, influenza, vsr}; coluna codeteccao
+                ──► dados/processados/sivep_notificados_de_fora.parquet (CS-031, entregue: 160 casos)
+                    contrato: notificados no RJ, residência fora do RJ ou vazia; mesma regra de caso;
+                    nunca entra em contagem por residência
 02_indicadores.R ─► dados/processados/populacao_rj.parquet           (CS-011, entregue)
                     contrato: 92 × 4, cod6 texto, populacao inteira, fonte por linha (ADR-0003)
                 ─► dados/processados/indicadores_municipais.parquet (CS-012, entregue: 1.104 linhas)
@@ -257,6 +260,8 @@ Testes verificam o contrato, não a implementação.
                 ─► dados/processados/indicadores_quadrimestrais.parquet (CS-012; 3.312 linhas, só descritivo)
                     contrato: 92 municípios × 3 agentes × N períodos, SEM linha faltante
                     (zero explícito); casos, populacao, incid_100k, incid_eb_100k
+                ─► dados/processados/residencia_notificacao.parquet (CS-031, entregue: 1.104 linhas)
+                    contrato: casos_res idêntico à grade anual; cada caso numa só casinha de cada lado
 03_cartografia.R ─► dados/processados/municipios_rj.rds             (CS-014, entregue; malha IBGE, ADR-0006)
                     contrato: sf com 92 feições válidas, EPSG:4674, coluna cod6
                   + regioes_saude_rj.rds, indicadores_regionais.parquet   (CS-030, entregue)

@@ -50,7 +50,7 @@ Rscript run.R --sem-relatorio  # sem Quarto
 Rscript run.R --limpar         # apaga o que é derivado e refaz do zero
 ```
 
-Tempo medido: ~140 s com os dados já baixados; o tempo de cada etapa fica em
+Tempo medido: ~120–140 s com os dados já baixados; o tempo de cada etapa fica em
 `resultados/execucao.log`. Para conferir os resultados por um caminho independente do
 pipeline (sem o `spdep` nem as funções de `R/`), rode `Rscript tests/auditoria_independente.R`.
 
@@ -67,7 +67,7 @@ Rscript -e "shiny::runApp(launch.browser = TRUE)"
 | `08_relatorio.html` | Relatório autocontido (um arquivo; nenhum número digitado à mão) |
 | `08_apresentacao.html` | Apresentação (revealjs) do mesmo fonte |
 | `resultados/mapas/` | 12 mapas de incidência, 12 de LISA, 2 painéis e 12 mapas por região de saúde (300 dpi) |
-| `resultados/tabelas/exportacao/` | 6 CSV para Excel em português (municípios e regiões de saúde) + LEIA-ME com a versão dos dados |
+| `resultados/tabelas/exportacao/` | 7 CSV para Excel em português (municípios, regiões de saúde, residência × notificação) + LEIA-ME com a versão dos dados |
 | `resultados/estatistica/` | Moran global, LISA por município, vizinhança |
 | `app.R` | Painel Shiny + leaflet |
 

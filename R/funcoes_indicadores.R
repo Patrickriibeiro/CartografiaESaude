@@ -262,3 +262,88 @@ resumir_suavizacao <- function(ind) {
   out <- merge(out, par, by = c("agente", "ano"))
   out[order(out$agente, out$ano), ]
 }
+
+# ---------------------------------------------------------------------------
+# Residência × notificação (CS-031)
+# ---------------------------------------------------------------------------
+
+#' Casos por município de RESIDÊNCIA e por município de NOTIFICAÇÃO, lado a lado.
+#'
+#' `casos`: casos de residentes do RJ (o recorte do estudo).
+#' `casos_de_fora`: casos notificados no RJ de quem mora fora do RJ, com a mesma
+#' regra de caso. Sem eles, quem vem de outro estado sumiria da contagem por
+#' notificação, justamente no município que o recebe.
+#'
+#' Por município × agente × ano:
+#'   casos_res            residentes do município (a contagem do estudo);
+#'   casos_not            notificados no município, morem onde morarem;
+#'   not_mesmo_municipio  notificados onde moram (entram nas duas contagens);
+#'   not_de_outro_mun_rj  notificados aqui, moradores de outro município do RJ;
+#'   not_de_fora_do_rj    notificados aqui, moradores de fora do RJ;
+#'   res_not_fora_do_rj   residentes daqui notificados fora do RJ;
+#'   res_sem_not          residentes daqui sem município de notificação.
+#' Para se algum município de notificação do RJ não estiver na lista.
+comparar_residencia_notificacao <- function(casos, casos_de_fora, cod6,
+                                            anos = ANOS_ESTUDO, agentes = AGENTES) {
+  base <- function(d, mun) data.frame(cod6 = mun, agente = as.character(d$agente),
+                                      ano = as.integer(d$ano_banco), stringsAsFactors = FALSE)
+  rj <- function(x) !is.na(x) & substr(x, 1, 2) == PREFIXO_UF_RJ
+  not_rj <- rj(casos$CO_MUN_NOT)
+  fora <- setdiff(unique(c(casos$CO_MUN_NOT[not_rj], casos_de_fora$CO_MUN_NOT)), cod6)
+  if (length(fora) > 0) {
+    stop("Município de notificação fora da lista: ", paste(fora, collapse = ", "), call. = FALSE)
+  }
+  mesmo <- not_rj & casos$CO_MUN_NOT == casos$CO_MUN_RES
+
+  conta <- function(d, nome) {
+    if (nrow(d) == 0) return(NULL)
+    d$n <- 1L
+    a <- stats::aggregate(n ~ cod6 + agente + ano, data = d, FUN = sum)
+    names(a)[4] <- nome
+    a
+  }
+  partes <- list(
+    conta(base(casos, casos$CO_MUN_RES), "casos_res"),
+    conta(base(casos[mesmo, ], casos$CO_MUN_RES[mesmo]), "not_mesmo_municipio"),
+    conta(base(casos[not_rj & !mesmo, ], casos$CO_MUN_NOT[not_rj & !mesmo]), "not_de_outro_mun_rj"),
+    conta(base(casos_de_fora, casos_de_fora$CO_MUN_NOT), "not_de_fora_do_rj"),
+    conta(base(casos[!is.na(casos$CO_MUN_NOT) & !not_rj, ],
+               casos$CO_MUN_RES[!is.na(casos$CO_MUN_NOT) & !not_rj]), "res_not_fora_do_rj"),
+    conta(base(casos[is.na(casos$CO_MUN_NOT), ], casos$CO_MUN_RES[is.na(casos$CO_MUN_NOT)]), "res_sem_not")
+  )
+  grade <- expand.grid(cod6 = sort(unique(cod6)), agente = agentes, ano = as.integer(anos),
+                       stringsAsFactors = FALSE, KEEP.OUT.ATTRS = FALSE)
+  colunas <- c("casos_res", "not_mesmo_municipio", "not_de_outro_mun_rj", "not_de_fora_do_rj",
+               "res_not_fora_do_rj", "res_sem_not")
+  for (k in seq_along(partes)) {
+    if (is.null(partes[[k]])) { grade[[colunas[k]]] <- 0L; next }
+    grade <- merge(grade, partes[[k]], by = c("cod6", "agente", "ano"), all.x = TRUE, sort = FALSE)
+    grade[[colunas[k]]][is.na(grade[[colunas[k]]])] <- 0L
+  }
+  grade$casos_not <- grade$not_mesmo_municipio + grade$not_de_outro_mun_rj + grade$not_de_fora_do_rj
+
+  # Conservação: cada caso cai em exatamente uma casinha de cada lado.
+  if (sum(grade$casos_res) != nrow(casos) ||
+      sum(grade$casos_not) != sum(not_rj) + nrow(casos_de_fora) ||
+      sum(grade$not_mesmo_municipio + grade$not_de_outro_mun_rj + grade$res_not_fora_do_rj +
+          grade$res_sem_not) != nrow(casos)) {
+    stop("Contagem residência × notificação não fecha com o número de casos", call. = FALSE)
+  }
+  grade <- grade[do.call(order, grade[c("cod6", "agente", "ano")]),
+                 c("cod6", "agente", "ano", "casos_res", "casos_not", colunas[-1])]
+  rownames(grade) <- NULL
+  grade
+}
+
+#' Uma linha por município, somando agentes e anos: casos por residência e por
+#' notificação, razão notificação / residência e saldo (notificação − residência).
+#' Saldo positivo = o município notifica mais do que tem de residentes doentes:
+#' recebe pacientes de fora ("importador"). A razão fica NA sem caso residente.
+resumir_residencia_notificacao <- function(rn, nomes = NULL) {
+  cols <- setdiff(names(rn), c("cod6", "agente", "ano"))
+  r <- stats::aggregate(rn[cols], by = list(cod6 = rn$cod6), FUN = sum)
+  r$razao_not_res <- ifelse(r$casos_res > 0, r$casos_not / r$casos_res, NA_real_)
+  r$saldo <- r$casos_not - r$casos_res
+  if (!is.null(nomes)) r$nome <- unname(nomes[r$cod6])
+  r[order(-r$saldo, r$cod6), ]
+}
