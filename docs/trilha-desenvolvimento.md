@@ -265,6 +265,7 @@ Testes verificam o contrato, não a implementação.
 03_cartografia.R ─► dados/processados/municipios_rj.rds             (CS-014, entregue; malha IBGE, ADR-0006)
                     contrato: sf com 92 feições válidas, EPSG:4674, coluna cod6
                   + regioes_saude_rj.rds, indicadores_regionais.parquet   (CS-030, entregue)
+                  + leitos_rj.parquet (CS-034: CNES de julho, 92 × 4, junção por nome + 2 apelidos)
                     contrato: 9 regiões (malha IBGE dissolvida), 108 linhas, soma de casos = municipal
 04_pesos_espaciais.R ► resultados/objetos/pesos_queen.rds (+ vizinhos_queen.rds)   (CS-016, entregue)
                     contrato: listw estilo W; n.comp.nb == 1; nenhum vizinho vazio; 456 ligações;
@@ -278,6 +279,7 @@ Testes verificam o contrato, não a implementação.
 06_visualizacoes.R ► resultados/mapas/*.png   (CS-019 + CS-030, entregue: 24 mapas + 2 painéis + 12 regionais)
                   + resultados/estatistica/serie_semanal_*.png (CS-032: estado + 9 regiões + painel)
                   + resultados/estatistica/nao_encerrados_2025.png (CS-035)
+                  + resultados/estatistica/leitos_x_incidencia.png (CS-034)
                     contrato da série: 10 recortes × 3 agentes × 209 semanas, zero explícito;
                     semana de DT_SIN_PRI, nunca SEM_PRI; estado = soma das regiões = nº de casos
 07_exportacao.R ──► resultados/tabelas/*.csv

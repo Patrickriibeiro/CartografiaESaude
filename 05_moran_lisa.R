@@ -6,6 +6,7 @@
 #   resultados/estatistica/lisa_resumo.csv       contagens por agente × ano (antes/depois do FDR)
 #   resultados/estatistica/lisa_concordancia.csv suavizada × bruta
 #   resultados/estatistica/moran_regional.csv    Moran global nas 9 regiões de saúde (CS-030, descritivo)
+#   resultados/estatistica/spearman_leitos.csv   taxa de SRAG × leitos por 100 mil, por ano, IC bootstrap (CS-034)
 
 source("00_setup.R")
 
@@ -62,3 +63,10 @@ print(resumo[, c("agente", "ano", "sig_sem_correcao", "sig_fdr", "HH_confirmado"
                  "HH_indicativo", "LL_indicativo", "instaveis_sig")], row.names = FALSE)
 message(sprintf("Moran regional (9 regiões, taxa bruta): I abaixo do esperado %.3f em %d de 12; p < %.2f em %d de 12",
                 -1 / 8, sum(regional$I < regional$esperado_I), ALFA_LISA, sum(regional$p_perm < ALFA_LISA)))
+
+# ---- taxa × leitos (CS-034): Spearman por ano, IC por bootstrap, sem leitura causal ----
+leitos <- as.data.frame(arrow::read_parquet(file.path("dados", "processados", "leitos_rj.parquet")))
+sp <- correlacionar_leitos(ind, leitos)
+stopifnot(nrow(sp) == 2 * length(ANOS_ESTUDO), all(sp$ic_inf <= sp$rho & sp$rho <= sp$ic_sup))
+gravar(sp, "spearman_leitos.csv")
+print(sp[, c("ano", "rotulo", "rho", "ic_inf", "ic_sup")], row.names = FALSE, digits = 3)

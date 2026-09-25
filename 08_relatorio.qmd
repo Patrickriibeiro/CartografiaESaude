@@ -507,6 +507,58 @@ anteriores: `r if (sobe) "a subida indica que a investigação dessas semanas ai
 
 ![Fichas não encerradas por semana epidemiológica no último ano do estudo](resultados/estatistica/nao_encerrados_2025.png){#fig-nao-encerrados width=90%}
 
+## Leitos SUS e incidência
+
+```{r leitos}
+lt <- as.data.frame(arrow::read_parquet(file.path("dados", "processados", "leitos_rj.parquet")))
+spl <- utils::read.csv(file.path("resultados", "estatistica", "spearman_leitos.csv"), encoding = "UTF-8", stringsAsFactors = FALSE)
+spl <- spl[order(spl$ano, spl$medida != "leitos_sus_100k"), ]
+tot_ano <- stats::aggregate(casos ~ cod6 + ano, data = ind_mun <- as.data.frame(arrow::read_parquet(
+  file.path("dados", "processados", "indicadores_municipais.parquet"))), FUN = sum)
+dl <- merge(tot_ano, lt, by = c("cod6", "ano"))
+dl$taxa <- dl$casos / dl$populacao * 1e5
+sem_uti <- tapply(dl$uti_sus == 0, dl$ano, sum)
+med_sem <- tapply(dl$taxa[dl$uti_sus == 0], dl$ano[dl$uti_sus == 0], stats::median)
+med_com <- tapply(dl$taxa[dl$uti_sus > 0], dl$ano[dl$uti_sus > 0], stats::median)
+sem_leito <- tapply(dl$leitos_sus == 0, dl$ano, sum)
+sus <- spl[spl$medida == "leitos_sus_100k", ]; uti <- spl[spl$medida == "uti_sus_100k", ]
+cruza_zero <- function(x) x$ic_inf < 0 & x$ic_sup > 0
+nboot_l <- unique(spl$reamostras)
+faixa <- function(x) if (min(x) == max(x)) paste("Em todos os anos,", min(x)) else paste("Entre", min(x), "e", max(x))
+```
+
+Os leitos vêm do Cadastro Nacional de Estabelecimentos de Saúde (CNES), no conjunto "Hospitais e
+Leitos" do Portal de Dados Abertos do SUS, na competência de julho de cada ano, a mesma data de
+referência da população. Os arquivos de `r ano_ini` a `r ano_fim - 1` não trazem o código IBGE do
+município; a junção é pelo nome, com duas grafias antigas corrigidas, e no arquivo de `r ano_fim`,
+que traz o código, as duas junções concordam em todos os estabelecimentos.
+`r faixa(sem_leito)` municípios não têm nenhum leito SUS; `r tolower(faixa(sem_uti))` não têm
+leito de UTI SUS.
+
+```{r tbl-leitos}
+#| tbl-cap: "Correlação de Spearman entre a taxa de SRAG por residência e os leitos por 100 mil habitantes, por município (IC de 95 % por bootstrap)"
+t12 <- data.frame(Ano = spl$ano, `Tipo de leito` = spl$rotulo, Municípios = spl$municipios,
+                  `rho de Spearman` = fd(spl$rho, 2),
+                  `IC 95 %` = paste(fd(spl$ic_inf, 2), "a", fd(spl$ic_sup, 2)), check.names = FALSE)
+tab(t12)
+```
+
+A correlação de Spearman compara a ordem dos municípios nas duas medidas; o intervalo de
+confiança vem de `r fi(nboot_l)` reamostragens dos municípios. Com o total de leitos SUS, o
+intervalo inclui o zero em `r sum(cruza_zero(sus))` dos `r nrow(sus)` anos. Com os leitos de UTI
+SUS, o coeficiente fica entre `r fd(min(uti$rho), 2)` e `r fd(max(uti$rho), 2)`, e o
+intervalo `r if (any(cruza_zero(uti))) paste("inclui o zero em", sum(cruza_zero(uti)), "ano(s)") else "fica acima de zero em todos os anos"`.
+A diferença entre municípios com e sem UTI aparece nas medianas da taxa:
+`r lista(paste0(fd(med_com), " por 100 mil com UTI e ", fd(med_sem), " sem UTI (", names(med_com), ")"))`.
+
+Essa associação é descritiva e não indica que leitos causem ou evitem SRAG. Uma hipótese é de
+verificação: onde há hospital com UTI, o paciente grave seria internado, testado e notificado
+com mais frequência, e o caso apareceria no sistema. Outra é de composição: os municípios com UTI
+são maiores e mais urbanos. Distinguir essas hipóteses de uma diferença real de risco exigiria
+dados de testagem e de acesso que o estudo não tem.
+
+![Taxa de SRAG por residência e leitos por 100 mil habitantes, por município e ano](resultados/estatistica/leitos_x_incidencia.png){#fig-leitos width=100%}
+
 ## Protótipo de painel para a vigilância
 
 O painel interativo (`app.R`, Shiny e leaflet) permite escolher o agente, o ano e a camada

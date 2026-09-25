@@ -41,7 +41,7 @@ Rscript -e "testthat::test_dir('tests/testthat')"
 ```
 
 **4. Rode o pipeline** (na primeira vez baixa ~115 MB do Portal de Dados Abertos do SUS e
-~21 MB da tabela de regiões de saúde do geobr, e
+~21 MB da tabela de regiões de saúde do geobr, ~82 MB de leitos do CNES, e
 confere cada arquivo pelo SHA-256 do manifesto)
 
 ```bash
@@ -67,7 +67,7 @@ Rscript -e "shiny::runApp(launch.browser = TRUE)"
 | `08_relatorio.html` | Relatório autocontido (um arquivo; nenhum número digitado à mão) |
 | `08_apresentacao.html` | Apresentação (revealjs) do mesmo fonte |
 | `resultados/mapas/` | 12 mapas de incidência, 12 de LISA, 2 painéis e 12 mapas por região de saúde (300 dpi) |
-| `resultados/tabelas/exportacao/` | 9 CSV para Excel em português (municípios, regiões de saúde, residência × notificação, série semanal, não encerradas) + LEIA-ME com a versão dos dados |
+| `resultados/tabelas/exportacao/` | 11 CSV para Excel em português (municípios, regiões de saúde, residência × notificação, série semanal, não encerradas, leitos do CNES e correlação) + LEIA-ME com a versão dos dados |
 | `resultados/estatistica/` | Moran global, LISA por município, vizinhança; séries por semana epidemiológica (estado e regiões) e fichas não encerradas |
 | `app.R` | Painel Shiny + leaflet |
 
@@ -90,7 +90,7 @@ Rscript -e "shiny::runApp(launch.browser = TRUE)"
 app.R                          painel Shiny + leaflet
 R/funcoes_*.R                  funções usadas pelas etapas, com testes
 config/fontes.yml              endereços das fontes (fora do código)
-dados/brutos/                  bancos do SIVEP e regiões de saúde baixados (fora do git; conferidos pelo manifesto)
+dados/brutos/                  bancos do SIVEP, regiões de saúde e leitos do CNES (fora do git; conferidos pelo manifesto)
 dados/externos/                dicionário, malha e população do IBGE (no git)
 dados/processados/             tabelas intermediárias (fora do git; regeneráveis)
 resultados/                    tabelas, estatística, mapas

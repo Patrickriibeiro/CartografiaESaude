@@ -96,3 +96,34 @@ campanhas_influenza:
   - ano: 2025
     inicio: "2025-04-07"
     fonte: https://prefeitura.rio/saude/campanha-de-vacinacao-contra-gripe-comeca-na-cidade-do-rio/
+
+# Leitos SUS por estabelecimento (CNES), conjunto "Hospitais e Leitos" do Portal de
+# Dados Abertos do SUS (CS-034). Um arquivo por ano, uma linha por estabelecimento e
+# competência mensal (COMP = AAAAMM); usa-se julho, como a população (ADR-0003).
+# Os arquivos mudam de formato entre anos: codificação, separador, nomes de coluna e,
+# em 2025, zip com a coluna CO_IBGE. Declarados aqui, não adivinhados.
+leitos_cnes:
+  conjunto: https://dadosabertos.saude.gov.br/dataset/hospitais-e-leitos
+  competencia_mes: "07"
+  arquivos:
+    - ano: 2022
+      url: https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/Leitos_SUS/Leitos_2022.csv
+      destino: dados/brutos/Leitos_2022.csv
+      codificacao: UTF-8
+      separador: ","
+    - ano: 2023
+      url: https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/Leitos_SUS/Leitos_2023.csv
+      destino: dados/brutos/Leitos_2023.csv
+      codificacao: latin1
+      separador: ","
+    - ano: 2024
+      url: https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/Leitos_SUS/Leitos_2024.csv
+      destino: dados/brutos/Leitos_2024.csv
+      codificacao: latin1
+      separador: ","
+    - ano: 2025
+      url: https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/Leitos_SUS/Leitos_csv_2025.zip
+      destino: dados/brutos/Leitos_csv_2025.zip
+      arquivo_no_zip: Leitos_2025.csv
+      codificacao: latin1
+      separador: ";"

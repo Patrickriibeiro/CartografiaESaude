@@ -8,6 +8,7 @@
 #   resultados/tabelas/serie_semanal.csv             casos por semana × agente, estado e 9 regiões (CS-032)
 #   resultados/estatistica/serie_semanal_*.png       1 gráfico do estado + 9 regionais + painel (CS-032)
 #   resultados/estatistica/nao_encerrados_<ano>.png  maturação do último ano (CS-035)
+#   resultados/estatistica/leitos_x_incidencia.png   taxa de SRAG × leitos por 100 mil, por ano (CS-034)
 
 source("00_setup.R")
 
@@ -127,7 +128,13 @@ versao_ult <- ler_fontes()$sivep$bancos[[length(ler_fontes()$sivep$bancos)]]$ver
 f <- file.path(pasta_est, sprintf("nao_encerrados_%d.png", max(ANOS_ESTUDO)))
 ggplot2::ggsave(f, grafico_nao_encerrados(nao_enc_sem, versao_ult), width = 9, height = 4.5, dpi = 150, bg = "white")
 graficos <- c(graficos, f)
-stopifnot(all(file.exists(graficos)), length(graficos) == 1 + 9 + 1 + 1)
+# Taxa × leitos (CS-034).
+leitos <- as.data.frame(arrow::read_parquet(file.path("dados", "processados", "leitos_rj.parquet")))
+sp <- utils::read.csv(file.path("resultados", "estatistica", "spearman_leitos.csv"), encoding = "UTF-8")
+f <- file.path(pasta_est, "leitos_x_incidencia.png")
+ggplot2::ggsave(f, grafico_leitos(ind, leitos, sp), width = 11, height = 6, dpi = 150, bg = "white")
+graficos <- c(graficos, f)
+stopifnot(all(file.exists(graficos)), length(graficos) == 1 + 9 + 1 + 1 + 1)
 
 stopifnot(all(file.exists(gerados)), length(gerados) == 38)
 message(sprintf("%d mapas gravados em %s", length(gerados), pasta))

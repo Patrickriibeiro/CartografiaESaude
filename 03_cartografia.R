@@ -7,6 +7,9 @@
 #   dados/processados/municipio_regiao.parquet cod6 → cod_regiao, regiao
 #   dados/processados/indicadores_regionais.parquet  9 regiões × 3 agentes × 4 anos
 #   resultados/tabelas/indicadores_regionais.csv     a mesma tabela, para leitura
+#   dados/brutos/Leitos_*.csv|zip                    CNES, Hospitais e Leitos (CS-034), no manifesto
+#   dados/processados/leitos_rj.parquet              leitos SUS e de UTI SUS de julho, 92 × 4 anos
+#   resultados/tabelas/leitos_regionais.csv          leitos e taxa de SRAG por região de saúde
 
 source("00_setup.R")
 
@@ -50,3 +53,16 @@ utils::write.csv(indicadores_regionais, file.path("resultados", "tabelas", "indi
 message(sprintf("Regiões de saúde: %d feições (%s municípios); grade regional %d linhas, %d casos",
                 nrow(regioes_rj), paste(regioes_rj$n_municipios, collapse = "/"),
                 nrow(indicadores_regionais), sum(indicadores_regionais$casos)))
+
+# ---- leitos SUS do CNES (CS-034) ----
+# Junção por NOME (os arquivos de 2022-2024 não trazem código IBGE): por isso vem
+# depois da malha, que dá os nomes oficiais.
+obter_leitos()
+leitos <- montar_leitos(municipios_rj, populacao)
+stopifnot(nrow(leitos) == nrow(municipios_rj) * length(ANOS_ESTUDO), !anyNA(leitos$leitos_sus_100k))
+arrow::write_parquet(leitos, file.path("dados", "processados", "leitos_rj.parquet"))
+leitos_reg <- resumir_leitos_regiao(leitos, municipio_regiao, indicadores_regionais)
+utils::write.csv(leitos_reg, file.path("resultados", "tabelas", "leitos_regionais.csv"), row.names = FALSE, fileEncoding = "UTF-8")
+message(sprintf("Leitos CNES (julho): %s leitos SUS no estado por ano; %d municípios sem leito SUS em %d",
+                paste(tapply(leitos$leitos_sus, leitos$ano, sum), collapse = "/"),
+                sum(leitos$leitos_sus == 0 & leitos$ano == max(ANOS_ESTUDO)), max(ANOS_ESTUDO)))

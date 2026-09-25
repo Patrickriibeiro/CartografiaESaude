@@ -147,7 +147,7 @@ Cada objetivo declara o produto e o critério pelo qual se verifica que foi cump
 | OE7 | Gerar relatório e apresentação a partir do mesmo código-fonte (Quarto), com todos os números lidos dos objetos do pipeline | `08_relatorio.qmd` | `quarto render` sem erro; zero números digitados à mão no fonte |
 | OE8 | Publicar código, dados processados e documentação em repositório público com ambiente congelado (`renv`) e testes automatizados | repositório GitHub | Terceiro reexecuta do zero seguindo o README; testes verdes em integração contínua |
 | OE9 *(opcional, D-10)* | Calcular taxas padronizadas por idade (método direto, Censo 2022 por faixa etária) para VSR e Influenza | coluna `incid_pad_100k` | Comparação bruta × padronizada no relatório |
-| OE10 *(opcional, D-10)* | Descrever a relação entre taxa por residência e oferta de leitos (CNES) por região de saúde | tabela + gráfico | Coeficiente de correlação de Spearman por ano, sem inferência causal |
+| OE10 *(opcional, D-10; entregue no CS-034)* | Descrever a relação entre taxa por residência e oferta de leitos (CNES) por município e região de saúde | `spearman_leitos.csv`, `leitos_regionais.csv`, gráfico | Coeficiente de correlação de Spearman por ano, com IC por bootstrap, sem inferência causal |
 
 ---
 
@@ -187,7 +187,7 @@ Todas públicas, gratuitas e de acesso aberto.
 | IBGE, Censo 2022 por idade (SIDRA tabela 9514) | População por faixa etária e município | API SIDRA | Só para OE9 (padronização) |
 | IBGE, Malha Municipal 2022 | Polígonos municipais do RJ, resolução completa | `geoftp.ibge.gov.br` (arquivo `RJ_Municipios_2022.zip`) | Já em EPSG:4674; registrada no manifesto com hash. **Não** a malha simplificada do `geobr`, que perde 8 pares de vizinhos (ADR-0006) |
 | Regiões de saúde (tabela município → região) | Qual das 9 regiões contém cada município | pacote `geobr` (`read_health_region`), só como atributo | A geometria regional sai de dissolver a malha do IBGE (ADR-0006) |
-| CNES, leitos (CNES-LT) | Leitos por estabelecimento e município, mês a mês | pacote `microdatasus` (`information_system = "CNES-LT"`) | Só para OE10. Aqui o `microdatasus` **é** a ferramenta correta |
+| CNES, leitos | Leitos SUS e de UTI SUS por estabelecimento, mês a mês | Portal de Dados Abertos do SUS, conjunto "Hospitais e Leitos" (CSV anual; CS-034) | Só para OE10. Competência de julho. Preferido ao `microdatasus` (CNES-LT): mesmo portal do SIVEP, CSV em vez de `.dbc`, sem pacote fora do CRAN. Sem código IBGE em 2022–2024: junção por nome, conferida com o código de 2025 |
 | Boletins InfoGripe (Fiocruz) | Composição viral e tendência nacional/estadual por semana | Agência Fiocruz / GitHub `infogripe` | Contexto e validação externa da tendência estadual, não entra no cálculo |
 
 ### 3.3 Coleta, curadoria e tratamento dos dados do SIVEP-Gripe
@@ -511,7 +511,7 @@ Pacote R, CRAN. https://ipeagit.github.io/geobr/
 
 Saldanha RF, Bastos RR, Barcellos C. Microdatasus: pacote para download e
 pré-processamento de microdados do DATASUS. *Cadernos de Saúde Pública*. 2019;35(9).
-(Pacote usado apenas para CNES.)
+(Previsto para o CNES; não usado: os leitos vieram do Portal de Dados Abertos, CS-034.)
 
 Secretaria de Estado de Saúde do Rio de Janeiro. Regionalização: as nove regiões de
 saúde. https://www.saude.rj.gov.br/assessoria-de-regionalizacao/sobre-a-regionalizacao/2017/04/regionalizacao

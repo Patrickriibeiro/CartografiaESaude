@@ -1,0 +1,9 @@
+﻿"ano";"tipo_de_leito";"municipios";"rho_de_spearman";"ic95_inferior";"ic95_superior";"reamostras_bootstrap"
+2022;"Leitos SUS";92;0,184;-0,048;0,402;9999
+2022;"Leitos de UTI SUS";92;0,396;0,197;0,569;9999
+2023;"Leitos SUS";92;0,27;0,058;0,472;9999
+2023;"Leitos de UTI SUS";92;0,328;0,11;0,522;9999
+2024;"Leitos SUS";92;0,039;-0,178;0,263;9999
+2024;"Leitos de UTI SUS";92;0,365;0,162;0,549;9999
+2025;"Leitos SUS";92;0,111;-0,104;0,322;9999
+2025;"Leitos de UTI SUS";92;0,349;0,145;0,529;9999

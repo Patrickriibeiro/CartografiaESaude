@@ -9,6 +9,8 @@
 #   resultados/tabelas/exportacao/residencia_notificacao.csv  92 municípios, casos por residência e por notificação (CS-031)
 #   resultados/tabelas/exportacao/serie_semanal.csv           casos por semana, estado e 9 regiões (CS-032)
 #   resultados/tabelas/exportacao/nao_encerrados.csv          fichas não encerradas por ano (CS-035)
+#   resultados/tabelas/exportacao/leitos_municipais.csv       leitos SUS e de UTI SUS de julho, 92 × 4 (CS-034)
+#   resultados/tabelas/exportacao/spearman_leitos.csv         taxa × leitos, por ano, com IC (CS-034)
 #   resultados/tabelas/exportacao/LEIA-ME.txt                 carimbo: data, commit, versões dos dados
 
 source("00_setup.R")
@@ -105,6 +107,18 @@ ne <- utils::read.csv(file.path("resultados", "tabelas", "nao_encerrados.csv"))
 nao_enc <- data.frame(ano = ne$ano, fichas_de_srag = ne$fichas, nao_encerradas = ne$nao_encerradas,
                       proporcao_pct = round(100 * ne$proporcao, 2), row.names = NULL)
 
+lt <- as.data.frame(arrow::read_parquet(file.path("dados", "processados", "leitos_rj.parquet")))
+leitos_exp <- data.frame(codigo_ibge = malha$cod7[match(lt$cod6, malha$cod6)], municipio = nomes[lt$cod6], ano = lt$ano,
+                         estabelecimentos = lt$estabelecimentos, leitos_sus = lt$leitos_sus, leitos_uti_sus = lt$uti_sus,
+                         populacao = lt$populacao, leitos_sus_100mil = round(lt$leitos_sus_100k, 2),
+                         leitos_uti_sus_100mil = round(lt$uti_sus_100k, 2), stringsAsFactors = FALSE, row.names = NULL)
+leitos_exp <- leitos_exp[order(leitos_exp$ano, leitos_exp$municipio), ]
+spl <- utils::read.csv(file.path("resultados", "estatistica", "spearman_leitos.csv"), encoding = "UTF-8")
+spearman_exp <- data.frame(ano = spl$ano, tipo_de_leito = spl$rotulo, municipios = spl$municipios,
+                           rho_de_spearman = round(spl$rho, 3), ic95_inferior = round(spl$ic_inf, 3),
+                           ic95_superior = round(spl$ic_sup, 3), reamostras_bootstrap = spl$reamostras,
+                           stringsAsFactors = FALSE, row.names = NULL)
+
 pasta <- file.path("resultados", "tabelas", "exportacao")
 arquivos <- c(
   salvar_resultado(indicadores, "indicadores_municipais", pasta),
@@ -116,6 +130,8 @@ arquivos <- c(
   salvar_resultado(res_not, "residencia_notificacao", pasta),
   salvar_resultado(serie, "serie_semanal", pasta),
   salvar_resultado(nao_enc, "nao_encerrados", pasta),
+  salvar_resultado(leitos_exp, "leitos_municipais", pasta),
+  salvar_resultado(spearman_exp, "spearman_leitos", pasta),
   escrever_carimbo(pasta, c(
     sprintf("Contagens pequenas (CS-043): %d combinações município x agente x ano têm de 1 a %d casos.",
             sum(ind$casos >= 1 & ind$casos < LIMIAR_CONTAGEM_PEQUENA), LIMIAR_CONTAGEM_PEQUENA - 1L),
@@ -131,6 +147,7 @@ stopifnot(nrow(ler_resultado(arquivos[1])) == 1104, nrow(ler_resultado(arquivos[
           nrow(ler_resultado(arquivos[7])) == 92,
           nrow(ler_resultado(arquivos[8])) == 10 * 3 * nrow(semanas_do_estudo()),
           nrow(ler_resultado(arquivos[9])) == length(ANOS_ESTUDO),
+          nrow(ler_resultado(arquivos[10])) == 92 * length(ANOS_ESTUDO), nrow(ler_resultado(arquivos[11])) == 2 * length(ANOS_ESTUDO),
           "Baía da Ilha Grande" %in% ler_resultado(arquivos[5])$regiao_de_saude,
           "Niterói" %in% ler_resultado(arquivos[1])$municipio)
 message(sprintf("%d arquivos em %s", length(arquivos), pasta))
