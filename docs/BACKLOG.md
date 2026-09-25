@@ -149,7 +149,7 @@ Prefixos: `CS` = tarefa · `D` = decisão que só o dono/mestranda fecha · `ADR
 | CS-011 | **Denominadores populacionais** — SIDRA 4714 (Censo 2022) e 6579 (2024, 2025) no manifesto; 2023 interpolado nas datas de referência reais (peso 0,4771); 92 × 4 sem NA; soma 2022 = 16.055.174. ADR-0003 **proposto**: degrau Censo × estimativa devolvido à D-05 | 2026-09-25 | `docs/release-history/cs-011-cs-014-populacao-e-malha.md` · commit `0d3d91a` |
 | CS-014 | **Malha municipal** — IBGE oficial em resolução completa (ADR-0006), não o `geobr` simplificado, que perdia 8 pares de vizinhos; 92 feições válidas, EPSG 4674; casa 92/92 com população e SIVEP por `cod6` | 2026-09-25 | idem · ADR-0006 |
 | CS-015 | **Testes da malha** — 92 códigos únicos com prefixo 33, área 43.750,4 km² (dentro de 2 % da oficial). Fechado junto com o CS-014, com aviso ao dono, porque os critérios já eram exercidos pelo mesmo teste | 2026-09-25 | idem |
-| CS-016 | **Vizinhança Queen e pesos W** — 92 municípios, **456 ligações** (bate com o ADR-0006), 1 bloco, mínimo 1 vizinho, máximo 10, mediana 5; `region.id` = cod6; tabela e histograma em `resultados/estatistica/` | 2026-09-25 | `docs/release-history/cs-016-vizinhanca-queen.md` · commit PENDENTE |
+| CS-016 | **Vizinhança Queen e pesos W** — 92 municípios, **456 ligações** (bate com o ADR-0006), 1 bloco, mínimo 1 vizinho, máximo 10, mediana 5; `region.id` = cod6; tabela e histograma em `resultados/estatistica/` | 2026-09-25 | `docs/release-history/cs-016-vizinhanca-queen.md` · commit `72970cf` |
 
 ## Descartados
 
