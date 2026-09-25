@@ -102,6 +102,87 @@ A autocorrelação espacial global foi significativa em `r sum(sig_global)` de `
 `r lista(unique(paste(rot(conf$agente), conf$ano)))` apresentou agrupamentos confirmados:
 `r lista(conf$nome[conf$quadrante == "HH"])` (Alto-Alto).
 
+# Introdução
+
+```{r intro}
+casos_ini_ag <- tapply(cpa$casos[cpa$ano == ano_ini], cpa$agente[cpa$ano == ano_ini], sum)
+casos_fim_ag <- tapply(cpa$casos[cpa$ano == ano_fim], cpa$agente[cpa$ano == ano_fim], sum)
+p_ini <- casos_ini_ag / sum(casos_ini_ag); p_fim <- casos_fim_ag / sum(casos_fim_ag)
+pop_censo <- sum(popd$pop_2022); pop_min <- min(popd$pop_2022); pop_max <- max(popd$pop_2022)
+n_regioes_intro <- length(REGIOES_SAUDE_RJ)
+perfil_i <- ler("resultados", "tabelas", "perfil_etario.csv")
+p_vsr_bebe <- sum(perfil_i$casos[perfil_i$agente == "vsr" & perfil_i$faixa == "<1"]) / sum(perfil_i$casos[perfil_i$agente == "vsr"])
+p_sars_idoso <- sum(perfil_i$casos[perfil_i$agente == "sarscov2" & perfil_i$faixa %in% c("60-69", "70-79", "80+")]) /
+  sum(perfil_i$casos[perfil_i$agente == "sarscov2"])
+nao_int_intro <- sum(diag$nao_internado) / sum(diag$fichas_rj)
+rn_intro <- utils::read.csv(file.path("resultados", "tabelas", "residencia_notificacao.csv"), encoding = "UTF-8",
+                            colClasses = c(cod6 = "character"))
+p_outro_mun <- sum(rn_intro$not_de_outro_mun_rj) / sum(rn_intro$casos_res)
+zeros_intro <- utils::read.csv(file.path("resultados", "estatistica", "zeros_diagnostico.csv"), encoding = "UTF-8")
+max_zeros <- zeros_intro[which.max(zeros_intro$zeros), ]
+```
+
+## Contextualização
+
+A Síndrome Respiratória Aguda Grave (SRAG) é a forma grave das infecções respiratórias agudas:
+o paciente é internado, ou morre, com dispneia, saturação baixa ou desconforto respiratório.
+No Brasil, todo caso de SRAG hospitalizado ou óbito por SRAG é de notificação compulsória no
+Sistema de Informação de Vigilância Epidemiológica da Gripe (SIVEP-Gripe), cujos microdados
+anonimizados o Ministério da Saúde publica em bancos anuais no Portal de Dados Abertos do SUS
+[@ms_srag]. Foi esse sistema que permitiu acompanhar, em 2020, a explosão das hospitalizações por SRAG
+com a chegada do SARS-CoV-2 e compará-las às da influenza [@bastos2020; @niquini2020]. As taxas deste
+relatório medem, portanto, doença grave, e não infecção: `r fp(nao_int_intro)` das fichas de
+SRAG do estado declaram que o paciente não foi internado, e o restante foi internado ou morreu.
+
+O período de `r ano_ini` a `r ano_fim` é singular. Encerrada a emergência de saúde pública por
+COVID-19, o SARS-CoV-2 deixou de ser o agente dominante e passou a cocircular com a influenza A
+e B e com o vírus sincicial respiratório (VSR), cuja carga se concentra em bebês [@li2022]. No
+Estado do Rio de Janeiro, entre os casos confirmados dos três agentes, o SARS-CoV-2 passou de
+`r fp(p_ini[["sarscov2"]], 0)` em `r ano_ini` para `r fp(p_fim[["sarscov2"]], 0)` em `r ano_fim`,
+enquanto a influenza foi de `r fp(p_ini[["influenza"]], 0)` para `r fp(p_fim[["influenza"]], 0)` e
+o VSR de `r fp(p_ini[["vsr"]], 0)` para `r fp(p_fim[["vsr"]], 0)`. Os três vírus atingem idades
+diferentes: `r fp(p_vsr_bebe, 0)` dos casos de VSR são de menores de um ano, e
+`r fp(p_sars_idoso, 0)` dos de SARS-CoV-2 têm sessenta anos ou mais. Esse rearranjo, e não a
+pandemia em si, é o objeto deste trabalho.
+
+O Estado do Rio de Janeiro tem `r n_mun` municípios, `r fi(pop_censo)` habitantes no Censo 2022 e
+uma organização do SUS em `r n_regioes_intro` regiões de saúde. A população municipal vai de
+`r fi(pop_min)` a `r fi(pop_max)` habitantes, e a oferta hospitalar se concentra em poucos polos:
+`r fp(p_outro_mun, 0)` dos casos de residentes do estado foram notificados em outro município
+que não o de residência, um fluxo já descrito para a região metropolitana [@cavalcante2021].
+Isso torna a escolha entre município de residência e município de notificação uma decisão
+metodológica, não um detalhe.
+
+## Problematização
+
+A vigilância de SRAG é comunicada, na prática, em escala nacional e estadual: os boletins
+InfoGripe da Fiocruz [@infogripe2025] e os painéis do Ministério agregam por unidade da
+federação. Em um estado com a heterogeneidade demográfica e assistencial do Rio de Janeiro,
+a média estadual esconde municípios com carga de doença grave muito acima ou muito abaixo do
+esperado, e não diz se esses municípios formam territórios contíguos, o que teria implicação
+direta para a alocação regional de leitos, testagem e vacinação.
+
+Três obstáculos explicam por que essa leitura territorial raramente é feita. O primeiro é o
+volume e o formato dos dados: cada banco anual do SIVEP-Gripe tem perto de duzentas colunas e
+centenas de milhares de registros nacionais, e extrair, filtrar e classificar por agente exige
+código, não planilha. O segundo é a instabilidade estatística dos municípios pequenos: em
+`r rot(max_zeros$agente)` de `r max_zeros$ano`, `r max_zeros$zeros` dos `r n_mun` municípios não
+tiveram nenhum caso, e um mapa de taxa bruta destaca esse ruído como se fosse padrão. O terceiro
+é a falta de pipelines reprodutíveis: análises publicadas raramente disponibilizam código e
+dados de forma que outro pesquisador, ou a própria vigilância municipal, reexecute a análise
+quando o banco é atualizado.
+
+Este trabalho ataca os três obstáculos com uma prova de conceito: um pipeline aberto em R que
+vai do download ao mapa, com estatística espacial que trata os pequenos números e os testes
+múltiplos, e com um painel interativo para a vigilância municipal. A pergunta é como as taxas
+de incidência de SRAG por SARS-CoV-2, influenza e VSR se distribuem entre os municípios e as
+regiões de saúde do estado, de `r ano_ini` a `r ano_fim`, e onde se concentram os agrupamentos
+espaciais de alto risco. As hipóteses de trabalho são quatro: H1, as taxas municipais têm
+autocorrelação espacial positiva em ao menos um ano; H2, os agrupamentos de alto risco ocupam
+territórios diferentes para cada agente; H3, a localização dos agrupamentos muda ao longo do
+período; e H4, secundária, parte da heterogeneidade das taxas por residência acompanha a oferta
+de leitos hospitalares. A conclusão responde a cada uma.
+
 # Resultados
 
 ## Arquitetura do pipeline reprodutível
@@ -793,6 +874,69 @@ pequenas <- sum(ind_muni$casos >= 1 & ind_muni$casos < LIMIAR_CONTAGEM_PEQUENA)
   agente e ano com menos de `r LIMIAR_CONTAGEM_PEQUENA` casos. Não há supressão: o
   microdado de origem já é público e anonimizado pelo Ministério, e o projeto só agrega. Quem
   republicar essas tabelas em outro contexto deve avaliar a regra de supressão local.
+
+# Conclusão
+
+```{r conclusao}
+anos_sig <- tapply(g$p_perm < alfa, g$agente, sum)[AGENTES]
+hh_conf <- conf[conf$quadrante == "HH", ]
+mapas_conf <- unique(paste(rot(hh_conf$agente), "em", hh_conf$ano))
+anos_txt <- function(n) paste(n, ifelse(n == 1, "ano", "anos"))
+ind_hh <- lisa[lisa$quadrante == "HH" & lisa$nivel != "ns", ]
+rep_hh <- t(sapply(AGENTES, function(a) {
+  x <- ind_hh[ind_hh$agente == a, ]; tb <- table(x$cod6)
+  c(municipios = length(tb), em_mais_de_um_ano = sum(tb >= 2))
+}))
+queda_sars <- tx("sarscov2", ano_ini) / tx("sarscov2", ano_fim)
+alta_flu <- tx("influenza", ano_fim) / tx("influenza", ano_ini)
+alta_vsr <- tx("vsr", ano_fim) / tx("vsr", ano_ini)
+reg_hh_conf <- unique(mreg$regiao[match(hh_conf$cod6, mreg$cod6)])
+```
+
+A pergunta era como as taxas de SRAG por SARS-CoV-2, influenza e VSR se distribuem entre os
+`r n_mun` municípios e as `r n_reg` regiões de saúde do estado, e onde se concentram os
+agrupamentos de alto risco. A resposta, com os dados abertos de `r ano_ini` a `r ano_fim`, é que
+a distribuição é desigual, mas o sinal espacial é fraco: a maior parte do que os mapas mostram
+é a diferença entre municípios, não a semelhança entre vizinhos.
+
+**H1, dependência espacial: sustentada, com sinal fraco.** O I de Moran global foi
+significativo em `r sum(sig_global)` dos `r n_mapas` mapas: `r lista(paste0(rot(AGENTES), " em ", anos_txt(anos_sig[AGENTES])))`.
+Os valores ficaram entre `r fd(min(g$I[sig_global]), 2)` e `r fd(max(g$I[sig_global]), 2)`, e na
+escala das regiões de saúde o sinal desaparece (`r sig_reg` de `r nrow(mr)` mapas com p abaixo de α).
+
+**H2, especificidade por agente: sustentada só para o VSR.** Após a correção para testes
+múltiplos, só `r lista(mapas_conf)` teve agrupamento Alto-Alto confirmado, formado por
+`r lista(hh_conf$nome)`, na região `r lista(reg_hh_conf)`, no eixo leste da Baía de Guanabara. A
+influenza e o SARS-CoV-2 não tiveram nenhum agrupamento confirmado em nenhum ano; para eles a
+hipótese não se sustenta com este critério. A estrutura etária não explica o padrão: a taxa
+padronizada por idade preserva a ordem dos municípios (correlação de postos de
+`r fd(min(padr$spearman_bruta_pad), 3)` a `r fd(max(padr$spearman_bruta_pad), 3)`).
+
+**H3, dinâmica temporal: sustentada na série, não localizável nos mapas.** No tempo, a
+transição é nítida: com o mesmo denominador, a incidência de SARS-CoV-2 em `r ano_fim` foi
+`r fd(queda_sars, 1)` vezes menor que em `r ano_ini`; a de influenza, `r fd(alta_flu, 1)` vezes maior; a
+de VSR, `r fd(alta_vsr, 1)` vezes maior, com picos de influenza e VSR na temporada de outono e inverno. No espaço, porém, só um mapa tem
+agrupamento confirmado, então não há como dizer se os agrupamentos se deslocam. No nível
+indicativo, sem correção, dos municípios Alto-Alto de cada agente, aparecem em mais de um ano
+`r lista(paste0(rep_hh[, "em_mais_de_um_ano"], " dos ", rep_hh[, "municipios"], " ", c("do SARS-CoV-2", "da influenza", "do VSR")[match(rownames(rep_hh), AGENTES)]))`,
+o que é compatível tanto com persistência quanto com acaso.
+
+**H4, oferta de leitos: associação descritiva positiva.** A taxa de SRAG por residência
+correlaciona-se com os leitos de UTI SUS por 100 mil habitantes (rho de Spearman de
+`r fd(min(uti$rho), 2)` a `r fd(max(uti$rho), 2)`, intervalos acima de zero nos `r nrow(uti)` anos), e
+pouco com o total de leitos SUS. Isso não mede efeito: onde há UTI, o caso grave é internado,
+testado e notificado, e aparece no sistema.
+
+**O que não pôde ser testado.** A diferença entre ausência de doença e ausência de testagem: os
+municípios sem caso tiveram fichas de SRAG com menos confirmação laboratorial que os demais, e
+os dados abertos não permitem separar as duas coisas. Nenhuma associação aqui é causal, e a
+escala regional, com `r n_reg` unidades, não comporta o Moran local.
+
+**O que o trabalho entrega além da resposta.** Um pipeline que refaz todos os números, mapas e
+este texto a partir dos arquivos públicos, com registro de proveniência, testes automáticos e
+reprodução byte a byte entre execuções; e um painel para a vigilância municipal. Quando o banco
+de `r ano_fim` for atualizado, a análise inteira se refaz com um comando, e é essa
+reprodutibilidade, mais do que qualquer mapa isolado, que a vigilância territorial precisa.
 
 # Referências {.unnumbered}
 

@@ -51,11 +51,11 @@ O período 2022–2025 é epidemiologicamente singular. Encerrada a Emergência 
 Pública de Importância Nacional por COVID-19 (abril de 2022), o SARS-CoV-2 deixou de ser
 o agente dominante das SRAG e passou a cocircular com a Influenza A e B e com o Vírus
 Sincicial Respiratório (VSR), este último com sazonalidade de outono-inverno no Sudeste
-e carga concentrada em crianças menores de dois anos. Os boletins InfoGripe da Fiocruz
-mostram que, entre os casos de SRAG com agente identificado em 2025, o VSR e a
-Influenza A superaram amplamente o SARS-CoV-2 **[REVISAR: transcrever os percentuais do
-boletim mais recente disponível no momento da entrega, com a semana epidemiológica]**.
-Esse rearranjo, e não a pandemia em si, é o objeto deste projeto.
+e carga concentrada em crianças menores de dois anos. No próprio RJ, entre os casos
+confirmados dos três agentes pelo critério do ADR-0002, o SARS-CoV-2 passou de 91 % em 2022
+para 14 % em 2025, a influenza de 2 % para 36 % e o VSR de 6 % para 50 % (números do pipeline,
+CS-028; a Introdução do relatório os recalcula a cada execução). Esse rearranjo, e não a
+pandemia em si, é o objeto deste projeto.
 
 O Estado do Rio de Janeiro tem 92 municípios, 16.055.174 habitantes no Censo 2022 (IBGE,
 tabela 4714) e uma organização do SUS em nove regiões de saúde (Metropolitana I,
@@ -434,8 +434,16 @@ Cada subseção da v1 passa a ter conteúdo definido e o artefato de onde vem.
 
 ## 6 Conclusão
 
-A ser escrita a partir dos resultados. Deve responder à pergunta da §1.4 e às hipóteses
-da §1.3 uma a uma, dizendo qual foi sustentada, qual não, e qual não pôde ser testada.
+Escrita no CS-028 (2026-09-25) como seção "Conclusão" do relatório (`08_relatorio.qmd`), com
+todos os números calculados pelo pipeline. Em resumo, na versão de 14/09/2026 do banco de 2025:
+H1 sustentada com sinal fraco (Moran global significativo em 6 dos 12 mapas, I entre 0,11 e
+0,33; nada na escala regional); H2 sustentada só para o VSR (único agrupamento Alto-Alto
+confirmado: Itaboraí, Maricá e Tanguá, VSR 2024, Metropolitana II; nenhum para influenza e
+SARS-CoV-2); H3 sustentada na série temporal (SARS-CoV-2 15,3 vezes menor em 2025 que em 2022;
+influenza 7,2 e VSR 3,3 vezes maiores), mas não localizável nos mapas (um só mapa confirmado);
+H4 descritiva e positiva com leitos de UTI SUS (rho 0,33–0,40), não causal. Não testável:
+ausência de doença × ausência de testagem. A Introdução (§1.1–1.2) também está no relatório,
+com os números vivos.
 
 ## 7 Cronograma **[REVISAR: depende do prazo, D-02]**
 
@@ -526,7 +534,8 @@ dicionário de dados SIVEP-Gripe com a data da versão baixada.]**
 
 ## Apêndice A — Avaliação crítica da disciplina (IOC 14090)
 
-Mantido da v1, texto pessoal da autora.
+Mantido da v1, texto pessoal da autora. **Não foi redigido pelo CS-028**: é avaliação pessoal
+da disciplina, e só a autora pode escrevê-la.
 
 ## Apêndice B — Correções factuais da v1 e suas fontes
 
