@@ -12,7 +12,7 @@ guardado em `dados/externos/dicionario-srag-2019-a-2025.pdf` e registrado em
 
 > **Conferido contra os bancos reais (CS-006, 2026-09-25).** Os quatro bancos PARQUET
 > (2022 a 2025) têm as mesmas **194 colunas**, com os mesmos nomes e os mesmos tipos. Os
-> 34 campos abaixo existem nos quatro. As três dúvidas marcadas antes como [CONFERIR]
+> 37 campos abaixo existem nos quatro. As três dúvidas marcadas antes como [CONFERIR]
 > foram resolvidas e estão indicadas como **[CONFERIDO]**.
 >
 > **Tipos no PARQUET:** 6 datas como `timestamp[ns]` sem fuso, à meia-noite UTC (ler
@@ -88,17 +88,33 @@ guardado em `dados/externos/dicionario-srag-2019-a-2025.pdf` e registrado em
 | `PCR_SARS2` | 72 | `Varchar2(1)` | 1-marcado; **vazio = não marcado**; habilitado se `POS_PCROUT = 1`. O PDF oficial grafa `PCR_ SARS2`, com espaço; **[CONFERIDO] no PARQUET o nome é `PCR_SARS2`** | **Critério SARS-CoV-2** |
 | `PCR_VSR` | 72 | `Varchar2(1)` | 1-marcado; **vazio = não marcado**; habilitado se `POS_PCROUT = 1` | **Critério VSR** |
 
+## Laboratório: sorologia para SARS-CoV-2
+
+Acrescentados no CS-007, só para medir a evidência laboratorial das fichas sem o
+checkbox do vírus (regra R3 do ADR-0002). Não entram na regra recomendada.
+
+| Campo | Nº ficha | Tipo | Domínio | Uso no projeto |
+|---|---|---|---|---|
+| `RES_IGG` | 76 | `Varchar2(1)` | resultado da sorologia IgG; no banco aparecem 1, 2, 4 e 9; o projeto lê **1 = reagente** | Evidência laboratorial alternativa (ADR-0002, R3) |
+| `RES_IGM` | 76 | `Varchar2(1)` | idem, IgM | idem |
+| `RES_IGA` | 76 | `Varchar2(1)` | idem, IgA | idem |
+
 ## Classificação e desfecho
 
 | Campo | Nº ficha | Tipo | Domínio | Uso no projeto |
 |---|---|---|---|---|
-| `CO_DETEC` | 79 | `Varchar2(1)` | 1-Sim, 2-Não, 9-Ignorado ("dois tipos de vírus ao mesmo tempo"). O dicionário grafa `CO-DETEC`; **[CONFERIDO] no PARQUET o nome é `CO_DETEC`** | Conferência da co-detecção que o projeto calcula |
+| `CO_DETEC` | 79 | `Varchar2(1)` | 1-Sim, 2-Não, 9-Ignorado ("dois tipos de vírus ao mesmo tempo"). O dicionário grafa `CO-DETEC`; **[CONFERIDO] no PARQUET o nome é `CO_DETEC`** | **Não usado:** marca co-detecção com qualquer vírus (rinovírus etc.) e está vazio em 65 % das fichas; das 305 fichas com dois dos três agentes do estudo, só 76 têm `CO_DETEC = 1` (ADR-0002 §3.3) |
 | `CLASSI_FIN` | 80 | `Varchar2(1)` | 1-SRAG por influenza, 2-SRAG por outro vírus respiratório, 3-SRAG por outro agente etiológico, 4-SRAG não especificado, 5-SRAG por covid-19. **Sem código 9.** Se os métodos divergirem, prioriza-se o RT-PCR | **Critério de caso** (ADR-0002). Vazio = caso não encerrado |
 | `CRITERIO` | 81 | `Varchar2(1)` | 1-Laboratorial, 2-Clínico epidemiológico, 3-Clínico, 4-Clínico imagem | Descritivo; ver nota abaixo |
 | `EVOLUCAO` | 82 | `Varchar2(1)` | 1-Cura, 2-Óbito, 3-Óbito por outras causas, 9-Ignorado | Não usado nesta fase |
 | `DT_EVOLUCA` | 83 | Date | ≥ `DT_SIN_PRI` | Não usado nesta fase |
 
-## Três consequências para o critério de caso (entrada do ADR-0002)
+## Quatro consequências para o critério de caso (entrada do ADR-0002)
+
+0. **O checkbox do vírus mede preenchimento, não confirmação.** Em 2022, 2.327 fichas
+   encerradas como COVID têm resultado de teste positivo, mas o "qual vírus" em branco;
+   a proporção de fichas sem checkbox cai de 27 % (2022) para 5 % (2025). Medido no
+   CS-007; é o achado central do ADR-0002.
 
 1. **"Vazio" tem dois sentidos diferentes.** Em `PCR_SARS2`, `PCR_VSR`, `AN_SARS2` e
    `AN_VSR`, vazio quer dizer "não marcado" (negativo ou não avaliado). Em

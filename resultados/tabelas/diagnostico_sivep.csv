@@ -1,5 +1,5 @@
-"ano","fichas_rj","municipios_com_ficha","sem_pri_diverge","sintomas_apos_digitacao","classi_fin_vazio","residencia_diferente_notificacao"
-2022,38726,92,0,17,1028,8040
-2023,19640,90,0,3,481,4190
-2024,18190,91,0,0,760,4117
-2025,23324,92,226,2,138,5451
+"ano","fichas_rj","municipios_com_ficha","sem_pri_diverge","sintomas_apos_digitacao","classi_fin_vazio","com_resultado_de_teste","nao_internado","internacao_ignorada_ou_vazia","residencia_diferente_notificacao"
+2022,38726,92,0,17,1028,33873,516,1352,8040
+2023,19640,90,0,3,481,17345,169,400,4190
+2024,18190,91,0,0,760,16296,152,227,4117
+2025,23324,92,226,2,138,21388,186,182,5451

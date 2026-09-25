@@ -20,7 +20,7 @@ Prefixos: `CS` = tarefa · `D` = decisão que só o dono/mestranda fecha · `ADR
 | D-01 | Quem é o dono do repositório GitHub público (item 4.5 do PDF): Patrick, Gabrielle ou ambos? Qual licença (MIT para código, CC-BY para relatório)? | Ambos como autores; MIT + CC-BY 4.0 | CS-026 |
 | D-02 | O `23092026` no nome do arquivo é data da apresentação (já passou) ou prazo de entrega? Existe prazo real para o produto final? | — | ordem da F5/F6 |
 | D-03 | Baixar CSV ou PARQUET do portal? PARQUET é menor e lê por coluna; CSV é o formato "clássico" que a banca conhece | PARQUET, com CSV como fallback | **Decidida 2026-09-25: PARQUET** (ADR-0001) |
-| D-04 | Critério de caso: estrito (`CLASSI_FIN` + laboratório) como o PDF escreve, ou laboratorial puro? Co-detecção conta em cada vírus? | Estrito, co-detecção conta em cada agente e é reportada | CS-007, CS-008 |
+| D-04 | Critério de caso: estrito (`CLASSI_FIN` + laboratório) como o PDF escreve, ou laboratorial puro? Co-detecção conta em cada vírus? | ~~Estrito, co-detecção conta em cada agente e é reportada~~ **Atualizada 2026-09-25 (ADR-0002, com números sobre 99.880 fichas):** regra **R2 vigilância** (`CLASSI_FIN` do agente + critério laboratorial declarado ou checkbox), porque a estrita perde 27 % → 5 % dos casos de COVID entre 2022 e 2025 só por checkbox em branco; **atribuição única** por `CLASSI_FIN`, co-detecção só reportada; contar toda ficha do banco sem filtrar internação. Três perguntas no ADR-0002 §8 | CS-008 |
 | D-05 | Denominador 2023 (IBGE não publicou estimativa): repetir Censo 2022, interpolar 2022–2024 ou outra? | Interpolar linearmente. **Atualizada 2026-09-25 (ADR-0003):** o Censo 2022 fica 3,1–8,4 % abaixo da estimativa de 2024 em todos os 92 municípios; há 4 opções no ADR. Implementada a interpolação como provisória | CS-012 (comparação entre anos) |
 | D-06 | "Por bairro" na seção 4.2 do PDF: erro de digitação ou intenção futura? | Tratar como município; registrar em ADR-0005 | CS-022 |
 | D-07 | Data de corte do snapshot do banco 2025 (vivo, semanal). Uma vez fixada, o manifesto congela | Fixar na primeira execução real do CS-005 | **Decidida 2026-09-25: versão 14-09-2026** (ADR-0001) |
@@ -42,8 +42,7 @@ Prefixos: `CS` = tarefa · `D` = decisão que só o dono/mestranda fecha · `ADR
 
 | ID | Título | Evidência | Modelo · Esforço | Aceite |
 |---|---|---|---|---|
-| CS-007 | **ADR-0002 — critério de caso e co-detecção** — texto curto: regra estrita do PDF (`CLASSI_FIN` + PCR/antígeno por vírus), tratamento do vazio em `CLASSI_FIN` (não encerrado ≠ negativo), co-detecção contada por agente. Inclui tabela "quantos casos cada regra alternativa incluiria" | trilha §2.6, §2.7; D-04; `docs/dicionario-sivep.md` §"Três consequências" (vazio com dois sentidos, campos aninhados, regra de 31/10/2022); **medido no CS-006 sobre 99.880 fichas do RJ:** `HOSPITAL` = 2 (não internado) em 1.023 e vazio em 1.792, a definir se entram; `CLASSI_FIN` vazio em 1.028 / 481 / 760 / 138 fichas (2022–2025), ou seja, 2025 NÃO tem mais casos abertos que os anteriores, ao contrário do que a proposta v2 §3.10 supunha; `CO_DETEC` vazio em 65 % das fichas, então só serve de conferência | **Fable · high** | ADR aceito pelo dono; tabela comparativa com 3 regras × 4 anos |
-| CS-008 | **`classificar_agente()` + `aplicar_criterios_inclusao()`** implementando o ADR-0002; saída `sivep_processado.parquet` com coluna `agente` (fator: sarscov2/influenza/vsr) e `codeteccao` (lógico) | ADR-0002 | Opus · medium | contagem por agente × ano bate com a tabela do ADR; parquet ≥ 1 linha por ano |
+| CS-008 | **`classificar_agente()` + `aplicar_criterios_inclusao()`** — aplica a regra aceita na D-04 chamando `aplicar_regra_caso(d, <regra>)` (as 5 regras já existem em `REGRAS_CASO`); saída `sivep_processado.parquet` com `agente` (fator), `codeteccao` (outro dos 3 agentes detectado) e `subtipo_influenza` (A/B); tabula o subtipo | ADR-0002 (proposto); **bloqueado pela D-04** | Opus · medium | contagem por agente × ano idêntica à linha da regra em `comparacao_regras_caso.csv`; parquet ≥ 1 linha por ano; subtipo A/B tabulado |
 | CS-009 | **`validar_variaveis()`, `validar_codigos_ibge()`, `validar_municipios_rj()`, `validar_datas()`** — falham alto (`stop()`) em: coluna faltante, código fora dos 92, data < 2022-01-01 ou > data do snapshot | PDF tabela de funções; `srag-intelligence-agent` PR #1 registra anos impossíveis (1695, 5202) | Opus · medium | 4 funções; cada uma com ≥ 2 testes (1 passa, 1 falha) |
 | CS-010 | **Fixture sintética + testes do ETL** — `tests/testthat/fixtures/sivep_sintetico.csv` (~200 linhas geradas por `tests/gerar_fixture.R` com seed, rotuladas FABRICADAS), cobrindo os 92 municípios, 3 agentes, co-detecção, `CLASSI_FIN` vazio, data inválida | trilha §3.3 invariante 7 | Opus · medium | testes do ETL rodam em < 5 s sem rede; X/X verdes |
 
@@ -106,7 +105,7 @@ Prefixos: `CS` = tarefa · `D` = decisão que só o dono/mestranda fecha · `ADR
 
 | ID | Título | Evidência | Modelo · Esforço | Aceite |
 |---|---|---|---|---|
-| CS-037 | **Atualizar a proposta v2 com as decisões de dados** — §3.2 e §3.5: malha do IBGE, não `geobr` (ADR-0006); §3.4: denominador conforme a D-05 fechada (ADR-0003); §3.10: acrescentar o degrau Censo × estimativa como limitação | ADR-0003, ADR-0006 | Opus · low | 3 seções da v2 corrigidas; cada mudança cita o ADR |
+| CS-037 | **Atualizar a proposta v2 com as decisões de dados** — §3.2 e §3.5: malha do IBGE, não `geobr` (ADR-0006); §3.4: denominador conforme a D-05 fechada (ADR-0003); §3.10: acrescentar o degrau Censo × estimativa como limitação; **§3.3: tabela do critério de caso com a regra aceita na D-04 e atribuição única (ADR-0002); "SRAG hospitalizada" → "SRAG notificada"; §3.10 item 2: a maturação NÃO é a limitação principal (2025 tem o menor nº de fichas abertas)** | ADR-0002, ADR-0003, ADR-0006 | Opus · low | 5 seções da v2 corrigidas; cada mudança cita o ADR |
 | CS-038 | **Citar o método de ajuste de cobertura do IBGE** — localizar a nota metodológica das Estimativas 2024 que explica por que ficam acima do Censo 2022, e citá-la no ADR-0003 antes de fechar a D-05 | ADR-0003 achado 2 (não verificado na fonte primária) | Opus · low | nota do IBGE citada com URL e página |
 
 ### Achados do CS-016
@@ -114,6 +113,12 @@ Prefixos: `CS` = tarefa · `D` = decisão que só o dono/mestranda fecha · `ADR
 | ID | Título | Evidência | Modelo · Esforço | Aceite |
 |---|---|---|---|---|
 | CS-039 | **Efeito de borda e municípios com 1 vizinho** — Paraty (só Angra), Itatiaia (só Resende) e Armação dos Búzios (só Cabo Frio) têm 1 vizinho; com pesos W, o LISA deles é a comparação com um único município. Paraty e Itatiaia, e outros municípios de divisa, perdem vizinhos de SP, MG e ES. Decidir no ADR-0004: (a) só declarar na limitação; (b) sensibilidade com k vizinhos mais próximos (k = 4); (c) marcar a classe LISA desses 3 como "instável" no mapa | `resultados/estatistica/vizinhos_por_municipio.csv` · CS-016 | Fable · medium (entra no ADR-0004) | ADR-0004 decide; relatório §5.3 cita os 3 municípios |
+
+### Achados do CS-007
+
+| ID | Título | Evidência | Modelo · Esforço | Aceite |
+|---|---|---|---|---|
+| CS-040 | **Sensibilidade do critério de caso no relatório** — tabela agente × ano com R1 (limite inferior), R2 (escolhida), R4 (limite superior) e R5 como "detecções por agente"; tabela de co-detecção; nota sobre os 941 casos de 2022 com critério laboratorial sem resultado exportado | ADR-0002 §4.5 e §6; `resultados/tabelas/comparacao_regras_caso.csv` | Opus · low | 3 tabelas no `08_relatorio.qmd`, lidas do CSV |
 
 ### Fora do código (para a mestranda)
 
@@ -128,7 +133,7 @@ Prefixos: `CS` = tarefa · `D` = decisão que só o dono/mestranda fecha · `ADR
 | ADR | Título | Nasce em |
 |---|---|---|
 | ADR-0001 | Extração do SIVEP-Gripe por download direto do portal (não `microdatasus`) | CS-005 · **escrito e aceito** (decide D-03 e D-07) |
-| ADR-0002 | Critério de caso por agente e tratamento de co-detecção | CS-007 |
+| ADR-0002 | Critério de caso por agente e tratamento de co-detecção | CS-007 · **escrito, proposto** (aguarda D-04) |
 | ADR-0003 | Denominador populacional por ano, incluindo 2023 | CS-011 · **escrito, proposto** (aguarda D-05) |
 | ADR-0004 | LISA: permutação, correção FDR, variável (bruta × EB), α | CS-017 |
 | ADR-0006 | Malha oficial do IBGE em resolução completa, não o `geobr` simplificado | CS-014 · **escrito e aceito** |
@@ -150,6 +155,7 @@ Prefixos: `CS` = tarefa · `D` = decisão que só o dono/mestranda fecha · `ADR
 | CS-014 | **Malha municipal** — IBGE oficial em resolução completa (ADR-0006), não o `geobr` simplificado, que perdia 8 pares de vizinhos; 92 feições válidas, EPSG 4674; casa 92/92 com população e SIVEP por `cod6` | 2026-09-25 | idem · ADR-0006 |
 | CS-015 | **Testes da malha** — 92 códigos únicos com prefixo 33, área 43.750,4 km² (dentro de 2 % da oficial). Fechado junto com o CS-014, com aviso ao dono, porque os critérios já eram exercidos pelo mesmo teste | 2026-09-25 | idem |
 | CS-016 | **Vizinhança Queen e pesos W** — 92 municípios, **456 ligações** (bate com o ADR-0006), 1 bloco, mínimo 1 vizinho, máximo 10, mediana 5; `region.id` = cod6; tabela e histograma em `resultados/estatistica/` | 2026-09-25 | `docs/release-history/cs-016-vizinhanca-queen.md` · commit `72970cf` |
+| CS-007 | **ADR-0002, critério de caso** — 5 regras candidatas em código (`REGRAS_CASO`, 6 testes), tabela 5 regras × 3 agentes × 4 anos sobre 99.880 fichas, decomposição das fichas sem checkbox, co-detecção; ADR **proposto** com recomendação R2 e 3 perguntas à autora (D-04) | 2026-09-25 | `docs/release-history/cs-007-criterio-de-caso.md` · ADR-0002 · commit PENDENTE |
 
 ## Descartados
 

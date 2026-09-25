@@ -139,6 +139,12 @@ co-detecção, `CO-DETEC` (campo 79, 1-Sim/2-Não/9-Ignorado). O projeto continu
 calculando a co-detecção a partir dos campos laboratoriais, que é o que a regra de caso
 usa, e passa a usar o `CO-DETEC` como conferência. Detalhes em `docs/dicionario-sivep.md`.
 
+**Atualização 2026-09-25 (CS-007):** o ADR-0002 mediu tudo isso sobre as 99.880 fichas.
+Co-detecção entre os três agentes: 305 fichas. `CO_DETEC` não serve nem de conferência
+(marca co-detecção com qualquer vírus). A regra recomendada ancora cada ficha no
+`CLASSI_FIN`, então uma ficha pertence a um agente só; a co-detecção é reportada, não
+contada duas vezes.
+
 ### 2.7 Semântica de `CLASSI_FIN` vs resultado laboratorial
 
 `CLASSI_FIN` é a classificação **final** da vigilância, preenchida no encerramento do
@@ -156,6 +162,11 @@ vigilância depois descartou. O PDF diz "casos encerrados como SRAG por agente v
 com confirmação por RT-PCR ou antígeno", ou seja, **as duas condições juntas** (a
 estrita, com confirmação laboratorial obrigatória). É o ponto de partida do ADR-0002;
 o relatório deve quantificar quantos casos cada regra inclui.
+
+**Atualização 2026-09-25 (CS-007):** quantificado. A regra estrita (checkbox) perde
+27 % dos casos de COVID de 2022 e 5 % dos de 2025, porque o checkbox "qual vírus" fica
+em branco em fichas com resultado positivo. A recomendação passou a ser a regra
+"vigilância" (`CLASSI_FIN` + critério laboratorial declarado ou checkbox). Ver ADR-0002.
 
 ### 2.8 Pequenos números e o problema da unidade de área modificável
 
@@ -230,7 +241,7 @@ Testes verificam o contrato, não a implementação.
 ```
 00_setup.R          cria diretórios, carrega renv, lê config (anos, snapshot)
 01_etl_sivep.R  ──► dados/intermediarios/sivep_rj.parquet          (CS-006, entregue)
-                    contrato: 1 linha por ficha de SRAG de residente do RJ; 34 colunas
+                    contrato: 1 linha por ficha de SRAG de residente do RJ; 37 colunas
                     tipadas; datas em UTC; ano_epi == ano_banco; semana_epi recalculada
                 ──► dados/processados/sivep_processado.parquet      (CS-008)
                     contrato: só casos confirmados pelo ADR-0002; coluna

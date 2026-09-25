@@ -18,4 +18,17 @@ utils::write.csv(diagnostico, file.path("resultados", "tabelas", "diagnostico_si
                  row.names = FALSE, fileEncoding = "UTF-8")
 print(diagnostico)
 
-message("Classificação por agente ainda não implementada (CS-008).")
+# Evidência do ADR-0002 (CS-007): quantos casos cada regra candidata conta,
+# onde está o laboratório das fichas sem campo específico, e co-detecções.
+tabelas_adr <- list(
+  comparacao_regras_caso = comparar_regras_caso(sivep_rj),
+  decomposicao_sem_campo_especifico = decompor_sem_campo_especifico(sivep_rj),
+  codeteccao_por_regra = do.call(rbind, lapply(names(REGRAS_CASO), function(r) resumir_codeteccao(sivep_rj, r)))
+)
+for (nome in names(tabelas_adr)) {
+  utils::write.csv(tabelas_adr[[nome]], file.path("resultados", "tabelas", paste0(nome, ".csv")),
+                   row.names = FALSE, fileEncoding = "UTF-8")
+}
+print(stats::xtabs(casos ~ regra + agente + ano, tabelas_adr$comparacao_regras_caso))
+
+message("Classificação por agente ainda não implementada (CS-008): aguarda a regra aceita no ADR-0002 (D-04).")

@@ -128,13 +128,19 @@ test_that("diagnóstico conta semana divergente e sintoma após digitação", {
     SEM_PRI = c("01", "10"), semana_epi = c(53L, 10L),
     DT_SIN_PRI = as.Date(c("2025-12-28", "2025-03-05")),
     DT_DIGITA = as.Date(c("2026-01-10", "2025-03-01")),
-    CLASSI_FIN = c(NA, 5L)
+    CLASSI_FIN = c(NA, 5L),
+    PCR_RESUL = c(5L, 1L),   # 5 = aguardando resultado: não conta como testado
+    RES_AN = c(NA, 2L),
+    HOSPITAL = c(2L, NA)
   )
   g <- diagnosticar_sivep(d)
   expect_equal(g$fichas_rj, 2)
   expect_equal(g$sem_pri_diverge, 1)
   expect_equal(g$sintomas_apos_digitacao, 1)
   expect_equal(g$classi_fin_vazio, 1)
+  expect_equal(g$com_resultado_de_teste, 1)
+  expect_equal(g$nao_internado, 1)
+  expect_equal(g$internacao_ignorada_ou_vazia, 1)
   expect_equal(g$residencia_diferente_notificacao, 1)
 })
 

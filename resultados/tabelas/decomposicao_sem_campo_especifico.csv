@@ -1,0 +1,9 @@
+"agente","ano","classificados","com_campo_especifico","sem_campo_especifico","resultado_positivo_generico_ou_sorologia","so_criterio_laboratorial_declarado","criterio_clinico_epidemiologico","criterio_clinico_ou_imagem","criterio_vazio"
+"sarscov2",2022,18647,13551,5096,2327,941,106,1509,213
+"sarscov2",2023,4123,3251,872,544,287,11,3,27
+"sarscov2",2024,2307,2026,281,205,57,5,5,9
+"sarscov2",2025,1098,1038,60,26,28,1,0,5
+"influenza",2022,422,326,96,42,19,19,10,6
+"influenza",2023,697,626,71,11,36,2,1,21
+"influenza",2024,1785,1630,155,18,80,15,11,31
+"influenza",2025,2771,2649,122,34,75,6,2,5
