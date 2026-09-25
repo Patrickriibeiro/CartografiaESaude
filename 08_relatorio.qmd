@@ -343,6 +343,16 @@ confundir sinal com acaso.
 nao_int <- sum(diag$nao_internado) / sum(diag$fichas_rj)
 testado <- diag$com_resultado_de_teste / diag$fichas_rj
 zeros_vsr <- suav$municipios_sem_caso[suav$agente == "vsr" & suav$ano == ano_ini]
+fora_res <- diag$residencia_diferente_notificacao
+dc_ini <- dec[dec$agente == "sarscov2" & dec$ano == ano_ini, ]
+so_crit <- dc_ini$so_criterio_laboratorial_declarado
+dicio <- man$versao[grepl("dicionario", man$arquivo)]
+data_dicio <- regmatches(dicio, regexpr("\\d{2}/\\d{2}/\\d{4}", dicio))
+sem_pri_errada <- sum(diag$sem_pri_diverge)
+ano_sem_pri <- diag$ano[diag$sem_pri_diverge > 0]
+tol_painel <- formals(carregar_dados_painel)$tolerancia_m
+ind_muni <- ler("resultados", "tabelas", "indicadores_municipais.csv")
+pequenas <- sum(ind_muni$casos >= 1 & ind_muni$casos < LIMIAR_CONTAGEM_PEQUENA)
 ```
 
 - **SRAG notificada, não infecção.** O banco registra casos graves; `r fp(nao_int)` das fichas
@@ -358,6 +368,36 @@ zeros_vsr <- suav$municipios_sem_caso[suav$agente == "vsr" & suav$ano == ano_ini
   suavização atenua, mas não elimina, a incerteza.
 - **Estudo ecológico.** As conclusões valem para municípios, não para pessoas, e dependem do
   recorte municipal.
+- **Residência × notificação.** As taxas são por município de residência, que é o correto para
+  incidência. Mas `r lista(paste0(fi(fora_res), " (", diag$ano, ")"))` fichas foram notificadas
+  fora do município de residência: o fluxo assistencial entre municípios [@cavalcante2021] não
+  foi analisado aqui.
+- **Confirmação declarada.** O critério adotado aceita a confirmação laboratorial declarada pela
+  vigilância: em `r ano_ini`, `r fi(so_crit)` casos de COVID
+  (`r fp(so_crit / dc_ini$classificados)` dos encerrados como COVID) entraram só por essa
+  declaração, sem resultado nos campos exportados.
+- **Agrupamentos de zeros.** Zero caso num município pequeno pode ser ausência de notificação ou
+  de testagem, e não de doença; é por isso que a taxa bruta, que forma agrupamentos desses
+  zeros, é só sensibilidade.
+- **Banco vivo.** O banco de `r ano_fim` é atualizado semanalmente; este relatório usa a versão
+  `r versao_ult`, e uma versão nova muda os números de `r ano_fim`.
+- **Dicionário de dados.** O dicionário oficial é de `r data_dicio`, anterior a parte dos
+  bancos; nenhuma coluna nova apareceu entre os anos, mas o domínio de valores de cada campo não
+  foi reconferido um a um.
+- **Semana epidemiológica do Ministério.** Em `r lista(ano_sem_pri)`, `r fi(sem_pri_errada)`
+  fichas da última semana do ano vêm com a semana rotulada como a primeira; o projeto recalcula
+  a semana a partir da data de início dos sintomas, e comparações com tabelas oficiais por
+  semana precisam levar isso em conta.
+- **Suavização global.** O Bayes empírico aproxima cada município da média do estado, não da
+  média dos vizinhos; a alternativa local usaria a mesma vizinhança que o LISA testa.
+- **Malha do painel.** O painel desenha a malha simplificada em `r tol_painel` m para ficar leve
+  no navegador; toda a análise usou a malha oficial completa.
+- **Escalas não entregues.** A região de saúde e a padronização por idade ficaram para uma
+  fase seguinte; a comparação entre municípios de estrutura etária diferente é bruta.
+- **Contagens pequenas.** As tabelas publicadas têm `r fi(pequenas)` combinações de município,
+  agente e ano com menos de `r LIMIAR_CONTAGEM_PEQUENA` casos. Não há supressão: o
+  microdado de origem já é público e anonimizado pelo Ministério, e o projeto só agrega. Quem
+  republicar essas tabelas em outro contexto deve avaliar a regra de supressão local.
 
 # Referências {.unnumbered}
 

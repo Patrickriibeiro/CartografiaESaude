@@ -362,6 +362,22 @@ incluir, em especial covariáveis ambientais (temperatura, umidade) para o VSR.
 7. **Efeito de borda.** Municípios de divisa não têm os vizinhos de SP, MG e ES na
    matriz; Paraty, Itatiaia e Armação dos Búzios têm um único vizinho, e a classe LISA
    deles aparece no mapa marcada como "instável" (decidido pela autora, CS-039).
+8. **Residência × notificação.** 8.040 (2022), 4.190, 4.117 e 5.451 (2025) fichas foram
+   notificadas fora do município de residência; o fluxo assistencial não é analisado.
+9. **Confirmação declarada.** 941 casos de COVID de 2022 entram só pela confirmação
+   laboratorial declarada pela vigilância, sem resultado nos campos exportados (ADR-0002).
+10. **Agrupamentos de zeros.** Zero caso em município pequeno pode ser ausência de
+    notificação; por isso a taxa bruta é só sensibilidade (ADR-0004).
+11. **Banco vivo, dicionário antigo e semana do Ministério.** A versão do banco de 2025 é
+    citada no relatório; o dicionário oficial é de maio de 2023; 226 fichas da última
+    semana de 2025 vêm com a semana rotulada errada, e o projeto a recalcula (ADR-0001).
+12. **Suavização global e malha do painel.** O Bayes empírico puxa para a média do estado,
+    não dos vizinhos; o painel desenha uma malha simplificada, a análise usa a completa.
+13. **Contagens pequenas.** 349 combinações município × agente × ano têm de 1 a 4 casos e
+    são publicadas sem supressão, porque o microdado de origem já é público (CS-043).
+
+*Itens 8 a 13 acrescentados em 2026-09-25 a partir da auditoria final (CS-027, CS-044); os
+números são os do relatório, que os calcula de `resultados/`.*
 3. **Pequenos números e MAUP.** Tratados com suavização; o problema da unidade de área
    modificável (o resultado depende do recorte) é inerente ao desenho e declarado.
 4. **Ecológico.** Nenhuma inferência individual.

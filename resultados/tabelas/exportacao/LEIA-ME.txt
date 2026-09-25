@@ -1,6 +1,6 @@
 ﻿Tabelas exportadas pelo pipeline Cartografia & Saúde (SRAG-RJ 2022-2025).
-Gerado em: 2026-09-25 14:46:44 -03
-Commit do código: e6094fe
+Gerado em: 2026-09-25 15:16:34 -03
+Commit do código: 5ccda74
 Critério de caso: R2_vigilancia (ADR-0002)
 Bancos SIVEP-Gripe (versão):
   dados/brutos/INFLUD22-23-03-2026.parquet (23-03-2026)
@@ -8,3 +8,6 @@ Bancos SIVEP-Gripe (versão):
   dados/brutos/INFLUD24-23-03-2026.parquet (23-03-2026)
   dados/brutos/INFLUD25-14-09-2026.parquet (14-09-2026)
 Formato: UTF-8 com BOM, separador ';', decimal ','.
+Contagens pequenas (CS-043): 349 combinações município x agente x ano têm de 1 a 4 casos.
+Publicadas sem supressão: o microdado de origem já é público e anonimizado pelo Ministério da Saúde.
+Ao republicar em outro contexto, avalie a regra local de supressão de contagens pequenas.

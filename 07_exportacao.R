@@ -66,7 +66,12 @@ arquivos <- c(
   salvar_resultado(lisa, "lisa_municipios", pasta),
   salvar_resultado(moran, "moran_global", pasta),
   salvar_resultado(estado, "incidencia_estado", pasta),
-  escrever_carimbo(pasta)
+  escrever_carimbo(pasta, c(
+    sprintf("Contagens pequenas (CS-043): %d combinações município x agente x ano têm de 1 a %d casos.",
+            sum(ind$casos >= 1 & ind$casos < LIMIAR_CONTAGEM_PEQUENA), LIMIAR_CONTAGEM_PEQUENA - 1L),
+    "Publicadas sem supressão: o microdado de origem já é público e anonimizado pelo Ministério da Saúde.",
+    "Ao republicar em outro contexto, avalie a regra local de supressão de contagens pequenas."
+  ))
 )
 
 # Conferência: cada CSV relido tem as mesmas linhas e os acentos intactos.

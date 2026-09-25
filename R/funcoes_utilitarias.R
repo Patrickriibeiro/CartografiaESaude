@@ -8,6 +8,9 @@ PREFIXO_UF_RJ <- "33"
 EPSG_SIRGAS2000 <- 4674
 SEMENTE <- 20260925
 REGRA_CASO <- "R2_vigilancia"  # D-04, aceita pela autora em 2026-09-25 (ADR-0002)
+# CS-043: contagens abaixo deste limiar são publicadas SEM supressão, com nota
+# (decisão provisória, a confirmar com a autora; ver docs/BACKLOG.md, D-11).
+LIMIAR_CONTAGEM_PEQUENA <- 5L
 
 #' Cria a árvore de diretórios de dados e resultados, se ainda não existir.
 #' Idempotente: rodar duas vezes não muda nada.
