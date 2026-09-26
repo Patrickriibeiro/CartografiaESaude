@@ -34,7 +34,7 @@ erro do pipeline (`padronizar_direto()` para).
 |---|---|---|
 | Idade do caso | SIVEP-Gripe, `NU_IDADE_N` + `TP_IDADE` | `TP_IDADE` 1 = dias, 2 = meses, 3 = anos; sem ele, "6" pode ser 6 dias ou 6 anos. Os 37.562 casos têm idade; máximo 115 anos |
 | População por faixa | IBGE, Censo 2022, SIDRA tabela 9514 | sexo Total, forma de declaração Total; 21 grupos quinquenais + "Menos de 1 ano"; 1-4 = "0 a 4" − "Menos de 1". "-" no SIDRA é zero (3 municípios em "100 anos ou mais") |
-| População dos outros anos | proporção de 2022 × população do ano (ADR-0003) | o IBGE não publica estrutura etária municipal fora do Censo |
+| População dos outros anos | proporção de 2022 × população do ano (ADR-0003) | o IBGE não publica estrutura etária municipal fora do Censo; como cada população anual é obtida (Censo, AiBi, interpolação) está na proposta v2 §3.4 e no relatório, seção "Como a população de cada ano foi obtida" (CS-049) |
 
 **Contrato testado no pipeline:** a soma das faixas é exatamente a população do ano, então a taxa
 bruta recalculada das faixas é idêntica, linha a linha, à `incid_100k` do estudo.

@@ -268,6 +268,34 @@ um uso: o **mapa e o LISA de cada ano** usam a população oficial daquele ano (
 único, o que remove o degrau. Cada uso traz o outro como sensibilidade. A fonte de cada ano consta de uma coluna `fonte` da tabela de
 população.
 
+**Como a população de cada ano é obtida (CS-049, 2026-09-26).** O Censo é decenal e o estudo
+precisa de um denominador por município para cada ano. Três fórmulas, com o exemplo de Niterói
+(os números abaixo são os do pipeline em 26/09/2026; o relatório os recalcula a cada execução):
+
+1. *2022, contagem do Censo* (SIDRA 4714, 1º de agosto de 2022): 481.749 habitantes. É a
+   contagem publicada, sem correção da subenumeração.
+2. *2024 e 2025, estimativas do IBGE pelo método AiBi* (Madeira e Simões, 1972; IBGE, Nota
+   metodológica n. 01, 2024, p. 5–6). A população do estado é projetada pelo método das
+   componentes demográficas; a de cada município acompanha a do estado por uma reta ajustada
+   aos Censos de 2010 e 2022:
+   $P_i(t) = a_i P(t) + b_i$, com $a_i = [P_i(t_1) - P_i(t_0)] / [P(t_1) - P(t_0)]$ e
+   $b_i = P_i(t_0) - a_i P(t_0)$, onde $P_i$ é o município, $P$ o estado, $t_0$ e $t_1$ são
+   1º de julho de 2010 e de 2022. Antes de ajustar a reta, o IBGE corrige as contagens dos dois
+   Censos pela subenumeração medida na Pesquisa de Pós-Enumeração, com ajuste maior nos
+   municípios grandes (p. 6–8). Por isso 2024 supera a contagem de 2022 em todo município:
+   Niterói, 516.720 habitantes, 7,3 % acima.
+3. *2023, interpolação linear nas datas de referência* (o IBGE não publicou estimativa
+   municipal): $P_{2023} = P_{2022} + w\,(P_{2024} - P_{2022})$, com
+   $w = 334/700 = 0{,}4771$ (dias de 1º/8/2022 a 1º/7/2023 sobre dias de 1º/8/2022 a
+   1º/7/2024). Niterói: 481.749 + 0,4771 × (516.720 − 481.749) = 498.435.
+
+*Faixas etárias:* só o Censo 2022 tem população municipal por idade (SIDRA 9514). Para os outros
+anos, $P_{a,\text{ano}} = P_{\text{ano}} \times P_{a,2022} / P_{2022}$: em Niterói, 3.683 dos
+481.749 habitantes de 2022 tinham menos de um ano (0,76 %), o que dá 3.811 bebês em 2023. A
+soma das faixas é exatamente a população do ano. *Taxa:* casos ÷ população × 100 mil; Niterói,
+VSR, 2023: 86 ÷ 498.435 × 100 mil = 17,3 por 100 mil. O relatório traz esta explicação na
+seção "Como a população de cada ano foi obtida".
+
 **Grade completa.** A tabela final tem exatamente 92 × 3 × 4 linhas; município sem caso
 registrado aparece com zero, nunca desaparece (uma junção que descarta o zero
 distorce o Moran).

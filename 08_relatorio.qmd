@@ -270,6 +270,77 @@ SARS-CoV-2 em `r ano_ini` fica `r fp(degrau_2022)` acima da calculada com a esti
 2024. Por isso as comparações entre anos usam a estimativa de 2024 como denominador único, e
 os mapas de cada ano usam a população oficial daquele ano.
 
+### Como a população de cada ano foi obtida
+
+```{r populacao-metodo}
+pop_r <- as.data.frame(arrow::read_parquet(file.path("dados", "processados", "populacao_rj.parquet")))
+ex_cod <- "330330"   # Niterói: município médio, com casos em todos os anos
+ex_nome <- nomes[[ex_cod]]
+pex <- function(a) pop_r$populacao[pop_r$cod6 == ex_cod & pop_r$ano == a]
+d0 <- as.Date("2022-08-01"); d1 <- as.Date("2024-07-01"); alvo <- as.Date("2023-07-01")
+dias_ate_alvo <- as.numeric(alvo - d0); dias_total <- as.numeric(d1 - d0); w <- dias_ate_alvo / dias_total
+p23_calc <- pex(2022) + w * (pex(2024) - pex(2022))
+pi_ex <- ler_populacao_idade(ler_fontes()$ibge$populacao_idade$destino)
+bebes22 <- pi_ex$populacao[pi_ex$cod6 == ex_cod & pi_ex$faixa == "<1"]
+tot22 <- sum(pi_ex$populacao[pi_ex$cod6 == ex_cod])
+bebes23 <- pex(2023) * bebes22 / tot22
+ind_ex <- as.data.frame(arrow::read_parquet(file.path("dados", "processados", "indicadores_municipais.parquet")))
+casos_ex <- ind_ex$casos[ind_ex$cod6 == ex_cod & ind_ex$agente == "vsr" & ind_ex$ano == 2023]
+taxa_ex <- casos_ex / pex(2023) * 1e5
+razao_ex <- pex(2024) / pex(2022)
+fontes_pop <- ler_fontes()$ibge
+tab_censo <- fontes_pop$populacao[[1]]$tabela; tab_idade <- fontes_pop$populacao_idade$tabela
+```
+
+O Censo é decenal e o estudo precisa de uma população por município para cada um dos
+`r length(anos)` anos. Cada denominador tem uma origem diferente, e vale explicar as três
+fórmulas com um exemplo, `r ex_nome`.
+
+**`r ano_ini`: contagem do Censo.** A população residente em 1º de agosto de 2022, como o IBGE a
+publicou (tabela `r tab_censo` do SIDRA): `r fi(pex(2022))` habitantes em `r ex_nome`. É uma contagem, sem
+correção da parcela de pessoas que o recenseamento deixou de enumerar.
+
+**2024 e 2025: estimativas do IBGE pelo método AiBi.** O IBGE não recenseia nesses anos; estima.
+Para os municípios usa o *método de tendência do crescimento populacional*, conhecido como AiBi
+e desenvolvido por Madeira e Simões em 1972 [@ibge2024estimativas]. A ideia: a população do
+estado é projetada primeiro, pelo método das componentes demográficas (nascimentos, óbitos e
+migração), e a de cada município acompanha a do estado por uma reta ajustada aos dois últimos
+Censos:
+
+$$P_i(t) = a_i \, P(t) + b_i, \qquad a_i = \frac{P_i(t_1) - P_i(t_0)}{P(t_1) - P(t_0)}, \qquad b_i = P_i(t_0) - a_i \, P(t_0)$$
+
+em que $P_i$ é a população do município, $P$ a do estado, $t_0$ e $t_1$ são 1º de julho de 2010 e
+de 2022, e $t$ é 1º de julho do ano estimado. O coeficiente $a_i$ diz que fração do crescimento
+do estado cabe ao município; $b_i$ é a correção linear. Por construção, a soma dos municípios
+reproduz o estado. Antes de ajustar a reta, o IBGE corrige as contagens dos dois Censos pela
+subenumeração medida na Pesquisa de Pós-Enumeração, com ajuste maior nos municípios grandes.
+É por isso que a estimativa de 2024 supera a contagem de 2022 em todos os municípios:
+em `r ex_nome`, `r fi(pex(2024))` habitantes, `r fp(razao_ex - 1)` acima da contagem do Censo.
+
+**2023: interpolação linear nas datas de referência.** O IBGE não publicou estimativa municipal
+para 2023. O projeto traça a reta entre os dois números oficiais vizinhos, o Censo (1º de agosto de
+2022) e a estimativa de 2024 (1º de julho de 2024), e a lê em 1º de julho de 2023:
+
+$$P_{2023} = P_{2022} + w \,(P_{2024} - P_{2022}), \qquad w = \frac{\text{dias de 1º de agosto de 2022 a 1º de julho de 2023}}{\text{dias de 1º de agosto de 2022 a 1º de julho de 2024}} = \frac{`r dias_ate_alvo`}{`r dias_total`} = `r fd(w, 4)`$$
+
+O peso não é meio, porque 1º de julho de 2023 está mais perto do Censo do que da estimativa.
+Em `r ex_nome`: `r fi(pex(2022))` + `r fd(w, 4)` × (`r fi(pex(2024))` − `r fi(pex(2022))`) =
+`r fi(p23_calc)` habitantes, o valor usado (`r fi(pex(2023))`, arredondado ao inteiro).
+
+**Faixas etárias: a estrutura de 2022 em todos os anos.** O Censo 2022 é a única fonte com a
+população municipal por idade (tabela `r tab_idade` do SIDRA). Para os outros anos, a proporção de cada faixa em
+2022 é aplicada à população total do ano:
+
+$$P_{a,\text{ano}} = P_{\text{ano}} \times \frac{P_{a,2022}}{P_{2022}}$$
+
+Em `r ex_nome`, `r fi(bebes22)` dos `r fi(tot22)` habitantes de 2022 tinham menos de um ano
+(`r fp(bebes22 / tot22, 2)`); aplicada à população de 2023, a proporção dá `r fi(bebes23)` bebês. A soma das
+faixas é exatamente a população do ano, então a taxa bruta recalculada das faixas é a do estudo.
+
+**A taxa.** Casos do ano divididos pela população do ano, por 100 mil habitantes. Em `r ex_nome`,
+em 2023, foram `r fi(casos_ex)` casos de VSR para `r fi(pex(2023))` habitantes:
+`r fi(casos_ex)` ÷ `r fi(pex(2023))` × 100 mil = `r fd(taxa_ex)` por 100 mil.
+
 ### Mapas de incidência
 
 ![Incidência de SRAG por município, agente e ano (taxa suavizada por Bayes empírico; escala comum aos anos de cada agente)](resultados/mapas/painel_incidencia.png){#fig-incidencia width=100%}
