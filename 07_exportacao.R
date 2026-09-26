@@ -14,6 +14,7 @@
 #   resultados/tabelas/exportacao/regioes_de_saude_municipios.csv  92 municípios e sua região (CS-050)
 #   resultados/tabelas/exportacao/versoes_do_banco.csv        casos em cada versão do banco (CS-048)
 #   resultados/tabelas/exportacao/tempo_ate_encerramento.csv  dias até encerrar a ficha, por ano (CS-048)
+#   resultados/tabelas/exportacao/tabelas_abnt.docx           as mesmas tabelas em Word, padrão ABNT/IBGE (CS-051)
 #   resultados/tabelas/exportacao/LEIA-ME.txt                 carimbo: data, commit, versões dos dados
 
 source("00_setup.R")
@@ -179,4 +180,37 @@ stopifnot(nrow(ler_resultado(arquivos[1])) == 1104, nrow(ler_resultado(arquivos[
           nrow(ler_resultado(arquivos[14])) == length(ANOS_ESTUDO),
           "Baía da Ilha Grande" %in% ler_resultado(arquivos[5])$regiao_de_saude,
           "Niterói" %in% ler_resultado(arquivos[1])$municipio)
-message(sprintf("%d arquivos em %s", length(arquivos), pasta))
+# ---- as mesmas tabelas em Word, padrão ABNT (CS-051) ----
+# Mesmos objetos dos CSV, na mesma ordem: Word e Excel nunca divergem. A série semanal
+# (6.270 linhas) entra resumida por mês; a íntegra fica no CSV.
+periodo <- sprintf("%d–%d", min(ANOS_ESTUDO), max(ANOS_ESTUDO))
+fonte_sivep <- "Elaboração própria com dados do SIVEP-Gripe (Ministério da Saúde) e do IBGE"
+tabelas_word <- list(
+  list(dados = indicadores, titulo = sprintf("Casos, população e incidência de SRAG por município, agente e ano, Estado do Rio de Janeiro, %s", periodo),
+       fonte = fonte_sivep, nota = "Taxas por 100 mil habitantes; taxa suavizada por Bayes empírico (ADR-0004); critério de caso do ADR-0002."),
+  list(dados = lisa, titulo = sprintf("Moran local (LISA) por município, agente e ano, %s", periodo), fonte = fonte_sivep,
+       nota = "Confirmado: significativo após a correção FDR; indicativo: só sem correção (ADR-0004)."),
+  list(dados = moran, titulo = "I de Moran global por agente e ano: taxa suavizada e bruta, vizinhanças Queen e Rook", fonte = fonte_sivep),
+  list(dados = estado, titulo = sprintf("Casos e incidência de SRAG no estado por agente e ano, %s", periodo), fonte = fonte_sivep,
+       nota = "Duas taxas: população do próprio ano e estimativa de 2024 para todos os anos (ADR-0003)."),
+  list(dados = regional, titulo = "Casos e incidência de SRAG por região de saúde, agente e ano", fonte = paste0(fonte_sivep, "; regiões de saúde: Ministério da Saúde via geobr")),
+  list(dados = moran_reg, titulo = "I de Moran global entre as regiões de saúde, por agente e ano", fonte = fonte_sivep,
+       nota = "Com 9 regiões, o teste é descritivo."),
+  list(dados = res_not, titulo = sprintf("Casos por município de residência e de notificação, %s", periodo), fonte = fonte_sivep),
+  list(dados = resumir_serie_mensal(serie), titulo = "Casos de SRAG por mês, estado e regiões de saúde, por agente", fonte = fonte_sivep,
+       nota = "Semanas epidemiológicas somadas pelo mês do domingo que abre cada semana; a série semanal completa está em serie_semanal.csv."),
+  list(dados = nao_enc, titulo = "Fichas de SRAG sem classificação final, por ano", fonte = "Elaboração própria com dados do SIVEP-Gripe (Ministério da Saúde)"),
+  list(dados = leitos_exp, titulo = "Leitos SUS e de UTI SUS por município e ano, competência de julho",
+       fonte = "Elaboração própria com dados do CNES (Hospitais e Leitos, Ministério da Saúde) e do IBGE"),
+  list(dados = spearman_exp, titulo = "Correlação de Spearman entre a taxa de SRAG por residência e os leitos por 100 mil habitantes",
+       fonte = "Elaboração própria com dados do SIVEP-Gripe, do CNES e do IBGE", nota = "Intervalo de confiança de 95 % por bootstrap; associação descritiva, não causal."),
+  list(dados = reg_mun, titulo = "Municípios do Estado do Rio de Janeiro por região de saúde", fonte = "Ministério da Saúde via geobr (IPEA), conferido com a SES-RJ"),
+  list(dados = versoes_exp, titulo = "Fichas e casos em cada versão publicada dos bancos mais recentes", fonte = "Elaboração própria com as versões do SIVEP-Gripe publicadas no Portal de Dados Abertos do SUS"),
+  list(dados = tempo_exp, titulo = "Tempo entre o início dos sintomas e o encerramento da ficha, por ano", fonte = "Elaboração própria com dados do SIVEP-Gripe (Ministério da Saúde)")
+)
+stopifnot(length(tabelas_word) == length(arquivos) - 1)   # uma tabela por CSV (o último arquivo é o LEIA-ME)
+docx <- montar_docx_abnt(tabelas_word, file.path(pasta, "tabelas_abnt.docx"),
+                         sprintf("Análise espaço-temporal de SRAG no Estado do Rio de Janeiro, %s — tabelas", periodo))
+stopifnot(contar_tabelas_docx(docx) == length(tabelas_word))
+
+message(sprintf("%d arquivos em %s, e %d tabelas em tabelas_abnt.docx", length(arquivos), pasta, length(tabelas_word)))

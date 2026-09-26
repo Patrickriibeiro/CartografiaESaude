@@ -9,7 +9,7 @@ test_that("scripts numerados do PDF existem", {
 
 test_that("as bibliotecas de funções existem (seis do PDF + regiões, CS-030, + séries, CS-032, + leitos, CS-034)", {
   esperados <- paste0("funcoes_", c("validacao", "sivep", "indicadores",
-    "espaciais", "mapas", "utilitarias", "regioes", "series", "leitos", "padronizacao"), ".R")
+    "espaciais", "mapas", "utilitarias", "regioes", "series", "leitos", "padronizacao", "abnt"), ".R")
   expect_true(all(file.exists(file.path(raiz_projeto, "R", esperados))))
 })
 

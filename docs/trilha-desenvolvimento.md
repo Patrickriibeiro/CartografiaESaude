@@ -285,6 +285,8 @@ Testes verificam o contrato, não a implementação.
                     contrato da série: 10 recortes × 3 agentes × 209 semanas, zero explícito;
                     semana de DT_SIN_PRI, nunca SEM_PRI; estado = soma das regiões = nº de casos
 07_exportacao.R ──► resultados/tabelas/*.csv
+                  + exportacao/tabelas_abnt.docx (CS-051: mesmas tabelas em Word, ABNT/IBGE, via pandoc do Quarto;
+                    SOURCE_DATE_EPOCH = data da versão do banco, para o .docx sair byte a byte igual)
 run.R (CS-023, entregue): 01→08 isoladas, log de tempos, --limpar refaz do zero em ~140 s
 app.R / 08_relatorio.qmd  consomem só dados/processados e resultados/
 08_relatorio.qmd (CS-022, entregue): HTML + revealjs; nenhum número digitado (teste)
