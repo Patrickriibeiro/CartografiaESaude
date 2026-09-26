@@ -28,7 +28,7 @@ utils::write.csv(tabela, file.path("resultados", "estatistica", "vizinhos_por_mu
                  row.names = FALSE, fileEncoding = "UTF-8")
 
 grafico <- ggplot2::ggplot(tabela, ggplot2::aes(x = n_vizinhos)) +
-  ggplot2::geom_bar(fill = "#3b6e8f") +
+  ggplot2::geom_bar(fill = COR_NEUTRA) +
   ggplot2::scale_x_continuous(breaks = seq(min(tabela$n_vizinhos), max(tabela$n_vizinhos))) +
   ggplot2::labs(
     title = "Número de vizinhos por município (contiguidade Queen)",

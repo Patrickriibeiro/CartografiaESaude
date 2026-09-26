@@ -185,6 +185,13 @@ de leitos hospitalares. A conclusão responde a cada uma.
 
 # Resultados
 
+Todas as figuras seguem o mesmo código de cores: cada vírus tem uma cor única, usada nas séries,
+nas dispersões e na rampa dos mapas de incidência, e os mapas de Moran local usam uma paleta
+própria, sem nenhuma cor de vírus.
+
+![Guia de cores: a cor de cada vírus, a rampa de incidência de cada um e as classes do Moran local](resultados/estatistica/guia_cores.png){#fig-guia-cores width=80%}
+
+
 ## Arquitetura do pipeline reprodutível
 
 O pipeline vai do download dos dados abertos ao mapa em scripts R numerados, executados em

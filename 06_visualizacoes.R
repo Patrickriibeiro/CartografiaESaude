@@ -10,6 +10,7 @@
 #   resultados/estatistica/nao_encerrados_<ano>.png  maturação do último ano (CS-035)
 #   resultados/estatistica/leitos_x_incidencia.png   taxa de SRAG × leitos por 100 mil, por ano (CS-034)
 #   resultados/estatistica/padronizacao_bruta_vs_padronizada.png  dispersão por município (CS-033)
+#   resultados/estatistica/guia_cores.png            cor de cada vírus, rampas e classes do LISA (CS-046)
 
 source("00_setup.R")
 
@@ -60,8 +61,7 @@ paineis <- lapply(AGENTES, function(ag) {
   x <- todos[todos$agente == ag, ]
   ggplot2::ggplot(x) +
     ggplot2::geom_sf(ggplot2::aes(fill = incid_eb_100k), colour = "white", linewidth = 0.08) +
-    ggplot2::scale_fill_viridis_c(option = "magma", direction = -1, begin = 0.1, end = 0.95,
-                                  trans = "sqrt", name = "por 100 mil") +
+    escala_incidencia(ag, name = "por 100 mil", trans = "sqrt") +
     ggplot2::facet_wrap(~ano_rotulo, nrow = 1) +
     ggplot2::labs(title = ROTULOS_AGENTE[[ag]]) +
     tema_mapa(9) + ggplot2::theme(legend.position = "right")
@@ -109,9 +109,9 @@ reg <- serie[serie$recorte != "Estado do Rio de Janeiro", ]
 reg$agente_rotulo <- factor(ROTULOS_AGENTE[reg$agente], levels = ROTULOS_AGENTE)
 painel_series <- ggplot2::ggplot(reg, ggplot2::aes(inicio_semana, casos, colour = agente_rotulo)) +
   ggplot2::geom_vline(xintercept = campanhas$inicio, linetype = "dashed", colour = "grey55", linewidth = 0.3) +
-  ggplot2::geom_line(linewidth = 0.35) +
+  ggplot2::geom_line(linewidth = 0.6) +
   ggplot2::facet_wrap(~recorte, ncol = 3, scales = "free_y") +
-  ggplot2::scale_colour_manual(values = c("SARS-CoV-2" = "#b2182b", "Influenza" = "#2166ac", "VSR" = "#1b7837"), name = NULL) +
+  escala_cor_agente() +
   ggplot2::scale_x_date(date_breaks = "1 year", date_labels = "%Y") +
   ggplot2::labs(title = "Casos de SRAG por semana epidemiológica e região de saúde",
                 subtitle = "Escala vertical própria de cada região. Tracejado: início da campanha nacional contra influenza",
@@ -135,11 +135,16 @@ sp <- utils::read.csv(file.path("resultados", "estatistica", "spearman_leitos.cs
 f <- file.path(pasta_est, "leitos_x_incidencia.png")
 ggplot2::ggsave(f, grafico_leitos(ind, leitos, sp), width = 11, height = 6, dpi = 150, bg = "white")
 graficos <- c(graficos, f)
+# Guia de cores (CS-046).
+f <- file.path(pasta_est, "guia_cores.png")
+ggplot2::ggsave(f, grafico_guia_cores(), width = 9, height = 5.2, dpi = 150, bg = "white")
+graficos <- c(graficos, f)
+
 # Bruta × padronizada por idade (CS-033).
 f <- file.path(pasta_est, "padronizacao_bruta_vs_padronizada.png")
 ggplot2::ggsave(f, grafico_padronizacao(ind), width = 11, height = 8, dpi = 150, bg = "white")
 graficos <- c(graficos, f)
-stopifnot(all(file.exists(graficos)), length(graficos) == 1 + 9 + 1 + 1 + 1 + 1)
+stopifnot(all(file.exists(graficos)), length(graficos) == 1 + 9 + 1 + 1 + 1 + 1 + 1)
 
 stopifnot(all(file.exists(gerados)), length(gerados) == 38)
 message(sprintf("%d mapas gravados em %s", length(gerados), pasta))

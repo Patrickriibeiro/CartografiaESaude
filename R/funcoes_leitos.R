@@ -162,7 +162,7 @@ grafico_leitos <- function(ind, leitos, sp) {
   num <- function(v) formatC(v, format = "f", digits = 2, decimal.mark = ",")
   sp$texto <- sprintf("rho = %s\nIC 95%%: %s a %s", num(sp$rho), num(sp$ic_inf), num(sp$ic_sup))
   ggplot2::ggplot(longo, ggplot2::aes(leitos, taxa)) +
-    ggplot2::geom_point(alpha = 0.55, colour = "#3b6e8f", size = 1.3) +
+    ggplot2::geom_point(alpha = 0.55, colour = COR_NEUTRA, size = 1.3) +
     ggplot2::geom_text(data = sp, ggplot2::aes(x = Inf, y = Inf, label = texto), hjust = 1.05, vjust = 1.2,
                        size = 2.7, colour = "grey20", inherit.aes = FALSE) +
     ggplot2::scale_x_sqrt() +

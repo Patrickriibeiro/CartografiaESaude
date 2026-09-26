@@ -172,8 +172,7 @@ mapa_regional <- function(regioes_sf, ind_regional, agente, ano, malha = NULL, p
     ggplot2::geom_sf_label(data = rot, ggplot2::aes(label = rotulo), size = 2.3, lineheight = 0.9,
                            fill = grDevices::adjustcolor("white", 0.8), linewidth = 0,
                            fun.geometry = identity) +  # já são pontos: sem point_on_surface em graus
-    ggplot2::scale_fill_viridis_c(option = "magma", direction = -1, begin = 0.1, end = 0.95,
-                                  name = "Taxa bruta\npor 100 mil hab.") +
+    escala_incidencia(agente, name = "Taxa bruta\npor 100 mil hab.") +
     ggplot2::labs(
       title = sprintf("SRAG por %s por região de saúde, %d", ROTULOS_AGENTE[[agente]], ano),
       subtitle = "Casos somados / população somada dos municípios de cada região",

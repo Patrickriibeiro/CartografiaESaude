@@ -2,17 +2,67 @@
 
 ROTULOS_AGENTE <- c(sarscov2 = "SARS-CoV-2", influenza = "Influenza", vsr = "VSR")
 
+# ---------------------------------------------------------------------------
+# Paleta única do projeto (CS-046). ÚNICO lugar com cores: o resto do código só
+# referencia estas constantes (um teste procura cor escrita à mão fora daqui).
+#
+# Regra: uma cor por vírus em TODOS os gráficos, e nenhuma cor de vírus reaparece
+# com outro significado. Antes, o vermelho era SARS-CoV-2 nas séries e Alto-Alto no
+# LISA, e o azul era influenza nas séries e Baixo-Baixo no LISA.
+# Cores dos vírus: posições 4, 5 e 6 da paleta categórica validada da skill dataviz.
+# Validação (OKLab ΔE×100, todos os pares, modo claro): pior par entre vírus 16,2 sob
+# daltonismo (meta ≥ 8) e 19,6 em visão normal (piso 15). Amarelo e magenta têm
+# contraste < 3:1 no branco: por isso linhas mais grossas, legenda sempre presente e
+# tabela com os mesmos dados (regra de alívio da skill).
+# ---------------------------------------------------------------------------
+CORES_AGENTE <- c(sarscov2 = "#eda100", influenza = "#e87ba4", vsr = "#008300")
+
+# Rampa sequencial de cada vírus (mapas de incidência): quase branco -> cor do vírus
+# -> tom escuro do mesmo matiz, interpolada no espaço Lab. O matiz diz o vírus; a
+# claridade diz a magnitude.
+EXTREMOS_RAMPA_AGENTE <- list(
+  sarscov2  = c("#fdf6e3", "#eda100", "#5c3a00"),
+  influenza = c("#fcf0f5", "#e87ba4", "#7a1c45"),
+  vsr       = c("#eef7ee", "#008300", "#003010")
+)
+
+# Cor de marca que não representa vírus nenhum (total de SRAG, histograma, proporção).
+COR_NEUTRA <- "#52514e"
+
 # Paleta do LISA em dois níveis (ADR-0004): cor cheia = confirmado após FDR,
 # cor clara = indicativo (significativo só sem correção). Vermelho/azul seguem a
-# convenção do GeoDa para Alto-Alto/Baixo-Baixo; os discrepantes usam roxo e verde
-# para não se confundirem com os agrupamentos.
+# convenção do GeoDa para Alto-Alto/Baixo-Baixo; os discrepantes usam roxo e cinza,
+# que não são cores de vírus. Validação das 4 classes confirmadas entre si: pior par
+# 9,5 sob daltonismo e 15,5 em visão normal; cada confirmado × seu indicativo ≥ 20;
+# cinza indicativo × "não significativo" 16,0.
 PALETA_LISA <- c(
-  "Alto-Alto (confirmado)"   = "#b2182b", "Alto-Alto (indicativo)"   = "#f4a582",
+  "Alto-Alto (confirmado)"   = "#d7301f", "Alto-Alto (indicativo)"   = "#fc9272",
   "Baixo-Baixo (confirmado)" = "#2166ac", "Baixo-Baixo (indicativo)" = "#92c5de",
-  "Alto-Baixo (confirmado)"  = "#762a83", "Alto-Baixo (indicativo)"  = "#c2a5cf",
-  "Baixo-Alto (confirmado)"  = "#1b7837", "Baixo-Alto (indicativo)"  = "#a6dba0",
+  "Alto-Baixo (confirmado)"  = "#542788", "Alto-Baixo (indicativo)"  = "#b2abd2",
+  "Baixo-Alto (confirmado)"  = "#4d4d4d", "Baixo-Alto (indicativo)"  = "#bababa",
   "Não significativo"        = "#eeeeee"
 )
+
+#' n cores da rampa sequencial de um vírus, da mais clara (perto de zero) à mais escura.
+rampa_agente <- function(agente, n = 7) {
+  if (!agente %in% names(EXTREMOS_RAMPA_AGENTE)) stop("Agente sem rampa: ", agente, call. = FALSE)
+  grDevices::colorRampPalette(EXTREMOS_RAMPA_AGENTE[[agente]], space = "Lab")(n)
+}
+
+#' Escala de preenchimento sequencial do vírus: contínua ou por classes (discreta).
+escala_incidencia <- function(agente, name, discreta = FALSE, n_classes = 5, ...) {
+  if (discreta) {
+    ggplot2::scale_fill_manual(values = rampa_agente(agente, n_classes), name = name, drop = FALSE, ...)
+  } else {
+    ggplot2::scale_fill_gradientn(colours = rampa_agente(agente, 7), name = name, ...)
+  }
+}
+
+#' Escala de cor por vírus, pelos rótulos legíveis ("SARS-CoV-2", "Influenza", "VSR").
+escala_cor_agente <- function(aesthetic = "colour", name = NULL) {
+  ggplot2::scale_colour_manual(values = stats::setNames(unname(CORES_AGENTE), ROTULOS_AGENTE[names(CORES_AGENTE)]),
+                               name = name, aesthetics = aesthetic)
+}
 NOMES_QUADRANTE <- c(HH = "Alto-Alto", LL = "Baixo-Baixo", HL = "Alto-Baixo", LH = "Baixo-Alto")
 
 #' Tema comum dos mapas: sem eixos, legenda à direita, título curto.
@@ -77,8 +127,7 @@ mapa_incidencia <- function(dados, agente, ano, variavel = "incid_eb_100k",
   dados$classe <- classes_quantil(dados[[variavel]])
   ggplot2::ggplot(dados) +
     ggplot2::geom_sf(ggplot2::aes(fill = classe), colour = "white", linewidth = 0.15) +
-    ggplot2::scale_fill_viridis_d(option = "magma", direction = -1, begin = 0.1, end = 0.95,
-                                  name = titulo_variavel, drop = FALSE) +
+    escala_incidencia(agente, name = titulo_variavel, discreta = TRUE, n_classes = nlevels(dados$classe)) +
     ggplot2::labs(
       title = sprintf("SRAG por %s, %d", ROTULOS_AGENTE[[agente]], ano),
       subtitle = "Incidência por município de residência (Bayes empírico), classes por quintil",
@@ -199,7 +248,7 @@ mapa_painel <- function(d, camada = c("incidencia", "lisa")) {
   camada <- match.arg(camada)
   if (camada == "incidencia") {
     niveis <- levels(d$classe_incidencia)
-    cores <- viridisLite::magma(length(niveis), begin = 0.1, end = 0.95, direction = -1)
+    cores <- rampa_agente(unique(d$agente)[1], length(niveis))
     pal <- leaflet::colorFactor(cores, levels = niveis)
     valor <- d$classe_incidencia
     titulo <- "Taxa suavizada<br>por 100 mil hab."
@@ -234,4 +283,37 @@ dados_mapa <- function(malha, ind, lisa, agente, ano) {
     stop("Junção malha × indicadores × LISA incompleta para ", agente, " ", ano, call. = FALSE)
   }
   d
+}
+
+#' Guia de cores (CS-046): a cor de cada vírus, a rampa de incidência de cada vírus e
+#' as 9 classes do LISA, numa figura só, para abrir a seção de resultados.
+grafico_guia_cores <- function(n_rampa = 5) {
+  ag <- names(CORES_AGENTE)
+  virus <- data.frame(bloco = "Cor de cada vírus (séries, dispersões, painéis)", x = seq_along(ag), y = 1,
+                      cor = unname(CORES_AGENTE), rotulo = unname(ROTULOS_AGENTE[ag]), stringsAsFactors = FALSE)
+  rampas <- do.call(rbind, lapply(seq_along(ag), function(i) {
+    data.frame(bloco = "Mapas de incidência: do mais baixo (claro) ao mais alto (escuro)",
+               x = (i - 1) * (n_rampa + 1) + seq_len(n_rampa), y = 1,
+               cor = rampa_agente(ag[i], n_rampa), rotulo = ifelse(seq_len(n_rampa) == 3, ROTULOS_AGENTE[[ag[i]]], ""),
+               stringsAsFactors = FALSE)
+  }))
+  lisa <- data.frame(bloco = "Mapas de Moran local (LISA) — as mesmas cores para os três vírus",
+                     x = rep(1:5, length.out = length(PALETA_LISA)), y = -((seq_along(PALETA_LISA) - 1) %/% 5),
+                     cor = unname(PALETA_LISA), rotulo = names(PALETA_LISA), stringsAsFactors = FALSE)
+  d <- rbind(virus, rampas, lisa)
+  d$bloco <- factor(d$bloco, levels = unique(d$bloco))
+  ggplot2::ggplot(d, ggplot2::aes(x, y)) +
+    ggplot2::geom_tile(ggplot2::aes(fill = cor), width = 0.92, height = 0.5, colour = "white") +
+    ggplot2::geom_text(ggplot2::aes(y = y - 0.32, label = rotulo), vjust = 1, size = 2.8, colour = "grey15") +
+    ggplot2::scale_fill_identity() +
+    ggplot2::facet_wrap(~bloco, ncol = 1, scales = "free") +
+    ggplot2::scale_y_continuous(expand = ggplot2::expansion(add = c(0.6, 0.35))) +
+    ggplot2::labs(title = "Guia de cores do projeto",
+                  subtitle = "Cada vírus tem uma cor única; nenhuma cor de vírus é usada no LISA com outro significado.") +
+    ggplot2::theme_void(base_size = 10) +
+    ggplot2::theme(plot.title = ggplot2::element_text(face = "bold"),
+                   plot.subtitle = ggplot2::element_text(colour = "grey30"),
+                   strip.text = ggplot2::element_text(face = "bold", hjust = 0, margin = ggplot2::margin(6, 0, 2, 0)),
+                   plot.background = ggplot2::element_rect(fill = "white", colour = NA),
+                   plot.margin = ggplot2::margin(8, 8, 8, 8))
 }

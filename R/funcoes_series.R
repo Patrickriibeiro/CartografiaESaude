@@ -74,9 +74,8 @@ grafico_serie_semanal <- function(serie, recorte, campanhas) {
     ggplot2::geom_vline(xintercept = campanhas$inicio, linetype = "dashed", colour = "grey45", linewidth = 0.4) +
     ggplot2::annotate("text", x = campanhas$inicio, y = Inf, label = "campanha", angle = 90,
                       hjust = 1.1, vjust = -0.4, size = 2.6, colour = "grey35") +
-    ggplot2::geom_line(linewidth = 0.55) +
-    ggplot2::scale_colour_manual(values = c("SARS-CoV-2" = "#b2182b", "Influenza" = "#2166ac", "VSR" = "#1b7837"),
-                                 name = NULL) +
+    ggplot2::geom_line(linewidth = 0.8) +
+    escala_cor_agente() +
     ggplot2::scale_x_date(date_breaks = "3 months", date_labels = "%m/%Y", expand = ggplot2::expansion(mult = 0.01)) +
     ggplot2::labs(
       title = sprintf("Casos de SRAG por semana epidemiológica, %s", recorte),
@@ -132,7 +131,7 @@ grafico_nao_encerrados <- function(semanal, versao_banco) {
   escala <- max(semanal$fichas) / max(1e-9, max(semanal$proporcao))
   ggplot2::ggplot(semanal, ggplot2::aes(semana_epi)) +
     ggplot2::geom_col(ggplot2::aes(y = fichas), fill = "grey85") +
-    ggplot2::geom_line(ggplot2::aes(y = proporcao * escala), colour = "#b2182b", linewidth = 0.8) +
+    ggplot2::geom_line(ggplot2::aes(y = proporcao * escala), colour = COR_NEUTRA, linewidth = 0.8) +
     ggplot2::scale_y_continuous(
       name = "Fichas de SRAG (barras)",
       sec.axis = ggplot2::sec_axis(~ . / escala, name = "Não encerradas (linha)",
@@ -148,7 +147,7 @@ grafico_nao_encerrados <- function(semanal, versao_banco) {
     ggplot2::theme(plot.title = ggplot2::element_text(face = "bold"),
                    plot.subtitle = ggplot2::element_text(colour = "grey30", size = 8.5),
                    plot.caption = ggplot2::element_text(colour = "grey40", hjust = 0),
-                   axis.title.y.right = ggplot2::element_text(colour = "#b2182b"))
+                   axis.title.y.right = ggplot2::element_text(colour = COR_NEUTRA))
 }
 
 # ---------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 ﻿Tabelas exportadas pelo pipeline Cartografia & Saúde (SRAG-RJ 2022-2025).
-Gerado em: 2026-09-25 17:33:01 -03
-Commit do código: 50e05e1
+Gerado em: 2026-09-26 14:17:53 -03
+Commit do código: d4bbf23
 Critério de caso: R2_vigilancia (ADR-0002)
 Bancos SIVEP-Gripe (versão):
   dados/brutos/INFLUD22-23-03-2026.parquet (23-03-2026)

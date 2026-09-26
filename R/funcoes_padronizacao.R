@@ -185,7 +185,8 @@ grafico_padronizacao <- function(ind) {
   ind$agente_rotulo <- factor(ROTULOS_AGENTE[ind$agente], levels = ROTULOS_AGENTE)
   ggplot2::ggplot(ind, ggplot2::aes(incid_100k, incid_pad_100k)) +
     ggplot2::geom_abline(slope = 1, intercept = 0, colour = "grey60", linetype = "dashed") +
-    ggplot2::geom_point(ggplot2::aes(size = populacao), alpha = 0.5, colour = "#7b3294") +
+    ggplot2::geom_point(ggplot2::aes(size = populacao, colour = agente_rotulo), alpha = 0.6, show.legend = c(colour = FALSE)) +
+    escala_cor_agente() +
     ggplot2::scale_size_area(max_size = 5, labels = scales::label_number(big.mark = ".", decimal.mark = ","), name = "População") +
     ggplot2::facet_wrap(agente_rotulo ~ ano, scales = "free", ncol = 4) +
     ggplot2::labs(

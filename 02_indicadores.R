@@ -82,9 +82,12 @@ estado <- resumir_incidencia_estado(anual)
 suav <- resumir_suavizacao(anual)
 utils::write.csv(suav, file.path("resultados", "tabelas", "suavizacao_bayes_empirico.csv"),
                  row.names = FALSE, fileEncoding = "UTF-8")
-grafico_eb <- ggplot2::ggplot(anual, ggplot2::aes(incid_100k, incid_eb_100k)) +
+dados_eb <- anual   # cópia só para o gráfico: a coluna de rótulo não vaza para os arquivos
+dados_eb$agente_rotulo <- factor(ROTULOS_AGENTE[dados_eb$agente], levels = ROTULOS_AGENTE)
+grafico_eb <- ggplot2::ggplot(dados_eb, ggplot2::aes(incid_100k, incid_eb_100k)) +
   ggplot2::geom_abline(slope = 1, intercept = 0, colour = "grey60", linetype = "dashed") +
-  ggplot2::geom_point(ggplot2::aes(size = populacao), alpha = 0.5, colour = "#3b6e8f") +
+  ggplot2::geom_point(ggplot2::aes(size = populacao, colour = agente_rotulo), alpha = 0.6, show.legend = c(colour = FALSE)) +
+  escala_cor_agente() +
   ggplot2::scale_size_area(max_size = 5, labels = scales::label_number(big.mark = ".", decimal.mark = ","),
                            name = "População") +
   ggplot2::facet_wrap(agente ~ ano, scales = "free", ncol = 4,
