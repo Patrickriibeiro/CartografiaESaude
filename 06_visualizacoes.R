@@ -13,6 +13,7 @@
 #   resultados/estatistica/leitos_x_incidencia.png   taxa de SRAG × leitos por 100 mil, por ano (CS-034)
 #   resultados/estatistica/padronizacao_bruta_vs_padronizada.png  dispersão por município (CS-033)
 #   resultados/estatistica/guia_cores.png            cor de cada vírus, rampas e classes do LISA (CS-046)
+#   resultados/estatistica/versoes_banco_<ano>.png   casos em cada versão do banco mais recente (CS-048)
 
 source("00_setup.R")
 
@@ -137,6 +138,12 @@ sp <- utils::read.csv(file.path("resultados", "estatistica", "spearman_leitos.cs
 f <- file.path(pasta_est, "leitos_x_incidencia.png")
 ggplot2::ggsave(f, grafico_leitos(ind, leitos, sp), width = 11, height = 6, dpi = 150, bg = "white")
 graficos <- c(graficos, f)
+# Evolução das versões do banco mais recente (CS-048).
+versoes <- utils::read.csv(file.path("resultados", "tabelas", "versoes_banco.csv"), encoding = "UTF-8", stringsAsFactors = FALSE)
+f <- file.path(pasta_est, sprintf("versoes_banco_%d.png", max(ANOS_ESTUDO)))
+ggplot2::ggsave(f, grafico_versoes(versoes, max(ANOS_ESTUDO)), width = 9, height = 4.8, dpi = 150, bg = "white")
+graficos <- c(graficos, f)
+
 # Guia de cores (CS-046).
 f <- file.path(pasta_est, "guia_cores.png")
 ggplot2::ggsave(f, grafico_guia_cores(), width = 9, height = 5.2, dpi = 150, bg = "white")
@@ -146,7 +153,7 @@ graficos <- c(graficos, f)
 f <- file.path(pasta_est, "padronizacao_bruta_vs_padronizada.png")
 ggplot2::ggsave(f, grafico_padronizacao(ind), width = 11, height = 8, dpi = 150, bg = "white")
 graficos <- c(graficos, f)
-stopifnot(all(file.exists(graficos)), length(graficos) == 1 + 9 + 1 + 1 + 1 + 1 + 1)
+stopifnot(all(file.exists(graficos)), length(graficos) == 1 + 9 + 1 + 1 + 1 + 1 + 1 + 1)
 
 # Mapa de referência das regiões de saúde (CS-050).
 f <- file.path(pasta, "regioes_saude_referencia.png")

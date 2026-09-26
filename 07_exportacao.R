@@ -12,6 +12,8 @@
 #   resultados/tabelas/exportacao/leitos_municipais.csv       leitos SUS e de UTI SUS de julho, 92 × 4 (CS-034)
 #   resultados/tabelas/exportacao/spearman_leitos.csv         taxa × leitos, por ano, com IC (CS-034)
 #   resultados/tabelas/exportacao/regioes_de_saude_municipios.csv  92 municípios e sua região (CS-050)
+#   resultados/tabelas/exportacao/versoes_do_banco.csv        casos em cada versão do banco (CS-048)
+#   resultados/tabelas/exportacao/tempo_ate_encerramento.csv  dias até encerrar a ficha, por ano (CS-048)
 #   resultados/tabelas/exportacao/LEIA-ME.txt                 carimbo: data, commit, versões dos dados
 
 source("00_setup.R")
@@ -127,6 +129,20 @@ reg_mun <- data.frame(codigo_ibge = malha$cod7[match(mr_exp$cod6, malha$cod6)], 
                       stringsAsFactors = FALSE, row.names = NULL)
 reg_mun <- reg_mun[order(reg_mun$regiao_de_saude, reg_mun$municipio), ]
 
+vb <- utils::read.csv(file.path("resultados", "tabelas", "versoes_banco.csv"), encoding = "UTF-8", stringsAsFactors = FALSE)
+versoes_exp <- data.frame(ano_do_banco = vb$ano, versao = vb$versao, dias_apos_fim_do_ano = vb$dias_apos_fim_do_ano,
+                          versao_do_estudo = ifelse(vb$referencia, "sim", "não"), fichas = vb$fichas, encerradas = vb$encerradas,
+                          casos_sarscov2 = vb$casos_sarscov2, casos_influenza = vb$casos_influenza, casos_vsr = vb$casos_vsr,
+                          pct_fichas = round(vb$pct_fichas, 2), pct_casos_sarscov2 = round(vb$pct_casos_sarscov2, 2),
+                          pct_casos_influenza = round(vb$pct_casos_influenza, 2), pct_casos_vsr = round(vb$pct_casos_vsr, 2),
+                          stringsAsFactors = FALSE, row.names = NULL)
+te <- utils::read.csv(file.path("resultados", "tabelas", "tempo_encerramento.csv"), encoding = "UTF-8")
+tempo_exp <- data.frame(ano = te$ano, fichas = te$fichas, encerradas_com_data = te$encerradas_com_data,
+                        dias_ate_encerrar_mediana = te$dias_encerramento_mediana, dias_ate_encerrar_p90 = te$dias_encerramento_p90,
+                        pct_encerradas_ate_30_dias = round(te$pct_encerradas_30d, 1), pct_encerradas_ate_60_dias = round(te$pct_encerradas_60d, 1),
+                        pct_encerradas_ate_90_dias = round(te$pct_encerradas_90d, 1), dias_ate_digitar_mediana = te$dias_digitacao_mediana,
+                        row.names = NULL)
+
 pasta <- file.path("resultados", "tabelas", "exportacao")
 arquivos <- c(
   salvar_resultado(indicadores, "indicadores_municipais", pasta),
@@ -141,6 +157,8 @@ arquivos <- c(
   salvar_resultado(leitos_exp, "leitos_municipais", pasta),
   salvar_resultado(spearman_exp, "spearman_leitos", pasta),
   salvar_resultado(reg_mun, "regioes_de_saude_municipios", pasta),
+  salvar_resultado(versoes_exp, "versoes_do_banco", pasta),
+  salvar_resultado(tempo_exp, "tempo_ate_encerramento", pasta),
   escrever_carimbo(pasta, c(
     sprintf("Contagens pequenas (CS-043): %d combinações município x agente x ano têm de 1 a %d casos.",
             sum(ind$casos >= 1 & ind$casos < LIMIAR_CONTAGEM_PEQUENA), LIMIAR_CONTAGEM_PEQUENA - 1L),
@@ -158,6 +176,7 @@ stopifnot(nrow(ler_resultado(arquivos[1])) == 1104, nrow(ler_resultado(arquivos[
           nrow(ler_resultado(arquivos[9])) == length(ANOS_ESTUDO),
           nrow(ler_resultado(arquivos[10])) == 92 * length(ANOS_ESTUDO), nrow(ler_resultado(arquivos[11])) == 2 * length(ANOS_ESTUDO),
           nrow(ler_resultado(arquivos[12])) == 92,
+          nrow(ler_resultado(arquivos[14])) == length(ANOS_ESTUDO),
           "Baía da Ilha Grande" %in% ler_resultado(arquivos[5])$regiao_de_saude,
           "Niterói" %in% ler_resultado(arquivos[1])$municipio)
 message(sprintf("%d arquivos em %s", length(arquivos), pasta))

@@ -90,3 +90,54 @@ test_that("ano epidemiológico: limites, 53 semanas em 2025 e meio do ano a no m
   expect_equal(weekdays(l$inicio), rep(weekdays(as.Date("2022-01-02")), 4))   # sempre domingo
   expect_lte(max(abs(as.numeric(as.Date(paste0(l$ano, "-07-01")) - l$meio))), 2)
 })
+
+test_that("tempo até o encerramento: mediana, p90, % em 30/60/90 dias e datas inconsistentes (CS-048)", {
+  s <- as.Date("2024-03-01")
+  x <- data.frame(ano_banco = 2024L, DT_SIN_PRI = s,
+                  DT_ENCERRA = s + c(10, 20, 40, 100, -5, NA),
+                  DT_DIGITA = s + c(1, 2, 3, 4, 5, 6),
+                  CLASSI_FIN = c(1L, 5L, 4L, 4L, 1L, NA))
+  t <- tempo_encerramento(x)
+  expect_equal(t$fichas, 6L)
+  expect_equal(t$encerradas_com_data, 5L)
+  expect_equal(t$encerramento_antes_dos_sintomas, 1L)          # -5 dias fica fora das medidas
+  expect_equal(t$dias_encerramento_mediana, stats::median(c(10, 20, 40, 100)))
+  expect_equal(t$pct_encerradas_30d, 100 * 2 / 6)               # sobre TODAS as fichas
+  expect_equal(t$pct_encerradas_90d, 100 * 3 / 6)
+  expect_equal(t$dias_digitacao_mediana, 3.5)
+})
+
+test_that("comparar_versoes expressa cada contagem em % da versão mais recente do mesmo ano (CS-048)", {
+  r <- data.frame(ano = c(2025L, 2025L, 2024L, 2024L), versao = c("09-03-2026", "14-09-2026", "26-06-2025", "23-03-2026"),
+                  data_versao = as.Date(c("2026-03-09", "2026-09-14", "2025-06-26", "2026-03-23")),
+                  dias_apos_fim_do_ano = c(65L, 254L, 180L, 450L), fichas = c(90L, 100L, 50L, 50L), fora_do_ano = 0L,
+                  encerradas = c(80L, 95L, 50L, 50L), casos_sarscov2 = c(9L, 10L, 5L, 5L), casos_influenza = c(20L, 20L, 1L, 1L),
+                  casos_vsr = c(3L, 4L, 2L, 2L))
+  c <- comparar_versoes(r)
+  expect_equal(c$referencia, c(FALSE, TRUE, FALSE, TRUE))       # 2024 antes de 2025, por data
+  expect_equal(c$pct_fichas[c$ano == 2025], c(90, 100))
+  expect_equal(c$pct_casos_vsr[c$ano == 2025], c(75, 100))
+  expect_equal(c$pct_casos_sarscov2[c$ano == 2024], c(100, 100))
+  expect_s3_class(ggplot2::ggplot_build(grafico_versoes(c, 2025)), "ggplot_built")
+  expect_error(grafico_versoes(c[c$ano == 2025 & c$referencia, ], 2025), "Menos de duas versões")
+})
+
+test_that("resumir_versao conta os mesmos casos que o caminho normal do pipeline (CS-048)", {
+  projeto_temporario()
+  f <- bancos_da_fixture()
+  b <- bancos_sivep(2022, fontes = f)
+  r <- resumir_versao(b$destino, 2022L, "23-03-2026")
+  sv <- preparar_sivep(2022, fontes = f)
+  esperado <- contar_casos_agente(aplicar_criterios_inclusao(classificar_agente(sv, REGRA_CASO)))
+  for (ag in AGENTES) expect_equal(r[[paste0("casos_", ag)]], esperado$casos[esperado$agente == ag & esperado$ano == 2022], info = ag)
+  expect_equal(r$fichas, nrow(sv))
+  expect_equal(r$dias_apos_fim_do_ano, as.integer(as.Date("2026-03-23") - as.Date("2022-12-31")))
+})
+
+test_that("as versões anteriores da configuração real apontam para o S3 do portal e para dados/brutos/versoes (CS-048)", {
+  v <- versoes_anteriores(yaml::read_yaml(file.path(raiz_projeto, "config", "fontes.yml")))
+  expect_gte(nrow(v), 2)
+  expect_true(all(startsWith(v$url, "https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SRAG/")))
+  expect_true(all(mapply(function(u, ver) grepl(ver, u, fixed = TRUE), v$url, v$versao)))
+  expect_true(all(startsWith(v$destino, file.path("dados", "brutos", "versoes"))))
+})

@@ -748,6 +748,49 @@ anteriores: `r if (sobe) "a subida indica que a investigação dessas semanas ai
 
 ![Fichas não encerradas por semana epidemiológica no último ano do estudo](resultados/estatistica/nao_encerrados_2025.png){#fig-nao-encerrados width=90%}
 
+### Quanto os números mudam depois do fim do ano
+
+```{r versoes}
+vb <- utils::read.csv(file.path("resultados", "tabelas", "versoes_banco.csv"), encoding = "UTF-8", stringsAsFactors = FALSE)
+te <- ler("resultados", "tabelas", "tempo_encerramento.csv")
+v_fim <- vb[vb$ano == ano_fim, ]; ref_fim <- v_fim[v_fim$referencia, ]; mais_antiga <- v_fim[which.min(v_fim$dias_apos_fim_do_ano), ]
+dif_max <- max(abs(unlist(lapply(AGENTES, function(ag) v_fim[[paste0("casos_", ag)]] - ref_fim[[paste0("casos_", ag)]]))))
+v_ant <- vb[vb$ano == ano_fim - 1, ]
+ant_igual <- nrow(v_ant) >= 2 && all(sapply(c("fichas", "encerradas", paste0("casos_", AGENTES)), function(cl) length(unique(v_ant[[cl]])) == 1))
+reabertas <- sum(diff(v_fim$encerradas[order(v_fim$dias_apos_fim_do_ano)]) < 0)
+pct_dif_max <- max(unlist(lapply(AGENTES, function(ag) abs(v_fim[[paste0("casos_", ag)]] - ref_fim[[paste0("casos_", ag)]]) / ref_fim[[paste0("casos_", ag)]])))
+```
+
+O banco do ano mais recente é republicado toda semana, e uma ficha pode ser acrescentada,
+encerrada ou reclassificada depois do fim do ano. Para medir o efeito, foram comparadas
+`r nrow(v_fim) - 1` versões anteriores do banco de `r ano_fim` publicadas no portal, a mais antiga
+`r mais_antiga$dias_apos_fim_do_ano` dias depois do fim do ano epidemiológico, com a versão usada no
+estudo (`r ref_fim$versao`), sempre pela mesma regra de caso. Entre elas, o número de fichas de
+residentes passou de `r fi(mais_antiga$fichas)` para `r fi(ref_fim$fichas)`, e o de casos
+confirmados de cada vírus variou no máximo `r dif_max` `r if (dif_max == 1) "caso" else "casos"`.
+`r if (reabertas > 0) paste0("Em ", reabertas, " passagem de uma versão para a seguinte o número de fichas encerradas diminuiu: fichas já encerradas podem ser reabertas. ") else ""`Para
+`r ano_fim - 1`, a versão publicada `r v_ant$dias_apos_fim_do_ano[!v_ant$referencia][1]` dias depois do fim
+do ano `r if (ant_igual) "é idêntica à atual em fichas, encerramentos e casos dos três vírus" else "difere da atual"`.
+
+```{r tbl-tempo-encerramento}
+#| tbl-cap: "Tempo entre o início dos sintomas e o encerramento da ficha, por ano"
+t16 <- data.frame(Ano = te$ano, `Dias até encerrar (mediana)` = te$dias_encerramento_mediana,
+                  `Dias até encerrar (percentil 90)` = te$dias_encerramento_p90,
+                  `Encerradas em até 30 dias` = fp(te$pct_encerradas_30d / 100, 0),
+                  `Em até 90 dias` = fp(te$pct_encerradas_90d / 100, 0),
+                  `Dias até digitar (mediana)` = te$dias_digitacao_mediana, check.names = FALSE)
+tab(t16)
+```
+
+Dentro de cada banco, a mediana entre o início dos sintomas e o encerramento da ficha foi de
+`r lista(paste0(te$dias_encerramento_mediana, " dias em ", te$ano))`. As versões mais antigas que o
+portal ainda guarda para `r ano_fim` são de `r mais_antiga$dias_apos_fim_do_ano` dias depois do fim do
+ano; o que muda nas primeiras semanas depois do fechamento não pôde ser medido. Daí em diante, a
+maior diferença de casos entre versões, em qualquer vírus, é de `r fp(pct_dif_max, 2)` dos casos da
+versão do estudo.
+
+![Diferença, em número de casos, entre cada versão publicada do banco de 2025 e a versão usada no estudo](resultados/estatistica/versoes_banco_2025.png){#fig-versoes width=90%}
+
 ## Leitos SUS e incidência
 
 ```{r leitos}

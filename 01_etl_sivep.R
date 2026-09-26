@@ -9,6 +9,9 @@
 #   dados/processados/sivep_notificados_de_fora.parquet  casos notificados no RJ de quem mora fora (CS-031)
 #   resultados/tabelas/nao_encerrados.csv                fichas com CLASSI_FIN vazio por ano (CS-035)
 #   resultados/tabelas/nao_encerrados_semanal.csv        a mesma proporção por semana do último ano (CS-035)
+#   dados/brutos/versoes/INFLUD*.parquet                 versões ANTERIORES dos bancos, no manifesto (CS-048)
+#   resultados/tabelas/versoes_banco.csv                 fichas e casos em cada versão, em % da versão do estudo (CS-048)
+#   resultados/tabelas/tempo_encerramento.csv            dias do início dos sintomas ao encerramento, por ano (CS-048)
 
 source("00_setup.R")
 
@@ -29,6 +32,24 @@ nao_enc_sem <- nao_encerrados_por_semana(sivep_rj, max(ANOS_ESTUDO))
 stopifnot(sum(nao_enc_sem$fichas) == nao_enc$fichas[nao_enc$ano == max(ANOS_ESTUDO)])
 utils::write.csv(nao_enc, file.path("resultados", "tabelas", "nao_encerrados.csv"), row.names = FALSE, fileEncoding = "UTF-8")
 utils::write.csv(nao_enc_sem, file.path("resultados", "tabelas", "nao_encerrados_semanal.csv"), row.names = FALSE, fileEncoding = "UTF-8")
+
+# CS-048: quanto os números mudam depois do fim do ano. Versões anteriores dos bancos
+# (achadas no S3 do portal) contra a versão usada no estudo, pela mesma regra de caso.
+baixar_versoes_anteriores()
+v_ant <- versoes_anteriores()
+v_atual <- bancos_sivep(sort(unique(v_ant$ano)))
+versoes <- comparar_versoes(rbind(
+  do.call(rbind, lapply(seq_len(nrow(v_ant)), function(i) resumir_versao(v_ant$destino[i], v_ant$ano[i], v_ant$versao[i]))),
+  do.call(rbind, lapply(seq_len(nrow(v_atual)), function(i) resumir_versao(v_atual$destino[i], v_atual$ano[i], v_atual$versao[i])))))
+# Contrato: a versão de referência resumida aqui dá os mesmos casos que o pipeline principal.
+ref <- versoes[versoes$referencia, ]
+por_ag <- contar_casos_agente(aplicar_criterios_inclusao(classificar_agente(sivep_rj, REGRA_CASO)))
+for (a in ref$ano) for (ag in AGENTES) {
+  stopifnot(ref[[paste0("casos_", ag)]][ref$ano == a] == por_ag$casos[por_ag$ano == a & por_ag$agente == ag])
+}
+utils::write.csv(versoes, file.path("resultados", "tabelas", "versoes_banco.csv"), row.names = FALSE, fileEncoding = "UTF-8")
+utils::write.csv(tempo_encerramento(sivep_rj), file.path("resultados", "tabelas", "tempo_encerramento.csv"),
+                 row.names = FALSE, fileEncoding = "UTF-8")
 
 # Evidência do ADR-0002 (CS-007): quantos casos cada regra candidata conta,
 # onde está o laboratório das fichas sem campo específico, e co-detecções.
