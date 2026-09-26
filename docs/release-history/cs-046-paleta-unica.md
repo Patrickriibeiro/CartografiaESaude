@@ -56,3 +56,8 @@ Todas as cores ficam em `R/funcoes_mapas.R` (`CORES_AGENTE`, `rampa_agente()`, `
 3. Um teste terminava em `|| TRUE` (nunca falharia); trocado por uma verificação real da escala.
 4. No gráfico da suavização, a coluna de rótulo ia ser criada no próprio `anual`; passou para uma
    cópia, para não vazar para os arquivos gravados.
+
+## Errata (2026-09-26)
+
+Na tabela de verificação, "18 gráficos" está errado: são **17** PNG em `resultados/estatistica/`
+(16 de antes + o guia de cores). Os 38 mapas estão certos.

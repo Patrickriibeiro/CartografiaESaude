@@ -233,3 +233,61 @@ pontos_rotulo_regioes <- function(malha, regioes, populacao) {
   sf::st_sf(cod_regiao = sede$cod_regiao, cod6_sede = sede$cod6,
             geometry = ponto_interno(sf::st_sfc(sede$geometry, crs = sf::st_crs(malha))))
 }
+
+#' Mapa de referência (CS-050): os 92 municípios coloridos pela região de saúde, com
+#' contorno regional escuro, fronteiras municipais brancas e o nome da região (com o
+#' número de municípios) escrito no município mais populoso dela.
+mapa_referencia_regioes <- function(malha, municipio_regiao, regioes_sf, pontos) {
+  m <- malha
+  m$cod_regiao <- municipio_regiao$cod_regiao[match(m$cod6, municipio_regiao$cod6)]
+  if (anyNA(m$cod_regiao)) stop("Município da malha sem região", call. = FALSE)
+  rot <- sf::st_sf(rotulo = paste0(regioes_sf$regiao, "\n(", regioes_sf$n_municipios, " municípios)"),
+                   geometry = polo_de_inacessibilidade(sf::st_geometry(regioes_sf)))
+  # Aqui o rótulo identifica a ÁREA: vai no ponto mais distante da borda da maior parte
+  # da região, não na sede (Petrópolis, sede da Serrana, fica na borda com o Centro-Sul).
+  ggplot2::ggplot() +
+    ggplot2::geom_sf(data = m, ggplot2::aes(fill = cod_regiao), colour = "white", linewidth = 0.2) +
+    ggplot2::geom_sf(data = regioes_sf, fill = NA, colour = "grey15", linewidth = 0.55) +
+    ggplot2::geom_sf_label(data = rot, ggplot2::aes(label = rotulo), size = 2.4, lineheight = 0.9,
+                           fill = grDevices::adjustcolor("white", 0.85), linewidth = 0, fun.geometry = identity) +
+    ggplot2::scale_fill_manual(values = PALETA_REGIOES, guide = "none") +
+    ggplot2::labs(
+      title = "As 9 regiões de saúde do Estado do Rio de Janeiro e seus municípios",
+      subtitle = "Cada cor é uma região; linhas brancas separam municípios, linhas escuras separam regiões.",
+      caption = paste0("Regiões de saúde: Ministério da Saúde via geobr (IPEA), conferidas com a SES-RJ.\n",
+                       "Malha Municipal 2022 (IBGE); contorno regional = união dos municípios.")
+    ) +
+    tema_mapa()
+}
+
+#' Tabela de referência: uma linha por região, com o número de municípios, a
+#' população (Censo 2022) e os nomes dos municípios em ordem alfabética.
+tabela_regioes_municipios <- function(malha, municipio_regiao, populacao_2022) {
+  m <- data.frame(cod6 = malha$cod6, nome = malha$nome, stringsAsFactors = FALSE)
+  m$cod_regiao <- municipio_regiao$cod_regiao[match(m$cod6, municipio_regiao$cod6)]
+  m$populacao <- populacao_2022$populacao[match(m$cod6, populacao_2022$cod6)]
+  if (anyNA(m$cod_regiao) || anyNA(m$populacao)) stop("Município sem região ou sem população", call. = FALSE)
+  out <- do.call(rbind, lapply(split(m, m$cod_regiao), function(x) {
+    data.frame(cod_regiao = x$cod_regiao[1], regiao = unname(REGIOES_SAUDE_RJ[x$cod_regiao[1]]),
+               municipios = nrow(x), populacao_2022 = sum(x$populacao),
+               lista_municipios = paste(sort(x$nome), collapse = ", "), stringsAsFactors = FALSE)
+  }))
+  rownames(out) <- NULL
+  out[order(out$cod_regiao), ]
+}
+
+#' Polo de inacessibilidade de cada polígono: o centro do maior círculo inscrito na
+#' maior parte dele, isto é, o ponto interno mais distante da borda. É onde um
+#' rótulo de área fica mais claramente "dentro". Calculado em UTM 23S (metros).
+polo_de_inacessibilidade <- function(geometria, tolerancia_m = 100) {
+  crs <- sf::st_crs(geometria)
+  g <- sf::st_transform(geometria, 31983)
+  pontos <- lapply(seq_along(g), function(i) {
+    partes <- sf::st_cast(g[i], "POLYGON")
+    maior <- partes[which.max(sf::st_area(partes))]
+    circulo <- sf::st_inscribed_circle(maior, dTolerance = tolerancia_m)
+    circulo <- circulo[!sf::st_is_empty(circulo)]   # o GEOS devolve também uma geometria vazia
+    sf::st_centroid(circulo)[[1]]                    # centro do círculo = polo de inacessibilidade
+  })
+  sf::st_transform(sf::st_sfc(pontos, crs = sf::st_crs(g)), crs)
+}

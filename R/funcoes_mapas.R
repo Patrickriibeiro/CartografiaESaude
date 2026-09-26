@@ -26,6 +26,14 @@ EXTREMOS_RAMPA_AGENTE <- list(
   vsr       = c("#eef7ee", "#008300", "#003010")
 )
 
+# Mapa de referência das 9 regiões de saúde (CS-050): tons pastel (ColorBrewer Set3),
+# que não se confundem com as cores fortes dos vírus. Com 9 categorias nenhuma paleta
+# separa todos os pares sob daltonismo: a identidade vem também do NOME escrito em cada
+# região e da tabela região -> municípios (codificação secundária).
+PALETA_REGIOES <- c("33001" = "#8dd3c7", "33002" = "#ffffb3", "33003" = "#bebada", "33004" = "#fdb462",
+                    "33005" = "#80b1d3", "33006" = "#fccde5", "33007" = "#b3de69", "33008" = "#fb8072",
+                    "33009" = "#bc80bd")
+
 # Cor de marca que não representa vírus nenhum (total de SRAG, histograma, proporção).
 COR_NEUTRA <- "#52514e"
 

@@ -11,6 +11,7 @@
 #   resultados/tabelas/exportacao/nao_encerrados.csv          fichas não encerradas por ano (CS-035)
 #   resultados/tabelas/exportacao/leitos_municipais.csv       leitos SUS e de UTI SUS de julho, 92 × 4 (CS-034)
 #   resultados/tabelas/exportacao/spearman_leitos.csv         taxa × leitos, por ano, com IC (CS-034)
+#   resultados/tabelas/exportacao/regioes_de_saude_municipios.csv  92 municípios e sua região (CS-050)
 #   resultados/tabelas/exportacao/LEIA-ME.txt                 carimbo: data, commit, versões dos dados
 
 source("00_setup.R")
@@ -120,6 +121,12 @@ spearman_exp <- data.frame(ano = spl$ano, tipo_de_leito = spl$rotulo, municipios
                            ic95_superior = round(spl$ic_sup, 3), reamostras_bootstrap = spl$reamostras,
                            stringsAsFactors = FALSE, row.names = NULL)
 
+mr_exp <- as.data.frame(arrow::read_parquet(file.path("dados", "processados", "municipio_regiao.parquet")))
+reg_mun <- data.frame(codigo_ibge = malha$cod7[match(mr_exp$cod6, malha$cod6)], municipio = nomes[mr_exp$cod6],
+                      codigo_regiao = mr_exp$cod_regiao, regiao_de_saude = mr_exp$regiao,
+                      stringsAsFactors = FALSE, row.names = NULL)
+reg_mun <- reg_mun[order(reg_mun$regiao_de_saude, reg_mun$municipio), ]
+
 pasta <- file.path("resultados", "tabelas", "exportacao")
 arquivos <- c(
   salvar_resultado(indicadores, "indicadores_municipais", pasta),
@@ -133,6 +140,7 @@ arquivos <- c(
   salvar_resultado(nao_enc, "nao_encerrados", pasta),
   salvar_resultado(leitos_exp, "leitos_municipais", pasta),
   salvar_resultado(spearman_exp, "spearman_leitos", pasta),
+  salvar_resultado(reg_mun, "regioes_de_saude_municipios", pasta),
   escrever_carimbo(pasta, c(
     sprintf("Contagens pequenas (CS-043): %d combinações município x agente x ano têm de 1 a %d casos.",
             sum(ind$casos >= 1 & ind$casos < LIMIAR_CONTAGEM_PEQUENA), LIMIAR_CONTAGEM_PEQUENA - 1L),
@@ -149,6 +157,7 @@ stopifnot(nrow(ler_resultado(arquivos[1])) == 1104, nrow(ler_resultado(arquivos[
           nrow(ler_resultado(arquivos[8])) == 10 * 3 * nrow(semanas_do_estudo()),
           nrow(ler_resultado(arquivos[9])) == length(ANOS_ESTUDO),
           nrow(ler_resultado(arquivos[10])) == 92 * length(ANOS_ESTUDO), nrow(ler_resultado(arquivos[11])) == 2 * length(ANOS_ESTUDO),
+          nrow(ler_resultado(arquivos[12])) == 92,
           "Baía da Ilha Grande" %in% ler_resultado(arquivos[5])$regiao_de_saude,
           "Niterói" %in% ler_resultado(arquivos[1])$municipio)
 message(sprintf("%d arquivos em %s", length(arquivos), pasta))

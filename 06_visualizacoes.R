@@ -5,6 +5,8 @@
 #   resultados/mapas/painel_incidencia.png           3 agentes × 4 anos (para o relatório)
 #   resultados/mapas/painel_lisa.png                 3 agentes × 4 anos (para o relatório)
 #   resultados/mapas/regional_<agente>_<ano>.png     12 mapas por região de saúde (CS-030)
+#   resultados/mapas/regioes_saude_referencia.png    municípios coloridos pela região (CS-050)
+#   resultados/tabelas/regioes_municipios.csv        região -> municípios, população 2022 (CS-050)
 #   resultados/tabelas/serie_semanal.csv             casos por semana × agente, estado e 9 regiões (CS-032)
 #   resultados/estatistica/serie_semanal_*.png       1 gráfico do estado + 9 regionais + painel (CS-032)
 #   resultados/estatistica/nao_encerrados_<ano>.png  maturação do último ano (CS-035)
@@ -146,5 +148,13 @@ ggplot2::ggsave(f, grafico_padronizacao(ind), width = 11, height = 8, dpi = 150,
 graficos <- c(graficos, f)
 stopifnot(all(file.exists(graficos)), length(graficos) == 1 + 9 + 1 + 1 + 1 + 1 + 1)
 
-stopifnot(all(file.exists(gerados)), length(gerados) == 38)
+# Mapa de referência das regiões de saúde (CS-050).
+f <- file.path(pasta, "regioes_saude_referencia.png")
+ggplot2::ggsave(f, mapa_referencia_regioes(malha, municipio_regiao, regioes_rj, pontos),
+                width = 8, height = 5.5, dpi = 300, bg = "white")
+gerados <- c(gerados, f)
+utils::write.csv(tabela_regioes_municipios(malha, municipio_regiao, pop2022),
+                 file.path("resultados", "tabelas", "regioes_municipios.csv"), row.names = FALSE, fileEncoding = "UTF-8")
+
+stopifnot(all(file.exists(gerados)), length(gerados) == 39)
 message(sprintf("%d mapas gravados em %s", length(gerados), pasta))

@@ -553,6 +553,36 @@ frase_conf <- if (length(reg_conf) == 1 && reg_conf == v24$regiao[1]) {
 }
 ```
 
+```{r regioes-ref}
+trm <- utils::read.csv(file.path("resultados", "tabelas", "regioes_municipios.csv"), encoding = "UTF-8", stringsAsFactors = FALSE)
+maior_reg <- trm[which.max(trm$populacao_2022), ]; menor_reg <- trm[which.min(trm$populacao_2022), ]
+decreto_regiao <- "nº 7.508/2011"   # norma citada, não resultado: fica aqui pela regra de números no texto
+```
+
+**Por que também regiões de saúde.** O Decreto `r decreto_regiao` define a região de saúde como o espaço
+geográfico contínuo de municípios limítrofes, delimitado por identidades culturais, econômicas e
+sociais e por redes de comunicação e transporte compartilhadas, com a finalidade de integrar a
+organização, o planejamento e a execução das ações de saúde [@brasil2011decreto]. É nessa escala
+que o SUS planeja a rede hospitalar, regula leitos e pactua ações entre municípios, na Comissão
+Intergestores Regional de cada região [@sesrj_regionalizacao]. Um resultado regional fala,
+portanto, com quem decide onde abrir leitos ou concentrar a vacinação.
+
+**Por que a análise principal continua municipal.** A região soma municípios muito diferentes: a
+maior, `r maior_reg$regiao`, tem `r fi(maior_reg$populacao_2022)` habitantes, e a menor,
+`r menor_reg$regiao`, `r fi(menor_reg$populacao_2022)`. Somar apaga contrastes internos, e o
+resultado estatístico muda com o recorte, o problema da unidade de área modificável descrito
+adiante. Por isso os agrupamentos são procurados nos `r n_mun` municípios, e a escala regional
+entra como leitura de gestão.
+
+![As regiões de saúde do Estado do Rio de Janeiro e seus municípios](resultados/mapas/regioes_saude_referencia.png){#fig-regioes-ref width=90%}
+
+```{r tbl-regioes-municipios}
+#| tbl-cap: "Regiões de saúde do Estado do Rio de Janeiro: municípios e população (Censo 2022)"
+t15 <- data.frame(Região = trm$regiao, Municípios = trm$municipios, `População (2022)` = fi(trm$populacao_2022),
+                  `Municípios que a compõem` = trm$lista_municipios, check.names = FALSE)
+tab(t15)
+```
+
 Os `r n_mun` municípios foram agrupados nas `r n_reg` regiões de saúde do estado, com
 `r min(rs$n_municipios)` a `r max(rs$n_municipios)` municípios cada. A tabela município → região
 vem do Ministério da Saúde, redistribuída pelo pacote geobr [@pereira2019geobr], e foi conferida

@@ -138,3 +138,37 @@ test_that("mapa regional monta com um rótulo por região e para se faltar dado"
   expect_true(any(grepl("Baixada Litorânea\n2,5", rotulos, fixed = TRUE)))
   expect_error(mapa_regional(rs, ind[-1, ], "vsr", 2024), "incompleta")
 })
+
+test_that("tabela de referência: uma linha por região, municípios em ordem alfabética, população somada (CS-050)", {
+  s <- malha_sintetica()
+  r <- validar_regioes(s$regioes, n_municipios = 9, n_regioes = 3)
+  pop <- data.frame(cod6 = s$regioes$cod6, populacao = 1:9)
+  t <- tabela_regioes_municipios(s$malha, r, pop)
+  expect_equal(nrow(t), 3)
+  expect_equal(t$municipios, c(3L, 3L, 3L))
+  expect_equal(t$populacao_2022, c(1 + 4 + 7, 2 + 5 + 8, 3 + 6 + 9))
+  expect_equal(t$lista_municipios[1], "M1, M4, M7")
+  expect_error(tabela_regioes_municipios(s$malha, r, pop[-1, ]), "sem população")
+})
+
+test_that("polo de inacessibilidade cai dentro do polígono e longe da borda (CS-050)", {
+  # Um "L": o centroide cairia fora da figura; o polo tem de ficar dentro.
+  l <- sf::st_sfc(sf::st_polygon(list(rbind(c(0, 0), c(30000, 0), c(30000, 10000), c(10000, 10000),
+                                             c(10000, 30000), c(0, 30000), c(0, 0)))), crs = 31983)
+  l <- sf::st_transform(l, EPSG_SIRGAS2000)
+  p <- polo_de_inacessibilidade(l)
+  expect_true(sf::st_within(sf::st_transform(p, 31983), sf::st_transform(l, 31983), sparse = FALSE)[1, 1])
+  borda <- as.numeric(sf::st_distance(sf::st_transform(p, 31983), sf::st_cast(sf::st_transform(l, 31983), "LINESTRING")))
+  expect_gt(borda, 4000)   # o maior círculo que cabe no "L" tem raio perto de 5 km
+})
+
+test_that("mapa de referência das regiões monta com um rótulo por região (CS-050)", {
+  s <- malha_sintetica()
+  r <- validar_regioes(s$regioes, n_municipios = 9, n_regioes = 3)
+  rs <- dissolver_regioes(s$malha, r)
+  b <- ggplot2::ggplot_build(mapa_referencia_regioes(s$malha, r, rs, NULL))
+  rotulos <- unlist(lapply(b$data, function(d) if ("label" %in% names(d)) d$label))
+  expect_length(rotulos, 3)
+  expect_true(any(grepl("Centro-Sul", rotulos)))
+  expect_length(PALETA_REGIOES, 9)
+})
