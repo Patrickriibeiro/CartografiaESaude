@@ -183,6 +183,100 @@ territórios diferentes para cada agente; H3, a localização dos agrupamentos m
 período; e H4, secundária, parte da heterogeneidade das taxas por residência acompanha a oferta
 de leitos hospitalares. A conclusão responde a cada uma.
 
+# Decisões de método
+
+```{r decisoes}
+adr_dir <- file.path("docs", "decisoes")
+n_adr <- length(list.files(adr_dir, pattern = "^ADR-[0-9]{4}.*\\.md$"))
+versoes_bancos <- bancos$versao[order(bancos$arquivo)]
+n_col_lidas <- length(COLUNAS_SIVEP)
+r1 <- function(ag, a) cmp$casos[cmp$regra == "R1_estrita_pdf" & cmp$agente == ag & cmp$ano == a]
+r2 <- function(ag, a) cmp$casos[cmp$regra == "R2_vigilancia" & cmp$agente == ag & cmp$ano == a]
+perda_r1_ini <- 1 - r1("sarscov2", ano_ini) / r2("sarscov2", ano_ini)
+perda_r1_fim <- 1 - r1("sarscov2", ano_fim) / r2("sarscov2", ano_fim)
+razao_min <- min(popd$razao_2024_censo) - 1; razao_max <- max(popd$razao_2024_censo) - 1
+pares_queen <- contar_ligacoes(readRDS(file.path("resultados", "objetos", "pesos_queen.rds"))$neighbours) / 2
+p_min_perm <- 1 / (nsim + 1)
+nsim_habitual <- 999L   # o padrão do spdep, citado como comparação
+p_min_habitual <- 1 / (nsim_habitual + 1)
+limiar_fdr_min <- alfa / n_mun
+n_scripts <- length(list.files(".", pattern = "^0[1-9]_.*\\.(R|qmd)$"))
+```
+
+Sete escolhas de método foram tomadas durante a implementação, cada uma registrada em um
+documento de decisão (ADR, *architecture decision record*) em `docs/decisoes/`. Elas estão aqui
+em forma de texto: o que foi decidido, por quê, e o que foi descartado.
+
+## Extração dos dados (ADR-0001)
+
+Os bancos anuais do SIVEP-Gripe são baixados diretamente do Portal de Dados Abertos do SUS, em
+formato PARQUET, e cada arquivo é registrado com endereço, data e impressão digital SHA-256
+antes de ser lido. A alternativa prevista na proposta original, o pacote `microdatasus`, foi
+descartada porque ele não distribui o SIVEP-Gripe. O PARQUET foi preferido ao CSV porque lê só
+as `r n_col_lidas` colunas usadas, das quase duzentas do banco, e já traz as datas como datas.
+Como o banco do ano corrente é republicado toda semana, a versão usada é fixada e citada:
+`r lista(unique(versoes_bancos))`.
+
+## Critério de caso (ADR-0002)
+
+Um caso de um agente é a ficha com classificação final daquele agente e, além disso, critério de
+encerramento laboratorial ou o campo específico do vírus marcado. A leitura literal da proposta
+original exigia sempre o campo específico; testada nos dados, ela perde `r fp(perda_r1_ini, 0)`
+dos casos de SARS-CoV-2 de `r ano_ini` e `r fp(perda_r1_fim, 0)` dos de `r ano_fim`, porque o
+preenchimento desse campo melhora ao longo dos anos, o que fabricaria uma queda artificial.
+Cada ficha pertence a um único agente, o da classificação final; a detecção de um segundo vírus
+é reportada, não contada duas vezes. Toda ficha do banco conta, sem filtrar a internação: o
+banco é de SRAG notificada. As regras alternativas seguem no relatório como sensibilidade.
+
+## Denominador populacional (ADR-0003)
+
+O IBGE não publicou estimativa municipal para 2023, e as estimativas de 2024 e 2025 partem do
+Censo 2022 corrigido pela subenumeração, correção maior nos municípios grandes: a estimativa de
+2024 supera a contagem do Censo em todos os municípios, de `r fp(razao_min)` a `r fp(razao_max)`.
+A decisão da autora foi usar dois denominadores, cada um com um uso: a população oficial do ano
+no mapa e no LISA de cada ano (2023 interpolado nas datas de referência), e a estimativa de 2024
+em todos os anos para as comparações entre anos, o que remove o degrau. As alternativas
+descartadas foram repetir o Censo em 2023 e escalonar o Censo por um fator estadual único, que
+é uma construção do projeto e não do IBGE. A seção sobre a população detalha as fórmulas.
+
+## Moran global e LISA (ADR-0004)
+
+A variável da análise espacial é a taxa suavizada por Bayes empírico, com a bruta como
+sensibilidade; a vizinhança é Queen de primeira ordem sobre a malha oficial, `r pares_queen`
+pares de vizinhos, com Rook como sensibilidade. Os testes usam `r fi(nsim)` permutações com
+semente fixa, e não as `r nsim_habitual` habituais: com `r nsim_habitual` o menor p possível
+(`r fd(p_min_habitual, 3)`) seria maior que o limiar mais exigente da correção para `r n_mun` testes
+(`r fd(limiar_fdr_min, 5)`), e a correção seria
+decidida pela resolução da simulação, não pelos dados; com `r fi(nsim)` o menor p é
+`r fd(p_min_perm, 4)`. Os p-valores locais são corrigidos por Benjamini-Hochberg em cada mapa
+(α = `r fd(alfa, 2)`), e o LISA sai em dois níveis, confirmado e indicativo, em vez de um só.
+Os `r length(instaveis)` municípios com um único vizinho (`r lista(instaveis)`) mantêm a classe,
+marcada como instável.
+
+## Escopo e estrutura do pipeline (ADR-0005)
+
+O pipeline são `r n_scripts` scripts numerados executados em ordem por um único comando, e não um
+gerenciador de dependências como o pacote `targets`, que reexecuta só o que mudou: com `r n_mun`
+polígonos e quatro anos, reexecutar tudo custa minutos, e quem avalia precisa ler o fluxo em
+ordem sem aprender uma ferramenta. A escala é municipal, não por bairro (o "bairro" da proposta
+original foi tratado como erro de digitação), e o quadrimestre é só descritivo; a análise
+espacial roda por ano.
+
+## Malha cartográfica (ADR-0006)
+
+A malha é a oficial do IBGE, municípios de 2022, em resolução completa, lida direto do arquivo
+compactado e registrada no manifesto. A alternativa, a malha simplificada distribuída pelo
+pacote `geobr`, foi descartada porque a simplificação apaga trechos de fronteira entre
+municípios vizinhos, e a vizinhança Queen mudaria com ela.
+
+## Campos e chave de junção (ADR-0007)
+
+Os nomes reais dos campos do SIVEP-Gripe, conferidos no dicionário oficial e nos quatro bancos,
+são a fonte de verdade e ficam numa única constante; o preparo para se um deles faltar. A chave
+de junção entre SIVEP, população e malha é o código IBGE de seis dígitos, sempre como texto: o
+SIVEP grava seis dígitos e o IBGE sete, e uma junção com sete dígitos devolveria zero municípios
+sem erro. Um teste confirma que os `r n_mun` municípios casam.
+
 # Resultados
 
 Todas as figuras seguem o mesmo código de cores: cada vírus tem uma cor única, usada nas séries,

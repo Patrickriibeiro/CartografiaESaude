@@ -44,6 +44,18 @@ test_that("08_relatorio.qmd não tem número de resultado digitado no texto", {
   expect_identical(achados, character(0), info = paste("números digitados:", paste(achados, collapse = ", ")))
 })
 
+test_that("todo ADR de docs/decisoes/ é citado no relatório e na proposta v2 (CS-052)", {
+  adrs <- sub("^(ADR-[0-9]{4}).*", "\\1", list.files(file.path(raiz_projeto, "docs", "decisoes"), pattern = "^ADR-[0-9]{4}.*\\.md$"))
+  expect_gte(length(adrs), 7)
+  qmd <- paste(readLines(file.path(raiz_projeto, "08_relatorio.qmd"), encoding = "UTF-8", warn = FALSE), collapse = "\n")
+  prop <- paste(readLines(file.path(raiz_projeto, "docs", "proposta-v2.md"), encoding = "UTF-8", warn = FALSE), collapse = "\n")
+  for (a in adrs) {
+    expect_true(grepl(a, qmd, fixed = TRUE), info = paste(a, "ausente do relatório"))
+    expect_true(grepl(a, prop, fixed = TRUE), info = paste(a, "ausente da proposta v2"))
+  }
+  expect_true(grepl("# Decisões de método", qmd, fixed = TRUE))
+})
+
 test_that("toda figura e citação do relatório existe", {
   qmd <- paste(readLines(file.path(raiz_projeto, "08_relatorio.qmd"), encoding = "UTF-8", warn = FALSE), collapse = "\n")
   figuras <- regmatches(qmd, gregexpr("\\]\\((resultados/[^)]+\\.png)\\)", qmd, perl = TRUE))[[1]]

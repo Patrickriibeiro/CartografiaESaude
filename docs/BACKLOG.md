@@ -110,7 +110,6 @@ D-06, D-08, D-09, D-10 e a opção do CS-039). **Só a D-02 (prazo) continua abe
 
 | ID | Título | Evidência | Modelo · Esforço | Aceite |
 |---|---|---|---|---|
-| CS-052 | **ADRs integrados ao texto** — cada decisão de método (ADR-0001 a 0007) aparece no texto da proposta v2 §3 e numa seção "Decisões de método" do relatório, em linguagem de artigo (o quê, por quê, alternativa descartada), sem depender de o leitor abrir `docs/decisoes/` | pedido da analista | Fable · medium | 7 ADRs cobertos (tabela de rastreio ADR → parágrafo); relatório com seção nova; 0 números digitados |
 | CS-053 | **(não prioritário) Viés de cobertura vacinal — análise no texto** — variação da abertura das campanhas por município e "dias D"; cobertura vacinal de influenza por município e ano (SI-PNI/DATASUS) como variável principal; auditoria município × ano registrando onde a fonte municipal não permite datar a campanha; só texto e tabela de apoio, fora do pipeline principal | pedido da analista, marcado como não prioritário | Fable · high (fonte de cobertura por município a verificar; dados de campanha municipal dispersos) | tabela município × ano com cobertura e data de abertura (ou "não determinável"); seção de discussão; nenhuma leitura causal |
 
 ### Fora do código (para a mestranda)
@@ -188,6 +187,7 @@ D-06, D-08, D-09, D-10 e a opção do CS-039). **Só a D-02 (prazo) continua abe
 | CS-051 | **Tabelas ABNT em Word** — `tabelas_abnt.docx` com as 14 tabelas dos 14 CSVs (título acima, fonte abaixo, 3 traços, sem linhas verticais, cabeçalho repetido, paisagem, vírgula decimal), gerado pelo pandoc do Quarto em 4 s e reprodutível byte a byte; série semanal resumida por mês. Suíte 739/739 em 23 arquivos | 2026-09-26 | `docs/release-history/cs-051-tabelas-abnt.md` · commit `4287ce2` |
 | CS-047 | **Revisão dos modelos de gráfico** — `docs/revisao-graficos.md` com pergunta, decisão e motivo por figura (15 + 2); trocadas: eixo duplo das não encerradas → 2 painéis, rótulos sobrepostos do mapa LISA retirados; nova: série do estado com um painel por vírus. Suíte 741/741 em 23 arquivos | 2026-09-26 | `docs/release-history/cs-047-revisao-graficos.md` · commit `2169445` |
 | CS-049 | **População: fórmulas e exemplo no texto** — subseção no relatório e na proposta v2 §3.4 com o método AiBi do IBGE (conferido na nota metodológica, p. 5–8), a interpolação de 2023 (peso 334/700) e as faixas etárias, com o exemplo de Niterói calculado pelo código; 0 números digitados. Suíte 741/741 em 23 arquivos | 2026-09-26 | `docs/release-history/cs-049-populacao-didatica.md` · commit `0a5fdd9` |
+| CS-052 | **ADRs integrados ao texto** — seção "Decisões de método" no relatório com os 7 ADRs em linguagem de artigo (o quê, por quê, alternativa descartada; números do pipeline); proposta v2 ganha ADR-0005 e ADR-0007 no texto e a tabela de rastreio §3.11; teste garante que todo ADR é citado nos dois textos. Suíte 757/757 em 23 arquivos | 2026-09-26 | `docs/release-history/cs-052-adrs-no-texto.md` · commit `(a registrar)` |
 
 ## Descartados
 

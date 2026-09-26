@@ -205,6 +205,12 @@ e não por notificação (`CO_MUN_NOT`), segue a prática da vigilância para in
 diferença entre as duas é quantificada no relatório porque mede o fluxo intermunicipal
 de internações (Cavalcante et al., 2021).
 
+**Campos e chave de junção (ADR-0007).** Os nomes reais dos campos, conferidos no dicionário
+oficial e nos quatro bancos, ficam numa única constante do código (`COLUNAS_SIVEP`), e o
+preparo para se um deles faltar. A chave de junção entre SIVEP, população e malha é o código
+IBGE de **seis** dígitos, como texto: o SIVEP grava seis dígitos e o IBGE sete, e uma junção
+com sete dígitos devolveria zero municípios sem nenhum erro; um teste confirma que os 92 casam.
+
 **Seleção temporal (CS-036).** A data é a de primeiros sintomas (`DT_SIN_PRI`), presente
 em todas as fichas dos quatro bancos; o pipeline para se faltar alguma, em vez de
 substituí-la pela data de notificação. Cada ficha entra no ano do banco em que está, e o
@@ -362,7 +368,11 @@ taxa bruta e a vizinhança Rook entram como sensibilidade.
 ### 3.7 Interface interativa e reprodutibilidade computacional
 
 O pipeline segue a organização de scripts numerados da v1 (`00_setup` a
-`07_exportacao`, `run.R`, funções em `R/funcoes_*.R`), com ambiente congelado por
+`07_exportacao`, `run.R`, funções em `R/funcoes_*.R`), executados em ordem por um único
+comando, e não um gerenciador de dependências como o pacote `targets` (ADR-0005): com 92
+polígonos e quatro anos, reexecutar tudo custa minutos, e a banca precisa ler o fluxo em ordem
+sem aprender uma ferramenta de orquestração. O escopo é municipal, não por bairro, e o
+quadrimestre é só descritivo (ADR-0005, D-06, D-08). O pipeline vem com ambiente congelado por
 `renv`, testes com `testthat` executados em integração contínua (GitHub Actions) sobre a
 base sintética, relatório e apresentação em Quarto (`08_relatorio.qmd`) e painel Shiny +
 leaflet (`app.R`) com filtros por agente e ano, mapa coroplético, camada LISA e popup
@@ -432,6 +442,23 @@ números são os do relatório, que os calcula de `resultados/`.*
    leitos é exploratória (Spearman), não causal.
 
 ---
+
+### 3.11 Decisões de método registradas (rastreio ADR → texto)
+
+Cada decisão de método tomada durante a implementação está registrada em `docs/decisoes/`
+(ADR, *architecture decision record*: contexto, decisão, alternativas descartadas,
+consequências) e integrada ao texto acima e ao relatório, que tem uma seção "Decisões de
+método" com todas elas em linguagem de artigo (CS-052).
+
+| ADR | Decisão | Onde está no texto |
+|---|---|---|
+| ADR-0001 | Download direto do portal, PARQUET, versão do banco fixada e citada | §3.1, §3.3 (Extração), §3.10 |
+| ADR-0002 | Critério de caso R2 "vigilância"; atribuição única; toda ficha conta | §3.3 (Critério de caso), §3.10 |
+| ADR-0003 | Dois denominadores: população do ano no mapa, estimativa 2024 entre anos; 2023 interpolado | §3.2, §3.4, §3.10 |
+| ADR-0004 | Taxa suavizada como variável; Queen; 9.999 permutações; FDR em dois níveis; instáveis marcados | §3.6, §3.10 |
+| ADR-0005 | Scripts numerados, não `targets`; escala municipal; quadrimestre descritivo | §3.7 |
+| ADR-0006 | Malha oficial do IBGE em resolução completa, não a simplificada do geobr | §3.2, §3.5 |
+| ADR-0007 | Nomes reais dos campos; chave de junção de seis dígitos como texto | §3.3 (Campos e chave) |
 
 ## 4 Resultados (a serem produzidos pelo pipeline)
 
