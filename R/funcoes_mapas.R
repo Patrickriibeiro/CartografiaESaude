@@ -145,9 +145,10 @@ mapa_incidencia <- function(dados, agente, ano, variavel = "incid_eb_100k",
 }
 
 #' Mapa LISA de um agente × ano, com dois níveis e hachura nos instáveis.
-#' `dados`: sf com quadrante, nivel, instavel e nome; `rotular` escreve o nome
-#' dos municípios confirmados.
-mapa_lisa <- function(dados, agente, ano, rotular = TRUE) {
+#' `dados`: sf com quadrante, nivel, instavel e nome. Os confirmados vão por nome no
+#' subtítulo; `rotular = TRUE` também os escreve no mapa (desligado por padrão desde o
+#' CS-047: Itaboraí e Tanguá se sobrepunham e o texto preto sumia no vermelho).
+mapa_lisa <- function(dados, agente, ano, rotular = FALSE) {
   dados$categoria <- categoria_lisa(dados$quadrante, dados$nivel)
   instaveis <- dados[dados$instavel, ]
   confirmados <- dados[dados$nivel == "confirmado", ]
@@ -160,7 +161,8 @@ mapa_lisa <- function(dados, agente, ano, rotular = TRUE) {
                                            collapse = ", "))
   lista_conf <- paste0(toupper(substring(lista_conf, 1, 1)), substring(lista_conf, 2), ".")
   subtitulo <- paste(c(strwrap(lista_conf, width = 105),
-                       sprintf("%d indicativo(s) sem correção (4,6 esperados por acaso).", n_ind)),
+                       sprintf("%d indicativo(s) sem correção (%s esperados por acaso).", n_ind,
+                               formatC(nrow(dados) * ALFA_LISA, format = "f", digits = 1, decimal.mark = ","))),
                      collapse = "\n")
 
   g <- ggplot2::ggplot(dados) +

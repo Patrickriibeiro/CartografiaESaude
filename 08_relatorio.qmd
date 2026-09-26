@@ -711,6 +711,8 @@ semana `r maior_sars$semana_epi` de `r maior_sars$ano_epi`, com `r fi(maior_sars
 
 ![Casos de SRAG por semana epidemiológica no estado. Tracejado: início da campanha nacional de vacinação contra influenza](resultados/estatistica/serie_semanal_estado.png){#fig-serie width=100%}
 
+![A mesma série com um painel por vírus, cada um na sua escala: o pico de SARS-CoV-2 de 2022 esconde, na escala comum, o tempo das ondas de influenza e VSR](resultados/estatistica/serie_semanal_estado_por_virus.png){#fig-serie-virus width=100%}
+
 ```{r tbl-pico-flu}
 #| tbl-cap: "Semana de maior número de casos de influenza em cada ano e distância até o início da campanha de vacinação"
 t10 <- data.frame(Ano = pico_flu$ano_epi, `Início da campanha` = fmt_data(pico_flu$campanha),
@@ -746,7 +748,7 @@ com `r fi(nes$nao_encerradas[which.max(nes$proporcao)])` de `r fi(nes$fichas[whi
 fichas. Nas últimas oito semanas a proporção agregada é `r fp(p_ult8)`, contra `r fp(p_resto)` nas
 anteriores: `r if (sobe) "a subida indica que a investigação dessas semanas ainda está em andamento" else "não há a subida sustentada que indicaria investigação em andamento"`.
 
-![Fichas não encerradas por semana epidemiológica no último ano do estudo](resultados/estatistica/nao_encerrados_2025.png){#fig-nao-encerrados width=90%}
+![Fichas de SRAG por semana e proporção ainda não encerrada, no último ano do estudo (dois painéis com o mesmo eixo do tempo)](resultados/estatistica/nao_encerrados_2025.png){#fig-nao-encerrados width=90%}
 
 ### Quanto os números mudam depois do fim do ano
 

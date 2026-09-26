@@ -9,6 +9,7 @@
 #   resultados/tabelas/regioes_municipios.csv        região -> municípios, população 2022 (CS-050)
 #   resultados/tabelas/serie_semanal.csv             casos por semana × agente, estado e 9 regiões (CS-032)
 #   resultados/estatistica/serie_semanal_*.png       1 gráfico do estado + 9 regionais + painel (CS-032)
+#   resultados/estatistica/serie_semanal_estado_por_virus.png  um painel por vírus, escala própria (CS-047)
 #   resultados/estatistica/nao_encerrados_<ano>.png  maturação do último ano (CS-035)
 #   resultados/estatistica/leitos_x_incidencia.png   taxa de SRAG × leitos por 100 mil, por ano (CS-034)
 #   resultados/estatistica/padronizacao_bruta_vs_padronizada.png  dispersão por município (CS-033)
@@ -107,6 +108,9 @@ for (r in unique(serie$recorte)) {
   ggplot2::ggsave(f, grafico_serie_semanal(serie, r, campanhas), width = 10, height = 4.5, dpi = 150, bg = "white")
   graficos <- c(graficos, f)
 }
+f <- file.path(pasta_est, "serie_semanal_estado_por_virus.png")
+ggplot2::ggsave(f, grafico_serie_por_virus(serie, "Estado do Rio de Janeiro", campanhas), width = 10, height = 7, dpi = 150, bg = "white")
+graficos <- c(graficos, f)
 # Painel das 9 regiões para o relatório: eixo y livre (a Metropolitana I tem 38 vezes a população da menor).
 reg <- serie[serie$recorte != "Estado do Rio de Janeiro", ]
 reg$agente_rotulo <- factor(ROTULOS_AGENTE[reg$agente], levels = ROTULOS_AGENTE)
@@ -153,7 +157,7 @@ graficos <- c(graficos, f)
 f <- file.path(pasta_est, "padronizacao_bruta_vs_padronizada.png")
 ggplot2::ggsave(f, grafico_padronizacao(ind), width = 11, height = 8, dpi = 150, bg = "white")
 graficos <- c(graficos, f)
-stopifnot(all(file.exists(graficos)), length(graficos) == 1 + 9 + 1 + 1 + 1 + 1 + 1 + 1)
+stopifnot(all(file.exists(graficos)), length(graficos) == 1 + 1 + 9 + 1 + 1 + 1 + 1 + 1 + 1)
 
 # Mapa de referência das regiões de saúde (CS-050).
 f <- file.path(pasta, "regioes_saude_referencia.png")

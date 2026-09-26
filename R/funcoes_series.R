@@ -126,28 +126,62 @@ nao_encerrados_por_semana <- function(sivep_rj, ano) {
   out
 }
 
-#' Gráfico da proporção não encerrada por semana (barras = fichas).
+#' Fichas por semana e proporção não encerrada, em DOIS painéis empilhados com o mesmo
+#' eixo do tempo (CS-047). A 1ª versão sobrepunha as duas medidas num eixo duplo, e o
+#' olho lia cruzamentos entre a barra e a linha que não significam nada: as escalas eram
+#' arbitrárias uma em relação à outra.
 grafico_nao_encerrados <- function(semanal, versao_banco) {
-  escala <- max(semanal$fichas) / max(1e-9, max(semanal$proporcao))
-  ggplot2::ggplot(semanal, ggplot2::aes(semana_epi)) +
-    ggplot2::geom_col(ggplot2::aes(y = fichas), fill = "grey85") +
-    ggplot2::geom_line(ggplot2::aes(y = proporcao * escala), colour = COR_NEUTRA, linewidth = 0.8) +
-    ggplot2::scale_y_continuous(
-      name = "Fichas de SRAG (barras)",
-      sec.axis = ggplot2::sec_axis(~ . / escala, name = "Não encerradas (linha)",
-                                   labels = scales::label_percent(decimal.mark = ","))) +
+  paineis <- c("Fichas de SRAG por semana", "Sem classificação final (%)")
+  longo <- rbind(
+    data.frame(semana_epi = semanal$semana_epi, valor = semanal$fichas, painel = paineis[1]),
+    data.frame(semana_epi = semanal$semana_epi, valor = 100 * semanal$proporcao, painel = paineis[2]))
+  longo$painel <- factor(longo$painel, levels = paineis)
+  ggplot2::ggplot(longo, ggplot2::aes(semana_epi, valor)) +
+    ggplot2::geom_col(data = longo[longo$painel == paineis[1], ], fill = "grey70", width = 0.8) +
+    ggplot2::geom_line(data = longo[longo$painel == paineis[2], ], colour = COR_NEUTRA, linewidth = 0.7) +
+    ggplot2::geom_point(data = longo[longo$painel == paineis[2], ], colour = COR_NEUTRA, size = 1.3) +
+    ggplot2::facet_grid(painel ~ ., scales = "free_y", switch = "y") +
+    ggplot2::scale_x_continuous(breaks = seq(0, 53, 5)) +
     ggplot2::labs(
-      title = sprintf("Fichas ainda não encerradas por semana epidemiológica, %d", semanal$ano[1]),
-      subtitle = sprintf("Residentes do RJ; banco na versão %s. Barras: fichas por semana. Linha: proporção sem classificação final.",
-                         versao_banco),
-      x = "Semana epidemiológica do início dos sintomas",
+      title = sprintf("Fichas de SRAG e fichas ainda não encerradas por semana epidemiológica, %d", semanal$ano[1]),
+      subtitle = sprintf("Residentes do RJ; banco na versão %s.", versao_banco),
+      x = "Semana epidemiológica do início dos sintomas", y = NULL,
       caption = "Não encerrada = classificação final (CLASSI_FIN) vazia. Fonte: SIVEP-Gripe."
     ) +
     ggplot2::theme_minimal(base_size = 10) +
     ggplot2::theme(plot.title = ggplot2::element_text(face = "bold"),
                    plot.subtitle = ggplot2::element_text(colour = "grey30", size = 8.5),
                    plot.caption = ggplot2::element_text(colour = "grey40", hjust = 0),
-                   axis.title.y.right = ggplot2::element_text(colour = COR_NEUTRA))
+                   strip.placement = "outside", strip.text.y.left = ggplot2::element_text(angle = 90, face = "bold"),
+                   panel.grid.minor = ggplot2::element_blank())
+}
+
+#' Série semanal com um painel por vírus, cada um na sua escala (CS-047): o pico de
+#' SARS-CoV-2 de 2022 esconde, na escala comum, o tempo e a forma das ondas de influenza
+#' e VSR. Complementa grafico_serie_semanal(), que mostra a magnitude relativa.
+grafico_serie_por_virus <- function(serie, recorte, campanhas) {
+  x <- serie[serie$recorte == recorte, ]
+  if (nrow(x) == 0) stop("Recorte sem dados: ", recorte, call. = FALSE)
+  x$agente_rotulo <- factor(ROTULOS_AGENTE[x$agente], levels = ROTULOS_AGENTE)
+  ggplot2::ggplot(x, ggplot2::aes(inicio_semana, casos, colour = agente_rotulo)) +
+    ggplot2::geom_vline(xintercept = campanhas$inicio, linetype = "dashed", colour = "grey55", linewidth = 0.35) +
+    ggplot2::geom_line(linewidth = 0.7, show.legend = FALSE) +
+    escala_cor_agente() +
+    ggplot2::facet_wrap(~agente_rotulo, ncol = 1, scales = "free_y") +
+    ggplot2::scale_x_date(date_breaks = "3 months", date_labels = "%m/%Y", expand = ggplot2::expansion(mult = 0.01)) +
+    ggplot2::labs(
+      title = sprintf("Casos de SRAG por semana epidemiológica, %s: cada vírus na sua escala", recorte),
+      subtitle = "Escalas verticais diferentes: compare o TEMPO das ondas, não a altura entre painéis. Tracejado: campanha contra influenza.",
+      x = NULL, y = "Casos por semana",
+      caption = "Fontes: SIVEP-Gripe (critério do ADR-0002), Ministério da Saúde (datas das campanhas)."
+    ) +
+    ggplot2::theme_minimal(base_size = 10) +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1),
+                   plot.title = ggplot2::element_text(face = "bold"),
+                   plot.subtitle = ggplot2::element_text(colour = "grey30", size = 8.5),
+                   plot.caption = ggplot2::element_text(colour = "grey40", hjust = 0),
+                   strip.text = ggplot2::element_text(face = "bold", hjust = 0),
+                   panel.grid.minor = ggplot2::element_blank())
 }
 
 # ---------------------------------------------------------------------------

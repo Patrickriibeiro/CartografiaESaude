@@ -76,6 +76,9 @@ test_that("os gráficos montam", {
   cmp <- data.frame(ano = 2025L, inicio = as.Date("2025-04-07"), fonte = "x")
   expect_s3_class(ggplot2::ggplot_build(grafico_serie_semanal(s, "Baía da Ilha Grande", cmp)), "ggplot_built")
   expect_error(grafico_serie_semanal(s, "Atlântida", cmp), "sem dados")
+  b <- ggplot2::ggplot_build(grafico_serie_por_virus(s, "Baía da Ilha Grande", cmp))
+  expect_equal(length(unique(b$layout$layout$PANEL)), 3)   # um painel por vírus
+  expect_error(grafico_serie_por_virus(s, "Atlântida", cmp), "sem dados")
   ne <- data.frame(ano = 2025L, semana_epi = 1:3, fichas = c(10L, 20L, 5L), nao_encerradas = c(0L, 1L, 1L),
                    proporcao = c(0, 0.05, 0.2))
   expect_s3_class(ggplot2::ggplot_build(grafico_nao_encerrados(ne, "teste")), "ggplot_built")
