@@ -17,6 +17,7 @@ ordem; legenda sempre que há mais de uma série; nada que dependa só de cor. R
 | Bruta × suavizada (dispersão) | quanto a suavização puxa os pequenos | mantida | idem |
 | Painel LISA (3 × 4) | onde há agrupamento, por vírus e ano | mantido | cor cheia/clara para confirmado/indicativo, hachura para instável (não depende só de cor) |
 | Mapa LISA isolado (VSR 2024) | quais municípios formam o agrupamento confirmado | **trocado**: rótulos retirados do mapa | Itaboraí e Tanguá se sobrepunham e o preto sumia sobre o vermelho; o subtítulo já nomeia os confirmados. O "4,6 esperados por acaso" era fixo no código e passou a ser calculado |
+| **Painéis por vírus (6: incidência e LISA × 3 vírus)** | um vírus de cada vez, os 4 anos | **novos** (CS-056, pedido da analista) | grade 2 × 2 cabe numa página A4 em retrato, melhor para a dissertação do que a linha de 4 do painel 3 × 4; a incidência usa a escala comum aos 4 anos do painel 3 × 4; no LISA, o título de cada ano diz quantos municípios ficaram confirmados |
 | Mapa de referência das regiões | qual município está em qual região | mantido | tons pastel + nome escrito + tabela (não depende só de cor) |
 | Mapas regionais (12) | taxa por região | mantidos | nome e taxa escritos nas 9 regiões |
 | Série semanal do estado (3 linhas) | a magnitude relativa dos três vírus no tempo | mantida | é a única figura em que os três estão na mesma escala; o pico de 2022 é o fato |
@@ -25,6 +26,9 @@ ordem; legenda sempre que há mais de uma série; nada que dependa só de cor. R
 | Fichas não encerradas por semana | há subida de não encerradas no fim do ano? | **trocada**: eixo duplo → dois painéis empilhados | barra e linha em dois eixos são o erro clássico: os cruzamentos entre elas não significam nada, e a razão entre as escalas é arbitrária. Dois painéis com o mesmo eixo do tempo respondem a mesma pergunta sem esse artefato |
 | Versões do banco (diferença de casos) | quanto os números mudam entre versões | mantida | já trocada no CS-048 de % para diferença absoluta, pelo mesmo motivo (um eixo de 99,9 % a 100,1 % faz 3 casos parecerem uma oscilação) |
 | Leitos × taxa (dispersão, 8 painéis) | a taxa acompanha a oferta de leitos? | mantida | eixo x em raiz quadrada porque metade dos municípios tem 0 leito de UTI; rho e IC escritos no painel |
+
+Mudanças de 2026-09-26 (pedidos da analista) em todas as figuras: SARS-CoV-2 passou de amarelo
+para azul (CS-054) e todo mapa ganhou o contorno do estado em cinza-escuro (CS-055).
 
 ## Fora do relatório
 

@@ -280,8 +280,9 @@ sem erro. Um teste confirma que os `r n_mun` municípios casam.
 # Resultados
 
 Todas as figuras seguem o mesmo código de cores: cada vírus tem uma cor única, usada nas séries,
-nas dispersões e na rampa dos mapas de incidência, e os mapas de Moran local usam uma paleta
-própria, sem nenhuma cor de vírus.
+nas dispersões e na rampa dos mapas de incidência. Os mapas de Moran local usam uma paleta
+própria, sem cor de vírus, na convenção da estatística espacial: vermelho para Alto-Alto e azul
+para Baixo-Baixo. O azul do LISA, portanto, não indica SARS-CoV-2.
 
 ![Guia de cores: a cor de cada vírus, a rampa de incidência de cada um e as classes do Moran local](resultados/estatistica/guia_cores.png){#fig-guia-cores width=80%}
 

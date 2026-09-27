@@ -4,6 +4,8 @@
 #   resultados/mapas/lisa_<agente>_<ano>.png         12 mapas, 300 dpi
 #   resultados/mapas/painel_incidencia.png           3 agentes × 4 anos (para o relatório)
 #   resultados/mapas/painel_lisa.png                 3 agentes × 4 anos (para o relatório)
+#   resultados/mapas/painel_incidencia_<agente>.png  um vírus, 4 anos em 2 × 2 (CS-056)
+#   resultados/mapas/painel_lisa_<agente>.png        um vírus, 4 anos em 2 × 2 (CS-056)
 #   resultados/mapas/regional_<agente>_<ano>.png     12 mapas por região de saúde (CS-030)
 #   resultados/mapas/regioes_saude_referencia.png    municípios coloridos pela região (CS-050)
 #   resultados/tabelas/regioes_municipios.csv        região -> municípios, população 2022 (CS-050)
@@ -22,14 +24,17 @@ malha <- readRDS(file.path("dados", "processados", "municipios_rj.rds"))
 ind <- as.data.frame(arrow::read_parquet(file.path("dados", "processados", "indicadores_municipais.parquet")))
 lisa <- readRDS(file.path("resultados", "estatistica", "moran_lisa.rds"))$principal$lisa
 
+# Contorno do estado (CS-055): calculado uma vez e desenhado em todos os mapas.
+contorno <- contorno_estado(malha)
+
 pasta <- file.path("resultados", "mapas")
 gerados <- character(0)
 paineis_inc <- list(); paineis_lisa <- list()
 
 for (ag in AGENTES) for (a in ANOS_ESTUDO) {
   d <- dados_mapa(malha, ind, lisa, ag, a)
-  m1 <- mapa_incidencia(d, ag, a)
-  m2 <- mapa_lisa(d, ag, a)
+  m1 <- mapa_incidencia(d, ag, a, contorno = contorno)
+  m2 <- mapa_lisa(d, ag, a, contorno = contorno)
   f1 <- file.path(pasta, sprintf("incidencia_%s_%d.png", ag, a))
   f2 <- file.path(pasta, sprintf("lisa_%s_%d.png", ag, a))
   ggplot2::ggsave(f1, m1, width = 8, height = 5.5, dpi = 300, bg = "white")
@@ -49,6 +54,7 @@ hach <- do.call(rbind, lapply(split(instaveis, list(instaveis$agente_rotulo, ins
 painel_lisa <- ggplot2::ggplot(todos) +
   ggplot2::geom_sf(ggplot2::aes(fill = categoria), colour = "white", linewidth = 0.08, show.legend = TRUE) +
   ggplot2::geom_sf(data = hach, colour = "grey25", linewidth = 0.15) +
+  camada_contorno_estado(contorno, linewidth = 0.25) +
   escala_lisa() +
   ggplot2::facet_grid(agente_rotulo ~ ano_rotulo) +
   ggplot2::labs(title = "Agrupamentos espaciais de SRAG por agente e ano, Estado do Rio de Janeiro",
@@ -65,6 +71,7 @@ paineis <- lapply(AGENTES, function(ag) {
   x <- todos[todos$agente == ag, ]
   ggplot2::ggplot(x) +
     ggplot2::geom_sf(ggplot2::aes(fill = incid_eb_100k), colour = "white", linewidth = 0.08) +
+    camada_contorno_estado(contorno, linewidth = 0.25) +
     escala_incidencia(ag, name = "por 100 mil", trans = "sqrt") +
     ggplot2::facet_wrap(~ano_rotulo, nrow = 1) +
     ggplot2::labs(title = ROTULOS_AGENTE[[ag]]) +
@@ -81,6 +88,16 @@ for (k in seq_along(paineis)) print(paineis[[k]], vp = grid::viewport(layout.pos
 invisible(dev.off())
 gerados <- c(gerados, f)
 
+# Painéis por vírus (CS-056): os 4 anos de um vírus em 2 × 2, incidência e LISA.
+for (ag in AGENTES) {
+  x <- todos[todos$agente == ag, ]
+  f1 <- file.path(pasta, sprintf("painel_incidencia_%s.png", ag))
+  f2 <- file.path(pasta, sprintf("painel_lisa_%s.png", ag))
+  ggplot2::ggsave(f1, painel_incidencia_agente(x, ag, contorno), width = 10, height = 7.5, dpi = 300, bg = "white")
+  ggplot2::ggsave(f2, painel_lisa_agente(x, ag, contorno), width = 11, height = 7.5, dpi = 300, bg = "white")
+  gerados <- c(gerados, f1, f2)
+}
+
 # Escala regional (CS-030): taxa bruta regional, nome e valor escritos em cada região.
 regioes_rj <- readRDS(file.path("dados", "processados", "regioes_saude_rj.rds"))
 ind_reg <- as.data.frame(arrow::read_parquet(file.path("dados", "processados", "indicadores_regionais.parquet")))
@@ -90,7 +107,7 @@ municipio_regiao <- as.data.frame(arrow::read_parquet(file.path("dados", "proces
 pontos <- pontos_rotulo_regioes(malha, municipio_regiao, pop2022)
 for (ag in AGENTES) for (a in ANOS_ESTUDO) {
   f <- file.path(pasta, sprintf("regional_%s_%d.png", ag, a))
-  ggplot2::ggsave(f, mapa_regional(regioes_rj, ind_reg, ag, a, malha = malha, pontos = pontos),
+  ggplot2::ggsave(f, mapa_regional(regioes_rj, ind_reg, ag, a, malha = malha, pontos = pontos, contorno = contorno),
                   width = 8, height = 5.5, dpi = 300, bg = "white")
   gerados <- c(gerados, f)
 }
@@ -161,11 +178,11 @@ stopifnot(all(file.exists(graficos)), length(graficos) == 1 + 1 + 9 + 1 + 1 + 1 
 
 # Mapa de referência das regiões de saúde (CS-050).
 f <- file.path(pasta, "regioes_saude_referencia.png")
-ggplot2::ggsave(f, mapa_referencia_regioes(malha, municipio_regiao, regioes_rj, pontos),
+ggplot2::ggsave(f, mapa_referencia_regioes(malha, municipio_regiao, regioes_rj, pontos, contorno = contorno),
                 width = 8, height = 5.5, dpi = 300, bg = "white")
 gerados <- c(gerados, f)
 utils::write.csv(tabela_regioes_municipios(malha, municipio_regiao, pop2022),
                  file.path("resultados", "tabelas", "regioes_municipios.csv"), row.names = FALSE, fileEncoding = "UTF-8")
 
-stopifnot(all(file.exists(gerados)), length(gerados) == 39)
+stopifnot(all(file.exists(gerados)), length(gerados) == 45)
 message(sprintf("%d mapas gravados em %s", length(gerados), pasta))

@@ -136,6 +136,7 @@ test_that("mapa regional monta com um rótulo por região e para se faltar dado"
   rotulos <- unlist(lapply(b$data, function(d) if ("label" %in% names(d)) d$label))
   expect_length(rotulos, 3)
   expect_true(any(grepl("Baixada Litorânea\n2,5", rotulos, fixed = TRUE)))
+  expect_true(tem_contorno(g))   # CS-055
   expect_error(mapa_regional(rs, ind[-1, ], "vsr", 2024), "incompleta")
 })
 
@@ -166,7 +167,9 @@ test_that("mapa de referência das regiões monta com um rótulo por região (CS
   s <- malha_sintetica()
   r <- validar_regioes(s$regioes, n_municipios = 9, n_regioes = 3)
   rs <- dissolver_regioes(s$malha, r)
-  b <- ggplot2::ggplot_build(mapa_referencia_regioes(s$malha, r, rs, NULL))
+  g <- mapa_referencia_regioes(s$malha, r, rs, NULL)
+  expect_true(tem_contorno(g))   # CS-055
+  b <- ggplot2::ggplot_build(g)
   rotulos <- unlist(lapply(b$data, function(d) if ("label" %in% names(d)) d$label))
   expect_length(rotulos, 3)
   expect_true(any(grepl("Centro-Sul", rotulos)))

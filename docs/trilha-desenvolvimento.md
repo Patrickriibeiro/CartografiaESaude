@@ -278,7 +278,8 @@ Testes verificam o contrato, não a implementação.
                     tabela LISA 92 × 12 com Ii, p_perm, p_fdr, quadrante, nivel
                     (confirmado/indicativo/ns), classe, instavel; + bruta e Rook (ADR-0004)
                     + regional: Moran global nas 9 regiões, descritivo, sem LISA (CS-030)
-06_visualizacoes.R ► resultados/mapas/*.png   (CS-019 + CS-030, entregue: 24 mapas + 2 painéis + 12 regionais)
+06_visualizacoes.R ► resultados/mapas/*.png   (CS-019 + CS-030, entregue: 24 mapas + 2 painéis + 12 regionais
+                    + 6 painéis por vírus (CS-056) + referência das regiões (CS-050) = 45; contorno do estado em todos, CS-055)
                   + resultados/estatistica/serie_semanal_*.png (CS-032: estado + 9 regiões + painel)
                   + resultados/estatistica/nao_encerrados_2025.png (CS-035)
                   + resultados/estatistica/leitos_x_incidencia.png (CS-034)

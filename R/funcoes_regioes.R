@@ -147,7 +147,8 @@ executar_moran_regional <- function(ind_regional, pesos, variavel = "incid_100k"
 #' Mapa coroplético de um agente × ano na escala regional: cor pela taxa, nome
 #' e taxa escritos em cada região (são só 9, cabem). Fronteiras municipais em
 #' cinza claro por baixo, para situar o leitor.
-mapa_regional <- function(regioes_sf, ind_regional, agente, ano, malha = NULL, pontos = NULL) {
+mapa_regional <- function(regioes_sf, ind_regional, agente, ano, malha = NULL, pontos = NULL,
+                          contorno = contorno_estado(regioes_sf)) {
   i <- ind_regional[ind_regional$agente == agente & ind_regional$ano == ano, ]
   d <- merge(as.data.frame(regioes_sf), i[, c("cod_regiao", "casos", "incid_100k")], by = "cod_regiao")
   d <- sf::st_as_sf(d, sf_column_name = "geometry", crs = sf::st_crs(regioes_sf))
@@ -169,6 +170,7 @@ mapa_regional <- function(regioes_sf, ind_regional, agente, ano, malha = NULL, p
     rot <- sf::st_sf(rotulo = d$rotulo, geometry = sf::st_geometry(pontos)[match(d$cod_regiao, pontos$cod_regiao)])
   }
   g + ggplot2::geom_sf(fill = NA, colour = "grey15", linewidth = 0.4) +
+    camada_contorno_estado(contorno) +
     ggplot2::geom_sf_label(data = rot, ggplot2::aes(label = rotulo), size = 2.3, lineheight = 0.9,
                            fill = grDevices::adjustcolor("white", 0.8), linewidth = 0,
                            fun.geometry = identity) +  # já são pontos: sem point_on_surface em graus
@@ -237,7 +239,8 @@ pontos_rotulo_regioes <- function(malha, regioes, populacao) {
 #' Mapa de referência (CS-050): os 92 municípios coloridos pela região de saúde, com
 #' contorno regional escuro, fronteiras municipais brancas e o nome da região (com o
 #' número de municípios) escrito no município mais populoso dela.
-mapa_referencia_regioes <- function(malha, municipio_regiao, regioes_sf, pontos) {
+mapa_referencia_regioes <- function(malha, municipio_regiao, regioes_sf, pontos,
+                                    contorno = contorno_estado(regioes_sf)) {
   m <- malha
   m$cod_regiao <- municipio_regiao$cod_regiao[match(m$cod6, municipio_regiao$cod6)]
   if (anyNA(m$cod_regiao)) stop("Município da malha sem região", call. = FALSE)
@@ -248,6 +251,7 @@ mapa_referencia_regioes <- function(malha, municipio_regiao, regioes_sf, pontos)
   ggplot2::ggplot() +
     ggplot2::geom_sf(data = m, ggplot2::aes(fill = cod_regiao), colour = "white", linewidth = 0.2) +
     ggplot2::geom_sf(data = regioes_sf, fill = NA, colour = "grey15", linewidth = 0.55) +
+    camada_contorno_estado(contorno, linewidth = 0.7) +
     ggplot2::geom_sf_label(data = rot, ggplot2::aes(label = rotulo), size = 2.4, lineheight = 0.9,
                            fill = grDevices::adjustcolor("white", 0.85), linewidth = 0, fun.geometry = identity) +
     ggplot2::scale_fill_manual(values = PALETA_REGIOES, guide = "none") +

@@ -79,6 +79,61 @@ test_that("mapa de incidência monta com 5 classes", {
   expect_equal(length(unique(b$data[[1]]$fill)), 5)
 })
 
+# ---- contorno do estado (CS-055) e painéis por vírus (CS-056) ----
+
+quatro_anos <- function(agente = "vsr") {
+  do.call(rbind, lapply(2022:2025, function(a) {
+    d <- dados_falsos_mapa(); d$agente <- agente; d$ano_rotulo <- a
+    if (a != 2024) d$nivel[1] <- "ns"   # só 2024 tem confirmado
+    d
+  }))
+}
+
+test_that("contorno do estado: um registro, mesma área e mesmo sistema da malha", {
+  m <- malha_falsa(4)
+  k <- contorno_estado(m)
+  expect_equal(nrow(k), 1)
+  expect_equal(sf::st_crs(k), sf::st_crs(m))
+  expect_equal(as.numeric(sf::st_area(k)), sum(as.numeric(sf::st_area(m))), tolerance = 1e-6)
+  # 16 quadrados colados viram 1 polígono sem buraco (a união não deixou fresta)
+  p <- sf::st_cast(sf::st_geometry(k), "POLYGON")
+  expect_length(p, 1)
+  expect_equal(lengths(p), 1L)
+})
+
+test_that("mapas de incidência e de LISA desenham o contorno do estado", {
+  d <- dados_falsos_mapa()
+  expect_true(tem_contorno(mapa_incidencia(d, "sarscov2", 2022)))
+  expect_true(tem_contorno(mapa_lisa(d, "vsr", 2024)))
+  expect_false(tem_contorno(ggplot2::ggplot(d) + ggplot2::geom_sf()))  # o detector não acha contorno onde não há
+})
+
+test_that("painel de incidência por vírus: 4 anos em 2 × 2, rampa do vírus, contorno", {
+  x <- quatro_anos("sarscov2")
+  g <- painel_incidencia_agente(x, "sarscov2", contorno_estado(malha_falsa()))
+  b <- ggplot2::ggplot_build(g)
+  expect_equal(nrow(b$layout$layout), 4)
+  expect_equal(max(b$layout$layout$ROW), 2)
+  expect_equal(max(b$layout$layout$COL), 2)
+  expect_match(g$labels$title, "SARS-CoV-2, 2022–2025")
+  expect_true(tem_contorno(g))
+  # o valor mais alto sai no passo mais escuro da rampa do SARS-CoV-2 (azul)
+  cores <- b$data[[1]]$fill[b$data[[1]]$PANEL == 1]
+  expect_equal(tolower(cores[which.max(x$incid_eb_100k[x$ano_rotulo == 2022])]), tolower(rampa_agente("sarscov2", 7)[7]))
+  expect_error(painel_incidencia_agente(quatro_anos("vsr"), "sarscov2", contorno_estado(malha_falsa())), "outro vírus")
+})
+
+test_that("painel LISA por vírus: 4 anos, 9 classes na legenda, confirmados no título de cada ano", {
+  g <- painel_lisa_agente(quatro_anos("vsr"), "vsr", contorno_estado(malha_falsa()))
+  b <- ggplot2::ggplot_build(g)
+  expect_equal(nrow(b$layout$layout), 4)
+  expect_equal(nrow(ggplot2::get_guide_data(g, "fill")), 9)
+  paineis <- as.character(b$layout$layout$painel)
+  expect_equal(paineis, c("2022 · nenhum confirmado", "2023 · nenhum confirmado",
+                          "2024 · 1 confirmado(s) após FDR", "2025 · nenhum confirmado"))
+  expect_true(tem_contorno(g))
+})
+
 test_that("dados_mapa devolve sf com a malha inteira e para se faltar dado", {
   m <- malha_falsa(2)
   ind <- data.frame(cod6 = m$cod6, agente = "vsr", ano = 2024L, incid_eb_100k = 1:4)
@@ -93,7 +148,7 @@ test_that("dados_mapa devolve sf com a malha inteira e para se faltar dado", {
 
 # ---- integração: os 26 mapas existem (pulado se o script não rodou) ----
 
-test_that("os 24 mapas individuais e os 2 painéis foram gerados", {
+test_that("os 24 mapas individuais, os 2 painéis 3 × 4 e os 6 painéis por vírus foram gerados", {
   withr::local_dir(raiz_projeto)
   skip_if_not(dir.exists("resultados/mapas") && length(list.files("resultados/mapas", "\\.png$")) > 0,
               "06_visualizacoes.R não rodou")
@@ -101,4 +156,5 @@ test_that("os 24 mapas individuais e os 2 painéis foram gerados", {
   expect_equal(sum(grepl("^incidencia_", f)), 12)
   expect_equal(sum(grepl("^lisa_", f)), 12)
   expect_true(all(c("painel_lisa.png", "painel_incidencia.png") %in% f))
+  expect_true(all(sprintf("painel_%s_%s.png", rep(c("incidencia", "lisa"), each = 3), AGENTES) %in% f))
 })

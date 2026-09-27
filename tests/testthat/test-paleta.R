@@ -6,6 +6,14 @@ test_that("cada agente tem uma cor, na ordem de AGENTES, e as três são diferen
   expect_true(all(grepl("^#[0-9a-fA-F]{6}$", CORES_AGENTE)))
 })
 
+test_that("SARS-CoV-2 é azul (pedido da analista, CS-054) e nenhuma outra cor de vírus é azul", {
+  matiz <- farver::convert_colour(t(grDevices::col2rgb(CORES_AGENTE)), "rgb", "hcl")[, "h"]
+  names(matiz) <- names(CORES_AGENTE)
+  azul <- function(h) h >= 220 & h <= 270
+  expect_true(azul(matiz[["sarscov2"]]))
+  expect_false(any(azul(matiz[c("influenza", "vsr")])))
+})
+
 test_that("nenhuma cor de vírus reaparece no LISA nem nas rampas de outro vírus", {
   expect_length(intersect(tolower(CORES_AGENTE), tolower(PALETA_LISA)), 0)
   for (ag in AGENTES) {

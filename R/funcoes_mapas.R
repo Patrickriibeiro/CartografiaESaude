@@ -9,19 +9,25 @@ ROTULOS_AGENTE <- c(sarscov2 = "SARS-CoV-2", influenza = "Influenza", vsr = "VSR
 # Regra: uma cor por vírus em TODOS os gráficos, e nenhuma cor de vírus reaparece
 # com outro significado. Antes, o vermelho era SARS-CoV-2 nas séries e Alto-Alto no
 # LISA, e o azul era influenza nas séries e Baixo-Baixo no LISA.
-# Cores dos vírus: posições 4, 5 e 6 da paleta categórica validada da skill dataviz.
-# Validação (OKLab ΔE×100, todos os pares, modo claro): pior par entre vírus 16,2 sob
-# daltonismo (meta ≥ 8) e 19,6 em visão normal (piso 15). Amarelo e magenta têm
-# contraste < 3:1 no branco: por isso linhas mais grossas, legenda sempre presente e
-# tabela com os mesmos dados (regra de alívio da skill).
+# Cores dos vírus: posições 1, 5 e 6 da paleta categórica validada da skill dataviz.
+# SARS-CoV-2 azul por pedido da analista (CS-054, 2026-09-26; era amarelo, posição 4).
+# Validação (OKLab ΔE×100, todos os pares, modo claro): pior par entre vírus 13,0 sob
+# daltonismo, azul × magenta em protanopia (meta ≥ 8), e 27,5 em visão normal (piso 15).
+# O magenta tem contraste < 3:1 no branco: por isso linhas mais grossas, legenda sempre
+# presente e tabela com os mesmos dados (regra de alívio da skill).
+# Concessão registrada: o azul do SARS-CoV-2 fica perto do azul do Baixo-Baixo do LISA
+# (ΔE 7,8, quase iguais). O LISA mantém a convenção do GeoDa (vermelho = Alto-Alto,
+# azul = Baixo-Baixo), conhecida de quem lê estatística espacial, e as duas cores nunca
+# dividem uma figura: mapa de LISA não tem cor de vírus, e a legenda de cada um diz o que
+# a cor é. Se a analista preferir, a saída é trocar o Baixo-Baixo, não o vírus.
 # ---------------------------------------------------------------------------
-CORES_AGENTE <- c(sarscov2 = "#eda100", influenza = "#e87ba4", vsr = "#008300")
+CORES_AGENTE <- c(sarscov2 = "#2a78d6", influenza = "#e87ba4", vsr = "#008300")
 
 # Rampa sequencial de cada vírus (mapas de incidência): quase branco -> cor do vírus
 # -> tom escuro do mesmo matiz, interpolada no espaço Lab. O matiz diz o vírus; a
 # claridade diz a magnitude.
 EXTREMOS_RAMPA_AGENTE <- list(
-  sarscov2  = c("#fdf6e3", "#eda100", "#5c3a00"),
+  sarscov2  = c("#eef4fc", "#2a78d6", "#0b2e5a"),
   influenza = c("#fcf0f5", "#e87ba4", "#7a1c45"),
   vsr       = c("#eef7ee", "#008300", "#003010")
 )
@@ -36,6 +42,13 @@ PALETA_REGIOES <- c("33001" = "#8dd3c7", "33002" = "#ffffb3", "33003" = "#bebada
 
 # Cor de marca que não representa vírus nenhum (total de SRAG, histograma, proporção).
 COR_NEUTRA <- "#52514e"
+
+# Contorno do estado (CS-055, pedido da analista): linha cinza-escura em volta dos 92
+# municípios. Sem ela, onde a borda do estado tem município de cor clara a forma do
+# estado some no fundo branco. Mais grossa que as fronteiras municipais (brancas, 0,15)
+# e que as regionais (cinza-escuro, 0,4), para ler como o limite de fora.
+COR_CONTORNO_ESTADO <- "#333333"
+ESPESSURA_CONTORNO_ESTADO <- 0.5
 
 # Paleta do LISA em dois níveis (ADR-0004): cor cheia = confirmado após FDR,
 # cor clara = indicativo (significativo só sem correção). Vermelho/azul seguem a
@@ -131,10 +144,12 @@ hachurar <- function(poligonos, espacamento = 0.02, angulo = 45) {
 #' as cores não são comparáveis entre anos (para isso, a série com a estimativa
 #' 2024, ADR-0003).
 mapa_incidencia <- function(dados, agente, ano, variavel = "incid_eb_100k",
-                            titulo_variavel = "Taxa suavizada por 100 mil hab.") {
+                            titulo_variavel = "Taxa suavizada por 100 mil hab.",
+                            contorno = contorno_estado(dados)) {
   dados$classe <- classes_quantil(dados[[variavel]])
   ggplot2::ggplot(dados) +
     ggplot2::geom_sf(ggplot2::aes(fill = classe), colour = "white", linewidth = 0.15) +
+    camada_contorno_estado(contorno) +
     escala_incidencia(agente, name = titulo_variavel, discreta = TRUE, n_classes = nlevels(dados$classe)) +
     ggplot2::labs(
       title = sprintf("SRAG por %s, %d", ROTULOS_AGENTE[[agente]], ano),
@@ -148,7 +163,7 @@ mapa_incidencia <- function(dados, agente, ano, variavel = "incid_eb_100k",
 #' `dados`: sf com quadrante, nivel, instavel e nome. Os confirmados vão por nome no
 #' subtítulo; `rotular = TRUE` também os escreve no mapa (desligado por padrão desde o
 #' CS-047: Itaboraí e Tanguá se sobrepunham e o texto preto sumia no vermelho).
-mapa_lisa <- function(dados, agente, ano, rotular = FALSE) {
+mapa_lisa <- function(dados, agente, ano, rotular = FALSE, contorno = contorno_estado(dados)) {
   dados$categoria <- categoria_lisa(dados$quadrante, dados$nivel)
   instaveis <- dados[dados$instavel, ]
   confirmados <- dados[dados$nivel == "confirmado", ]
@@ -170,6 +185,7 @@ mapa_lisa <- function(dados, agente, ano, rotular = FALSE) {
                      show.legend = TRUE) +
     ggplot2::geom_sf(data = hachurar(instaveis), colour = "grey25", linewidth = 0.25) +
     ggplot2::geom_sf(data = instaveis, fill = NA, colour = "grey25", linewidth = 0.3) +
+    camada_contorno_estado(contorno) +
     escala_lisa() +
     ggplot2::labs(
       title = sprintf("Agrupamentos espaciais de SRAG por %s, %d", ROTULOS_AGENTE[[agente]], ano),
@@ -194,6 +210,23 @@ ponto_interno <- function(geometria) {
   sf::st_transform(sf::st_point_on_surface(sf::st_transform(geometria, 31983)), sf::st_crs(geometria))
 }
 
+#' Contorno do estado: a união de todos os polígonos, feita em SIRGAS 2000 / UTM 23S
+#' (metros, geometria plana) e devolvida no sistema original, como em dissolver_regioes():
+#' em graus o sf usa a geometria esférica, 5 vezes mais lenta na malha real (6,4 s contra
+#' 1,3 s). Resultado: um único registro com as partes do estado (continente e ilhas).
+contorno_estado <- function(poligonos) {
+  crs <- sf::st_crs(poligonos)
+  u <- sf::st_union(sf::st_geometry(sf::st_transform(poligonos, 31983)))
+  sf::st_sf(geometry = sf::st_transform(u, crs))
+}
+
+#' Camada ggplot do contorno do estado: só a linha, sem preenchimento. `contorno` vem de
+#' contorno_estado(); calcule uma vez e reaproveite nos mapas.
+camada_contorno_estado <- function(contorno, linewidth = ESPESSURA_CONTORNO_ESTADO) {
+  ggplot2::geom_sf(data = contorno, fill = NA, colour = COR_CONTORNO_ESTADO, linewidth = linewidth,
+                   inherit.aes = FALSE)
+}
+
 #' Escala do LISA com as 9 categorias na legenda, mesmo as ausentes do mapa.
 #' Atenção (ggplot2 4.x): a escala sozinha não basta; a camada de preenchimento
 #' precisa de show.legend = TRUE, senão as categorias sem dado saem sem quadrado
@@ -201,6 +234,71 @@ ponto_interno <- function(geometria) {
 escala_lisa <- function() {
   ggplot2::scale_fill_manual(values = PALETA_LISA, limits = names(PALETA_LISA),
                              drop = FALSE, name = "Moran local (LISA)")
+}
+
+# ---------------------------------------------------------------------------
+# Painéis por vírus (CS-056, pedido da analista): um arquivo por vírus com os 4 anos
+# em grade 2 × 2, para usar um vírus de cada vez no texto. O painel 3 × 4 continua
+# sendo a visão de conjunto do relatório.
+# `dados`: sf com os 4 anos empilhados de UM vírus, colunas `ano_rotulo` e as de
+# dados_mapa(). `contorno`: de contorno_estado(), calculado uma vez sobre a malha.
+# ---------------------------------------------------------------------------
+
+#' Painel de incidência de um vírus: escala contínua comum aos 4 anos (raiz quadrada,
+#' para os anos de baixa não ficarem todos brancos), a mesma da linha do vírus no 3 × 4.
+painel_incidencia_agente <- function(dados, agente, contorno) {
+  if (length(unique(dados$agente)) != 1 || unique(dados$agente) != agente) {
+    stop("O painel de ", agente, " recebeu dados de outro vírus", call. = FALSE)
+  }
+  anos <- sort(unique(dados$ano_rotulo))
+  ggplot2::ggplot(dados) +
+    ggplot2::geom_sf(ggplot2::aes(fill = incid_eb_100k), colour = "white", linewidth = 0.1) +
+    camada_contorno_estado(contorno, linewidth = 0.35) +
+    escala_incidencia(agente, name = "Taxa suavizada\npor 100 mil hab.", trans = "sqrt") +
+    ggplot2::facet_wrap(~ano_rotulo, ncol = 2) +
+    ggplot2::labs(
+      title = sprintf("Incidência de SRAG por %s, %d–%d", ROTULOS_AGENTE[[agente]], min(anos), max(anos)),
+      subtitle = paste("Taxa suavizada por Bayes empírico, por município de residência.",
+                       "Mesma escala nos 4 anos (raiz quadrada)."),
+      caption = "Fontes: SIVEP-Gripe (critério do ADR-0002), IBGE (população e Malha Municipal 2022)."
+    ) +
+    tema_mapa(10) +
+    ggplot2::theme(strip.text = ggplot2::element_text(face = "bold", size = 11), legend.position = "right",
+                   plot.subtitle = ggplot2::element_text(colour = "grey30", margin = ggplot2::margin(b = 12)))
+}
+
+#' Painel LISA de um vírus: as 9 classes na legenda, hachura nos instáveis e, no título
+#' de cada ano, quantos municípios ficaram confirmados após a correção FDR.
+painel_lisa_agente <- function(dados, agente, contorno) {
+  if (length(unique(dados$agente)) != 1 || unique(dados$agente) != agente) {
+    stop("O painel de ", agente, " recebeu dados de outro vírus", call. = FALSE)
+  }
+  dados$categoria <- categoria_lisa(dados$quadrante, dados$nivel)
+  anos <- sort(unique(dados$ano_rotulo))
+  n_conf <- vapply(anos, function(a) sum(dados$nivel[dados$ano_rotulo == a] == "confirmado"), integer(1))
+  rotulos <- stats::setNames(sprintf("%d · %s", anos, ifelse(n_conf == 0, "nenhum confirmado",
+                                                               sprintf("%d confirmado(s) após FDR", n_conf))), anos)
+  dados$painel <- factor(rotulos[as.character(dados$ano_rotulo)], levels = rotulos)
+  instaveis <- dados[dados$instavel, ]
+  hach <- do.call(rbind, lapply(split(instaveis, instaveis$painel, drop = TRUE), function(x) {
+    h <- hachurar(x); h$painel <- x$painel[1]; h
+  }))
+  g <- ggplot2::ggplot(dados) +
+    ggplot2::geom_sf(ggplot2::aes(fill = categoria), colour = "white", linewidth = 0.1, show.legend = TRUE)
+  if (!is.null(hach) && nrow(hach) > 0) g <- g + ggplot2::geom_sf(data = hach, colour = "grey25", linewidth = 0.2)
+  g +
+    camada_contorno_estado(contorno, linewidth = 0.35) +
+    escala_lisa() +
+    ggplot2::facet_wrap(~painel, ncol = 2) +
+    ggplot2::labs(
+      title = sprintf("Agrupamentos espaciais de SRAG por %s, %d–%d", ROTULOS_AGENTE[[agente]], min(anos), max(anos)),
+      subtitle = paste("Cor cheia: confirmado após correção FDR. Cor clara: indicativo, sem correção.",
+                       "Hachura: classe instável (um único vizinho)."),
+      caption = "LISA sobre a taxa suavizada, vizinhança Queen, 9.999 permutações (ADR-0004). Fontes: SIVEP-Gripe, IBGE."
+    ) +
+    tema_mapa(10) +
+    ggplot2::theme(strip.text = ggplot2::element_text(face = "bold", size = 11), legend.position = "right",
+                   plot.subtitle = ggplot2::element_text(colour = "grey30", margin = ggplot2::margin(b = 12)))
 }
 
 # ---------------------------------------------------------------------------
@@ -319,7 +417,8 @@ grafico_guia_cores <- function(n_rampa = 5) {
     ggplot2::facet_wrap(~bloco, ncol = 1, scales = "free") +
     ggplot2::scale_y_continuous(expand = ggplot2::expansion(add = c(0.6, 0.35))) +
     ggplot2::labs(title = "Guia de cores do projeto",
-                  subtitle = "Cada vírus tem uma cor única; nenhuma cor de vírus é usada no LISA com outro significado.") +
+                  subtitle = paste("Cada vírus tem uma cor única. No LISA, o azul é Baixo-Baixo (convenção da estatística espacial),",
+                                   "não SARS-CoV-2: os mapas de LISA não usam cor de vírus.", sep = "\n")) +
     ggplot2::theme_void(base_size = 10) +
     ggplot2::theme(plot.title = ggplot2::element_text(face = "bold"),
                    plot.subtitle = ggplot2::element_text(colour = "grey30"),

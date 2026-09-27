@@ -93,3 +93,10 @@ tipar_fixture <- function(f = ler_fixture_sivep()) {
   f$ano_banco <- f$ano
   f
 }
+
+# Algum layer do gráfico é o contorno do estado (CS-055)? Linha na cor do contorno, sem preenchimento.
+tem_contorno <- function(g) {
+  b <- ggplot2::ggplot_build(g)
+  any(vapply(b$data, function(l) "colour" %in% names(l) && all(tolower(l$colour) == tolower(COR_CONTORNO_ESTADO)) &&
+               "fill" %in% names(l) && all(is.na(l$fill)), logical(1)))
+}
