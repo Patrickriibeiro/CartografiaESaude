@@ -17,7 +17,7 @@ LIMIAR_CONTAGEM_PEQUENA <- 5L
 criar_diretorios <- function() {
   pastas <- c(
     file.path("dados", c("brutos", "intermediarios", "processados", "externos")),
-    file.path("resultados", c("tabelas", "mapas", "estatistica", "objetos"))
+    file.path("resultados", c("tabelas", "mapas", "estatistica", "objetos", "documentos"))
   )
   for (p in pastas) dir.create(p, recursive = TRUE, showWarnings = FALSE)
   invisible(pastas)
@@ -302,7 +302,7 @@ ler_fontes <- function(arquivo = file.path("config", "fontes.yml")) {
 # Saídas regeneráveis. Brutos e externos NÃO entram: são cache conferido pelo manifesto.
 PASTAS_DERIVADAS <- c(
   file.path("dados", c("intermediarios", "processados")),
-  file.path("resultados", c("tabelas", "mapas", "estatistica", "objetos"))
+  file.path("resultados", c("tabelas", "mapas", "estatistica", "objetos", "documentos"))
 )
 
 #' Apaga tudo o que o pipeline gera, preservando os .gitkeep. Usado por

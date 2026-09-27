@@ -16,6 +16,7 @@
 #   resultados/tabelas/exportacao/tempo_ate_encerramento.csv  dias até encerrar a ficha, por ano (CS-048)
 #   resultados/tabelas/exportacao/tabelas_abnt.docx           as mesmas tabelas em Word, padrão ABNT/IBGE (CS-051)
 #   resultados/tabelas/exportacao/LEIA-ME.txt                 carimbo: data, commit, versões dos dados
+#   resultados/documentos/proposta-v2.docx                    docs/proposta-v2.md em Word, formatação ABNT (CS-057)
 
 source("00_setup.R")
 
@@ -212,5 +213,10 @@ stopifnot(length(tabelas_word) == length(arquivos) - 1)   # uma tabela por CSV (
 docx <- montar_docx_abnt(tabelas_word, file.path(pasta, "tabelas_abnt.docx"),
                          sprintf("Análise espaço-temporal de SRAG no Estado do Rio de Janeiro, %s — tabelas", periodo))
 stopifnot(contar_tabelas_docx(docx) == length(tabelas_word))
+
+# Proposta v2 em Word, para a analista editar (CS-057). Toda tabela do Markdown tem de chegar ao Word.
+md_proposta <- file.path("docs", "proposta-v2.md")
+prop <- montar_docx_texto(md_proposta, file.path("resultados", "documentos", "proposta-v2.docx"))
+if (!is.null(prop)) stopifnot(contar_tabelas_docx(prop) == contar_tabelas_markdown(md_proposta))
 
 message(sprintf("%d arquivos em %s, e %d tabelas em tabelas_abnt.docx", length(arquivos), pasta, length(tabelas_word)))

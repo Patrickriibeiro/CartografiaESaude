@@ -43,5 +43,5 @@ test_that("criar_diretorios é idempotente", {
   p2 <- criar_diretorios()
   expect_identical(p1, p2)
   expect_true(all(dir.exists(p1)))
-  expect_length(p1, 8)
+  expect_length(p1, 9)   # 9ª: resultados/documentos (CS-057)
 })

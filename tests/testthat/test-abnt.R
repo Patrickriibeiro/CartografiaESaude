@@ -52,3 +52,48 @@ test_that("o .docx sai com uma tabela por item, cabeçalho repetido, paisagem e 
   expect_false(grepl("insideV|insideH", estilo))                      # nenhuma linha vertical nem interna
   expect_true(grepl('w:type="firstRow"', estilo, fixed = TRUE))        # traço sob o cabeçalho
 })
+
+# ---- proposta v2 em Word (CS-057) ----
+
+test_that("contar_tabelas_markdown conta separadores de cabeçalho, não as linhas nem o código", {
+  f <- tempfile(fileext = ".md")
+  writeLines(c("| a | b |", "|---|:---:|", "| 1 | 2 |", "", "```", "| x |", "|---|", "```", "",
+               "| c |", "| ---: |", "| 3 |"), f)
+  expect_equal(contar_tabelas_markdown(f), 2L)
+})
+
+test_that("documento de texto: retrato, Arial 12 justificado 1,5, títulos pretos, pt-BR, fórmula editável, reprodutível", {
+  q <- caminho_quarto()
+  skip_if(!nzchar(q), "Quarto (pandoc) não instalado")
+  projeto_temporario()
+  writeLines(enc2utf8(c("# Título", "", "## Seção", "", "Texto com ~190 colunas e a fórmula $P_i(t) = a_i P(t) + b_i$.", "",
+                        "| a | b |", "|---|---|", "| 1 | 2 |")), "p.md", useBytes = TRUE)
+  f <- montar_docx_texto("p.md", file.path(getwd(), "p.docx"), quarto = q, data_referencia = "2026-01-01")
+  f2 <- montar_docx_texto("p.md", file.path(getwd(), "p2.docx"), quarto = q, data_referencia = "2026-01-01")
+  expect_equal(unname(tools::md5sum(f2)), unname(tools::md5sum(f)))
+  expect_equal(contar_tabelas_docx(f), 1L)
+  utils::unzip(f, files = c("word/document.xml", "word/styles.xml"), exdir = "x")
+  d <- paste(readLines("x/word/document.xml", encoding = "UTF-8", warn = FALSE), collapse = "")
+  s <- paste(readLines("x/word/styles.xml", encoding = "UTF-8", warn = FALSE), collapse = "")
+  expect_true(grepl('w:h="16838"', d) && grepl('w:w="11906"', d) && !grepl("landscape", d))
+  expect_equal(lengths(regmatches(d, gregexpr("<m:oMath>", d, fixed = TRUE))), 1L)   # equação do Word, não texto
+  expect_true(grepl("~190 colunas", d, fixed = TRUE))                                  # "~" não virou subscrito
+  # O pandoc regrava o XML da referência (atributos em outra ordem, "<w:b />" com espaço):
+  # os padrões aceitam as duas formas.
+  estilo <- function(id) regmatches(s, regexpr(sprintf('(?s)<w:style [^>]*w:styleId="%s"[^>]*>.*?</w:style>', id), s, perl = TRUE))
+  corpo <- estilo("BodyText")
+  expect_length(corpo, 1)
+  expect_true(grepl('w:line="360"', corpo, fixed = TRUE) && grepl('<w:jc w:val="both" */>', corpo))
+  h1 <- estilo("Heading1")
+  expect_length(h1, 1)
+  expect_true(grepl('<w:color w:val="000000" */>', h1) && grepl("<w:b */>", h1))
+  expect_false(grepl("0F4761", h1, fixed = TRUE))
+  expect_true(grepl('w:val="24"', regmatches(s, regexpr("(?s)<w:rPrDefault>.*?</w:rPrDefault>", s, perl = TRUE)), fixed = TRUE))
+  expect_true(grepl('<w:lang [^>]*w:val="pt-BR"', s))
+})
+
+test_that("proposta-v2.docx gerada tem todas as tabelas do Markdown (integração)", {
+  f <- file.path(raiz_projeto, "resultados", "documentos", "proposta-v2.docx")
+  skip_if_not(file.exists(f), "07_exportacao.R não gerou a proposta (sem Quarto?)")
+  expect_equal(contar_tabelas_docx(f), contar_tabelas_markdown(file.path(raiz_projeto, "docs", "proposta-v2.md")))
+})

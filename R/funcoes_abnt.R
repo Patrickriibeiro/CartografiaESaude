@@ -88,7 +88,10 @@ caminho_quarto <- function() {
 #' próprio pandoc e troca (1) o estilo "Table" — traço no topo e no fim da tabela,
 #' traço sob o cabeçalho, cabeçalho em negrito, Arial 9; (2) a fonte padrão — Arial 10;
 #' (3) a página — A4 em paisagem, margens de 3 cm (superior e esquerda) e 2 cm (NBR 14724).
-criar_referencia_abnt <- function(quarto, destino, data_referencia = "2000-01-01") {
+#' `texto = TRUE` (CS-057, documento corrido como a proposta): A4 em retrato, Arial 12,
+#' parágrafo justificado com entrelinha 1,5, títulos em preto e negrito, idioma pt-BR
+#' (o corretor do Word passa a conferir português).
+criar_referencia_abnt <- function(quarto, destino, data_referencia = "2000-01-01", texto = FALSE) {
   base <- tempfile(fileext = ".docx")
   saida <- suppressWarnings(system2(quarto, c("pandoc", "-o", shQuote(base), "--print-default-data-file", "reference.docx"),
                                     stdout = TRUE, stderr = TRUE))
@@ -110,15 +113,19 @@ criar_referencia_abnt <- function(quarto, destino, data_referencia = "2000-01-01
   # (?s): o estilo ocupa várias linhas, e sem ele o "." não casa quebra de linha.
   s <- sub('(?s)<w:style w:type="table" w:default="1" w:styleId="Table">.*?</w:style>', estilo_tabela, s, perl = TRUE)
   s <- sub('<w:rFonts w:asciiTheme="minorHAnsi"[^>]*/>', '<w:rFonts w:ascii="Arial" w:hAnsi="Arial" w:eastAsia="Arial" w:cs="Arial"/>', s, perl = TRUE)
-  s <- sub('(?s)(<w:rPrDefault>.*?)<w:sz w:val="24" />\\s*<w:szCs w:val="24" />', '\\1<w:sz w:val="20"/><w:szCs w:val="20"/>', s, perl = TRUE)
+  corpo <- if (texto) "24" else "20"   # meios-pontos: 12 pt no texto, 10 pt no documento de tabelas
+  s <- sub('(?s)(<w:rPrDefault>.*?)<w:sz w:val="24" />\\s*<w:szCs w:val="24" />',
+           sprintf('\\1<w:sz w:val="%s"/><w:szCs w:val="%s"/>', corpo, corpo), s, perl = TRUE)
   if (!grepl('w:styleId="Table"><w:name w:val="Table"/>', s, fixed = TRUE) || !grepl('w:ascii="Arial"', s, fixed = TRUE)) {
     stop("O documento de referência do pandoc mudou de formato; o estilo ABNT não foi aplicado", call. = FALSE)
   }
+  if (texto) s <- estilos_texto_abnt(s)
   writeLines(s, arq_estilos, useBytes = TRUE)
 
   arq_doc <- file.path(pasta, "word", "document.xml")
   d <- paste(readLines(arq_doc, encoding = "UTF-8", warn = FALSE), collapse = "\n")
-  pagina <- paste0('<w:pgSz w:w="16838" w:h="11906" w:orient="landscape"/>',
+  tamanho <- if (texto) '<w:pgSz w:w="11906" w:h="16838"/>' else '<w:pgSz w:w="16838" w:h="11906" w:orient="landscape"/>'
+  pagina <- paste0(tamanho,
                    '<w:pgMar w:top="1701" w:right="1134" w:bottom="1134" w:left="1701" w:header="709" w:footer="709" w:gutter="0"/>')
   d <- sub("</w:sectPr>", paste0(pagina, "</w:sectPr>"), d, fixed = TRUE)
   writeLines(d, arq_doc, useBytes = TRUE)
@@ -130,6 +137,53 @@ criar_referencia_abnt <- function(quarto, destino, data_referencia = "2000-01-01
   if (file.exists(destino)) file.remove(destino)
   zip::zip(normalizePath(destino, winslash = "/", mustWork = FALSE), files = arquivos, root = pasta, mode = "mirror")
   invisible(destino)
+}
+
+#' Estilos de texto corrido (CS-057) sobre o styles.xml do pandoc: corpo justificado com
+#' entrelinha 1,5 (line="360" = 1,5 × 240) e 6 pt depois; títulos em Arial preto negrito
+#' (o padrão do pandoc é azul, fonte de tema e 20 pt); idioma pt-BR. Para se algum alvo
+#' não for encontrado: um estilo que não casou deixaria o Word sem formatação, em silêncio.
+estilos_texto_abnt <- function(s) {
+  n0 <- nchar(s)
+  corpo <- '(?s)(<w:style w:type="paragraph" w:styleId="BodyText">.*?)<w:spacing w:before="180" w:after="180" />'
+  if (!grepl(corpo, s, perl = TRUE)) stop("Estilo BodyText do pandoc mudou de formato", call. = FALSE)
+  s <- sub(corpo, '\\1<w:spacing w:before="0" w:after="120" w:line="360" w:lineRule="auto"/><w:jc w:val="both"/>', s, perl = TRUE)
+  tamanhos <- c("1" = "28", "2" = "24", "3" = "24")   # meios-pontos: 14, 12 e 12 pt
+  for (n in names(tamanhos)) {
+    padrao <- sprintf('(?s)<w:style w:type="paragraph" w:styleId="Heading%s">.*?</w:style>', n)
+    bloco <- regmatches(s, regexpr(padrao, s, perl = TRUE))
+    if (length(bloco) != 1) stop("Estilo Heading", n, " do pandoc não encontrado", call. = FALSE)
+    novo <- gsub('<w:color [^>]*/>', '<w:color w:val="000000"/>', bloco, perl = TRUE)
+    novo <- gsub('<w:rFonts [^>]*/>', '<w:rFonts w:ascii="Arial" w:hAnsi="Arial" w:cs="Arial"/><w:b/>', novo, perl = TRUE)
+    novo <- gsub('<w:sz w:val="\\d+" */>\\s*<w:szCs w:val="\\d+" */>',
+                 sprintf('<w:sz w:val="%s"/><w:szCs w:val="%s"/>', tamanhos[[n]], tamanhos[[n]]), novo, perl = TRUE)
+    s <- sub(bloco, novo, s, fixed = TRUE)
+  }
+  s <- sub('w:lang w:val="en-US"', 'w:lang w:val="pt-BR"', s, fixed = TRUE)
+  if (!grepl('w:line="360"', s, fixed = TRUE) || !grepl('w:lang w:val="pt-BR"', s, fixed = TRUE) || nchar(s) == n0) {
+    stop("Estilos de texto ABNT não aplicados", call. = FALSE)
+  }
+  s
+}
+
+#' Documento Word de texto corrido a partir de um Markdown (CS-057: a proposta v2 para a
+#' analista editar). Fórmulas $...$ viram equações do Word, editáveis; tabelas saem com o
+#' estilo ABNT. Sem Quarto, avisa e devolve NULL. Reprodutível como montar_docx_abnt().
+montar_docx_texto <- function(arquivo_md, caminho, quarto = caminho_quarto(),
+                              data_referencia = data_versao_mais_recente()) {
+  if (!nzchar(quarto)) {
+    message("Quarto (pandoc) não encontrado: ", basename(caminho), " não gerado")
+    return(invisible(NULL))
+  }
+  referencia <- criar_referencia_abnt(quarto, tempfile(fileext = ".docx"), data_referencia, texto = TRUE)
+  epoch <- format(as.numeric(as.POSIXct(paste(data_referencia, "12:00:00"), tz = "UTC")), scientific = FALSE)
+  if (file.exists(caminho)) file.remove(caminho)   # sem isto, um pandoc que falha deixaria o arquivo velho passar
+  # markdown do pandoc sem subscrito/sobrescrito: "~190 colunas" é aproximação, não subscrito.
+  saida <- withr::with_envvar(c(SOURCE_DATE_EPOCH = epoch), suppressWarnings(
+    system2(quarto, c("pandoc", shQuote(arquivo_md), "-f", "markdown-subscript-superscript", "-t", "docx",
+                      "--reference-doc", shQuote(referencia), "-o", shQuote(caminho)), stdout = TRUE, stderr = TRUE)))
+  if (!file.exists(caminho)) stop("pandoc não gerou ", caminho, ": ", paste(saida, collapse = " "), call. = FALSE)
+  invisible(caminho)
 }
 
 #' Documento Word com todas as tabelas: uma por página, "Tabela N – título" acima e
@@ -167,6 +221,14 @@ montar_docx_abnt <- function(tabelas, caminho, titulo_documento, quarto = caminh
 data_versao_mais_recente <- function(fontes = ler_fontes()) {
   v <- vapply(fontes$sivep$bancos, function(b) b$versao, character(1))
   format(max(as.Date(v, format = "%d-%m-%Y")))
+}
+
+#' Conta as tabelas de um Markdown: linhas separadoras de cabeçalho ("|---|:---:|") fora de
+#' bloco de código.
+contar_tabelas_markdown <- function(arquivo_md) {
+  l <- readLines(arquivo_md, encoding = "UTF-8", warn = FALSE)
+  em_codigo <- cumsum(grepl("^```", l)) %% 2 == 1
+  sum(grepl("^\\|( *:?-+:? *\\|)+ *$", l) & !em_codigo)
 }
 
 #' Conta as tabelas de um .docx: elementos <w:tbl> no document.xml.
