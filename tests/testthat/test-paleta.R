@@ -14,6 +14,14 @@ test_that("SARS-CoV-2 é azul (pedido da analista, CS-054) e nenhuma outra cor d
   expect_false(any(azul(matiz[c("influenza", "vsr")])))
 })
 
+test_that("influenza é amarela (pedido da analista, CS-058) e nenhuma outra cor de vírus é amarela", {
+  matiz <- farver::convert_colour(t(grDevices::col2rgb(CORES_AGENTE)), "rgb", "hcl")[, "h"]
+  names(matiz) <- names(CORES_AGENTE)
+  amarelo <- function(h) h >= 40 & h <= 100   # do âmbar (#eda100 = 48,6°) ao amarelo puro (~86°); rosa ~350°, vermelho ~12°
+  expect_true(amarelo(matiz[["influenza"]]))
+  expect_false(any(amarelo(matiz[c("sarscov2", "vsr")])))
+})
+
 test_that("nenhuma cor de vírus reaparece no LISA nem nas rampas de outro vírus", {
   expect_length(intersect(tolower(CORES_AGENTE), tolower(PALETA_LISA)), 0)
   for (ag in AGENTES) {

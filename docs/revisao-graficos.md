@@ -28,7 +28,7 @@ ordem; legenda sempre que há mais de uma série; nada que dependa só de cor. R
 | Leitos × taxa (dispersão, 8 painéis) | a taxa acompanha a oferta de leitos? | mantida | eixo x em raiz quadrada porque metade dos municípios tem 0 leito de UTI; rho e IC escritos no painel |
 
 Mudanças de 2026-09-26 (pedidos da analista) em todas as figuras: SARS-CoV-2 passou de amarelo
-para azul (CS-054) e todo mapa ganhou o contorno do estado em cinza-escuro (CS-055).
+para azul (CS-054), a influenza passou de rosa para amarelo (CS-058) e todo mapa ganhou o contorno do estado em cinza-escuro (CS-055).
 
 ## Fora do relatório
 

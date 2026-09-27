@@ -9,26 +9,27 @@ ROTULOS_AGENTE <- c(sarscov2 = "SARS-CoV-2", influenza = "Influenza", vsr = "VSR
 # Regra: uma cor por vírus em TODOS os gráficos, e nenhuma cor de vírus reaparece
 # com outro significado. Antes, o vermelho era SARS-CoV-2 nas séries e Alto-Alto no
 # LISA, e o azul era influenza nas séries e Baixo-Baixo no LISA.
-# Cores dos vírus: posições 1, 5 e 6 da paleta categórica validada da skill dataviz.
-# SARS-CoV-2 azul por pedido da analista (CS-054, 2026-09-26; era amarelo, posição 4).
-# Validação (OKLab ΔE×100, todos os pares, modo claro): pior par entre vírus 13,0 sob
-# daltonismo, azul × magenta em protanopia (meta ≥ 8), e 27,5 em visão normal (piso 15).
-# O magenta tem contraste < 3:1 no branco: por isso linhas mais grossas, legenda sempre
-# presente e tabela com os mesmos dados (regra de alívio da skill).
+# Cores dos vírus: posições 1, 4 e 6 da paleta categórica validada da skill dataviz.
+# Pedidos da analista: SARS-CoV-2 azul (CS-054, 2026-09-26; era amarelo) e influenza
+# amarela (CS-058, 2026-09-26; era magenta/rosa).
+# Validação (OKLab ΔE×100, todos os pares, modo claro): pior par entre vírus 16,2 sob
+# daltonismo, amarelo × verde em protanopia (meta ≥ 8), e 29,0 em visão normal, azul ×
+# verde (piso 15). O amarelo tem contraste < 3:1 no branco (2,1): por isso linhas mais
+# grossas, legenda sempre presente e tabela com os mesmos dados (regra de alívio da skill).
 # Concessão registrada: o azul do SARS-CoV-2 fica perto do azul do Baixo-Baixo do LISA
 # (ΔE 7,8, quase iguais). O LISA mantém a convenção do GeoDa (vermelho = Alto-Alto,
 # azul = Baixo-Baixo), conhecida de quem lê estatística espacial, e as duas cores nunca
 # dividem uma figura: mapa de LISA não tem cor de vírus, e a legenda de cada um diz o que
 # a cor é. Se a analista preferir, a saída é trocar o Baixo-Baixo, não o vírus.
 # ---------------------------------------------------------------------------
-CORES_AGENTE <- c(sarscov2 = "#2a78d6", influenza = "#e87ba4", vsr = "#008300")
+CORES_AGENTE <- c(sarscov2 = "#2a78d6", influenza = "#eda100", vsr = "#008300")
 
 # Rampa sequencial de cada vírus (mapas de incidência): quase branco -> cor do vírus
 # -> tom escuro do mesmo matiz, interpolada no espaço Lab. O matiz diz o vírus; a
 # claridade diz a magnitude.
 EXTREMOS_RAMPA_AGENTE <- list(
   sarscov2  = c("#eef4fc", "#2a78d6", "#0b2e5a"),
-  influenza = c("#fcf0f5", "#e87ba4", "#7a1c45"),
+  influenza = c("#fdf6e3", "#eda100", "#5c3a00"),
   vsr       = c("#eef7ee", "#008300", "#003010")
 )
 
