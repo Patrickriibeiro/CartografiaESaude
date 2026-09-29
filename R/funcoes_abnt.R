@@ -178,9 +178,16 @@ montar_docx_texto <- function(arquivo_md, caminho, quarto = caminho_quarto(),
   referencia <- criar_referencia_abnt(quarto, tempfile(fileext = ".docx"), data_referencia, texto = TRUE)
   epoch <- format(as.numeric(as.POSIXct(paste(data_referencia, "12:00:00"), tz = "UTC")), scientific = FALSE)
   if (file.exists(caminho)) file.remove(caminho)   # sem isto, um pandoc que falha deixaria o arquivo velho passar
-  # markdown do pandoc sem subscrito/sobrescrito: "~190 colunas" é aproximação, não subscrito.
+  # markdown do pandoc sem subscrito/sobrescrito ("~190 colunas" é aproximação, não subscrito)
+  # e sem bloco de metadados YAML: para o pandoc, "---" depois de linha em branco abre um
+  # cabeçalho YAML, e a linha "---" que separa seções da história do projeto o fazia parar com
+  # "YAML parse exception" (CS-060). Estes documentos nunca trazem cabeçalho; "---" é só um traço.
+  # Só tabelas com "|" (pipe_tables), as únicas que contar_tabelas_markdown() conta: para o
+  # pandoc, "---" seguido de texto sem linha em branco abre uma tabela "multiline" que só termina
+  # no próximo "---", e duas seções inteiras da história viraram tabelas de 36 e 17 linhas.
+  formato <- "markdown-subscript-superscript-yaml_metadata_block-simple_tables-multiline_tables-grid_tables"
   saida <- withr::with_envvar(c(SOURCE_DATE_EPOCH = epoch), suppressWarnings(
-    system2(quarto, c("pandoc", shQuote(arquivo_md), "-f", "markdown-subscript-superscript", "-t", "docx",
+    system2(quarto, c("pandoc", shQuote(arquivo_md), "-f", formato, "-t", "docx",
                       "--reference-doc", shQuote(referencia), "-o", shQuote(caminho)), stdout = TRUE, stderr = TRUE)))
   if (!file.exists(caminho)) stop("pandoc não gerou ", caminho, ": ", paste(saida, collapse = " "), call. = FALSE)
   invisible(caminho)

@@ -17,6 +17,7 @@
 #   resultados/tabelas/exportacao/tabelas_abnt.docx           as mesmas tabelas em Word, padrão ABNT/IBGE (CS-051)
 #   resultados/tabelas/exportacao/LEIA-ME.txt                 carimbo: data, commit, versões dos dados
 #   resultados/documentos/proposta-v2.docx                    docs/proposta-v2.md em Word, formatação ABNT (CS-057)
+#   resultados/documentos/historia-do-projeto.docx            docs/historia-do-projeto.md em Word (CS-060)
 
 source("00_setup.R")
 
@@ -218,5 +219,9 @@ stopifnot(contar_tabelas_docx(docx) == length(tabelas_word))
 md_proposta <- file.path("docs", "proposta-v2.md")
 prop <- montar_docx_texto(md_proposta, file.path("resultados", "documentos", "proposta-v2.docx"))
 if (!is.null(prop)) stopifnot(contar_tabelas_docx(prop) == contar_tabelas_markdown(md_proposta))
+# A história da construção do projeto, para a autora (CS-060): mesmo caminho da proposta.
+md_historia <- file.path("docs", "historia-do-projeto.md")
+hist <- montar_docx_texto(md_historia, file.path("resultados", "documentos", "historia-do-projeto.docx"))
+if (!is.null(hist)) stopifnot(contar_tabelas_docx(hist) == contar_tabelas_markdown(md_historia))
 
 message(sprintf("%d arquivos em %s, e %d tabelas em tabelas_abnt.docx", length(arquivos), pasta, length(tabelas_word)))

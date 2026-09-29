@@ -60,3 +60,22 @@ test_that("COMECE-AQUI.md e o projeto do RStudio acompanham o pipeline (CS-059)"
   citados <- unique(regmatches(texto, gregexpr("0[0-9]_[a-z_]+\\.(R|qmd)", texto))[[1]])
   expect_true(all(file.exists(file.path(raiz_projeto, citados))), info = paste(citados, collapse = ", "))
 })
+
+test_that("historia-do-projeto.md só cita arquivos que existem e cobre as 8 etapas (CS-060)", {
+  guia <- file.path(raiz_projeto, "docs", "historia-do-projeto.md")
+  expect_true(file.exists(guia))
+  texto <- paste(readLines(guia, encoding = "UTF-8", warn = FALSE), collapse = "\n")
+  for (e in list.files(raiz_projeto, pattern = "^0[0-8]_.*\\.(R|qmd)$")) {
+    expect_true(grepl(e, texto, fixed = TRUE), info = paste(e, "fora da história"))
+  }
+  # Todo caminho de arquivo de código ou documentação citado tem de existir (nomes com "*" ou
+  # "N" são padrões, não arquivos). Nome sem pasta vale se existir em alguma pasta do projeto.
+  citados <- unique(regmatches(texto, gregexpr("[A-Za-z0-9_./-]+\\.(R|qmd|yml|md|cff|bib|Rproj|json)\\b", texto))[[1]])
+  citados <- citados[!grepl("[*N]", citados)]
+  pastas <- c(".", "R", "config", "docs", "renv", "tests", ".github", file.path("docs", "decisoes"),
+              file.path("docs", "release-history"), file.path("tests", "testthat"), file.path(".github", "workflows"))
+  existentes <- unique(basename(unlist(lapply(file.path(raiz_projeto, pastas), list.files, all.files = TRUE))))
+  faltam <- citados[!file.exists(file.path(raiz_projeto, citados)) & !basename(citados) %in% existentes]
+  expect_identical(faltam, character(0))
+  expect_gt(length(citados), 40)
+})

@@ -97,3 +97,9 @@ test_that("proposta-v2.docx gerada tem todas as tabelas do Markdown (integraçã
   skip_if_not(file.exists(f), "07_exportacao.R não gerou a proposta (sem Quarto?)")
   expect_equal(contar_tabelas_docx(f), contar_tabelas_markdown(file.path(raiz_projeto, "docs", "proposta-v2.md")))
 })
+
+test_that("historia-do-projeto.docx gerada tem todas as tabelas do Markdown (integração, CS-060)", {
+  f <- file.path(raiz_projeto, "resultados", "documentos", "historia-do-projeto.docx")
+  skip_if_not(file.exists(f), "07_exportacao.R não gerou a história (sem Quarto?)")
+  expect_equal(contar_tabelas_docx(f), contar_tabelas_markdown(file.path(raiz_projeto, "docs", "historia-do-projeto.md")))
+})

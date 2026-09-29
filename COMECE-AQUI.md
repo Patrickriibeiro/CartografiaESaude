@@ -78,6 +78,8 @@ O `00_setup.R` é carregado por todas as etapas: não precisa rodá-lo sozinho.
 aqui, nunca vão para o git), `resultados/`, `08_relatorio.html`, `08_apresentacao.html`.
 
 **Para ler, não para rodar:**
+`docs/historia-do-projeto.md` (a história da construção, contada do zero, sem presumir que você
+sabe programar: cada pasta e arquivo, por que existe e o que produz),
 `README.md` (detalhes técnicos), `docs/` (proposta, notas metodológicas, decisões, backlog),
 `tests/` (testes automáticos: `testthat::test_dir("tests/testthat")`), `app.R` (painel
 interativo, opcional: `shiny::runApp()`), `LICENSE`, `CITATION.cff`.

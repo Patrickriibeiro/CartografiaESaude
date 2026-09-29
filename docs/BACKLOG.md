@@ -194,6 +194,7 @@ D-06, D-08, D-09, D-10 e a opção do CS-039). **Só a D-02 (prazo) continua abe
 | CS-057 | **Proposta v2 em Word** — `resultados/documentos/proposta-v2.docx` gerado na etapa 07 pelo pandoc: A4 retrato, Arial 12, entrelinha 1,5, títulos pretos, pt-BR; 7/7 tabelas, 10/10 fórmulas editáveis, 5/5 [REVISAR]; reprodutível | 2026-09-26 | `docs/release-history/cs-057-proposta-docx.md` · commit `4dc04d5` |
 | CS-058 | **Influenza em amarelo** (pedido da analista) — `#eda100` e rampa âmbar em todas as figuras; pior par entre vírus ΔE 16,2 sob daltonismo (era 13,0), 29,0 em visão normal. Suíte 797/797 em 23 arquivos | 2026-09-26 | `docs/release-history/cs-058-influenza-amarela.md` · commit `a93efef` |
 | CS-059 | **Guia "Comece aqui" e projeto do RStudio** (dúvida da analista ao rodar do zero) — `COMECE-AQUI.md` (3 passos, renv, ordem das etapas, mapa de pastas) e `CartografiaESaude.Rproj`; renv liga sozinho numa cópia limpa; teste impede o guia de envelhecer. Suíte 810/810 em 23 arquivos | 2026-09-28 | `docs/release-history/cs-059-comece-aqui.md` · commit `bc858da` |
+| CS-060 | **A história da construção, contada do zero** (pedido da autora) — `docs/historia-do-projeto.md`, 9 partes + apêndice, ~12 mil palavras, sem presumir nenhum termo técnico; toda afirmação com a prova no repositório e 4 marcadas como inferência; Word gerado na etapa 07; teste garante que todo arquivo citado existe. Suíte 823/823 em 23 arquivos | 2026-09-28 | `docs/release-history/cs-060-historia-do-projeto.md` · commit (a registrar) |
 
 ## Descartados
 
