@@ -193,6 +193,7 @@ D-06, D-08, D-09, D-10 e a opção do CS-039). **Só a D-02 (prazo) continua abe
 | CS-056 | **Painéis por vírus** — 6 arquivos (incidência e LISA × 3 vírus), 4 anos em 2 × 2; LISA com nº de confirmados no título de cada ano; mapas 39 → 45 | 2026-09-26 | idem |
 | CS-057 | **Proposta v2 em Word** — `resultados/documentos/proposta-v2.docx` gerado na etapa 07 pelo pandoc: A4 retrato, Arial 12, entrelinha 1,5, títulos pretos, pt-BR; 7/7 tabelas, 10/10 fórmulas editáveis, 5/5 [REVISAR]; reprodutível | 2026-09-26 | `docs/release-history/cs-057-proposta-docx.md` · commit `4dc04d5` |
 | CS-058 | **Influenza em amarelo** (pedido da analista) — `#eda100` e rampa âmbar em todas as figuras; pior par entre vírus ΔE 16,2 sob daltonismo (era 13,0), 29,0 em visão normal. Suíte 797/797 em 23 arquivos | 2026-09-26 | `docs/release-history/cs-058-influenza-amarela.md` · commit `a93efef` |
+| CS-059 | **Guia "Comece aqui" e projeto do RStudio** (dúvida da analista ao rodar do zero) — `COMECE-AQUI.md` (3 passos, renv, ordem das etapas, mapa de pastas) e `CartografiaESaude.Rproj`; renv liga sozinho numa cópia limpa; teste impede o guia de envelhecer. Suíte 810/810 em 23 arquivos | 2026-09-28 | `docs/release-history/cs-059-comece-aqui.md` · commit (a registrar) |
 
 ## Descartados
 

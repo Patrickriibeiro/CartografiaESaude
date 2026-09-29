@@ -45,3 +45,18 @@ test_that("criar_diretorios é idempotente", {
   expect_true(all(dir.exists(p1)))
   expect_length(p1, 9)   # 9ª: resultados/documentos (CS-057)
 })
+
+test_that("COMECE-AQUI.md e o projeto do RStudio acompanham o pipeline (CS-059)", {
+  guia <- file.path(raiz_projeto, "COMECE-AQUI.md")
+  rproj <- file.path(raiz_projeto, "CartografiaESaude.Rproj")
+  expect_true(file.exists(guia))
+  expect_true(file.exists(rproj))
+  expect_equal(readLines(rproj, n = 1), "Version: 1.0")
+  expect_true(any(grepl("^RestoreWorkspace: No$", readLines(rproj))))   # sem .RData fantasma entre sessões
+  texto <- paste(readLines(guia, encoding = "UTF-8", warn = FALSE), collapse = "\n")
+  # toda etapa do pipeline aparece no guia, e todo script citado no guia existe
+  etapas <- list.files(raiz_projeto, pattern = "^0[1-8]_.*\\.(R|qmd)$")
+  for (e in etapas) expect_true(grepl(e, texto, fixed = TRUE), info = paste(e, "fora do COMECE-AQUI.md"))
+  citados <- unique(regmatches(texto, gregexpr("0[0-9]_[a-z_]+\\.(R|qmd)", texto))[[1]])
+  expect_true(all(file.exists(file.path(raiz_projeto, citados))), info = paste(citados, collapse = ", "))
+})

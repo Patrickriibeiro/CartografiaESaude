@@ -12,6 +12,10 @@ Cartografia & Saúde (IOC 14090), com Patrick Ribeiro Oliveira.
 
 ## Rodar numa máquina nova
 
+> **Primeira vez com R ou com o projeto?** Leia [`COMECE-AQUI.md`](COMECE-AQUI.md): 3 passos pelo
+> RStudio (dois cliques em `CartografiaESaude.Rproj`), o que é o renv, a ordem das etapas e quais
+> pastas são para rodar e quais são só para ler.
+
 Testado do zero num clone limpo (ver `docs/release-history/cs-024-maquina-nova.md`).
 
 **1. Instale**
